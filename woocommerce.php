@@ -421,6 +421,7 @@ class Woocommerce {
 		include_once( 'classes/widgets/class-wc-widget-best-sellers.php' );
 		include_once( 'classes/widgets/class-wc-widget-onsale.php' );
 		include_once( 'classes/widgets/class-wc-widget-random-products.php' );
+		include_once( 'classes/widgets/class-wc-widget-upsell-products.php' );
 
 		// Register widgets
 		register_widget( 'WC_Widget_Recent_Products' );
@@ -438,6 +439,7 @@ class Woocommerce {
 		register_widget( 'WC_Widget_Best_Sellers' );
 		register_widget( 'WC_Widget_Onsale' );
 		register_widget( 'WC_Widget_Random_Products' );
+		register_widget( 'WC_Widget_Upsell_Products' );
 	}
 
 

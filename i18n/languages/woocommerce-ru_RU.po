@@ -2720,10 +2720,14 @@ msgstr "Раздельные условия"
 msgid "Custom product attribute"
 msgstr "Индивидуальные свойства товара"
 
+#@ woocommerce
+msgid "Upsell Products"
+msgstr "Похожие"
+
 #: admin/post-types/writepanels/writepanel-product_data.php:464
 #@ woocommerce
 msgid "Up-Sells"
-msgstr "Перекрестные продажи"
+msgstr "Более дорогие похожие товары"
 
 #: admin/post-types/writepanels/writepanel-product_data.php:481
 #@ woocommerce
@@ -2733,7 +2737,7 @@ msgstr "Более дорогое предложение — это товары
 #: admin/post-types/writepanels/writepanel-product_data.php:483
 #@ woocommerce
 msgid "Cross-Sells"
-msgstr "Перекрестные продажи"
+msgstr "Сопутствующие товары или услуги"
 
 #: admin/post-types/writepanels/writepanel-product_data.php:500
 #@ woocommerce
