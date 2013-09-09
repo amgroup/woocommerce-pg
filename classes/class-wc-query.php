@@ -415,7 +415,7 @@ class WC_Query {
 				$args['order']    = $order == 'DESC' ? 'DESC' : 'ASC';
 				$args['meta_key'] = '';
 
-				add_filter( 'posts_clauses', array( $this, 'order_by_rating_post_clauses' ) );
+				//add_filter( 'posts_clauses', array( $this, 'order_by_rating_post_clauses' ) );
 			break;
 			case 'title' :
 				$args['orderby']  = 'title';
@@ -439,13 +439,12 @@ class WC_Query {
         $args['groupby'] = '';
         $args['join'] = "INNER JOIN {$wpdb->postmeta} s ON (s.post_id = {$wpdb->posts}.\"ID\" AND s.meta_key = '_stock')" . $args['join'];
         $args['orderby'] = "(s.meta_value::numeric > 0)::integer DESC" . ($args['orderby']?', ':'') . $args['orderby'];
-		$args['orderby'] .= ($args['orderby']?', ':'') . "s.meta_value::numeric DESC";
+	$args['orderby'] .= ",s.meta_value::numeric DESC";
         
         $args['distinct'] = 'DISTINCT';        
         $args['fields'] .= ", " . preg_replace( '/ (DESC|ASC)/','', $args['orderby'] );
 
-        //return apply_filters( 'woocommerce_get_catalog_ordering_args', $args );
-		return $args;
+		return apply_filters( 'woocommerce_get_catalog_ordering_args', $args );
 	}
 
 	/**
