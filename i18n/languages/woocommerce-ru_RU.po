@@ -9959,6 +9959,21 @@ msgstr "По оценкам (рейтингу)"
 msgid "Popularity"
 msgstr "Популярности"
 
+#@ woocommerce
+msgid "Sort by popularity"
+msgstr "По популярности"
+
+#@ woocommerce
+msgid "Sort by newness"
+msgstr "По новизне"
+
+#@ woocommerce
+msgid "Sort by price: low to high"
+msgstr "Сначала дешевые"
+
+#@ woocommerce
+msgid "Sort by price: high to low"
+msgstr "Сначала дорогие"
 
 #: admin/settings/settings-init.php:536
 #@ woocommerce
