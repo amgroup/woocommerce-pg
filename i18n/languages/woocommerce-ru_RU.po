@@ -9342,7 +9342,7 @@ msgstr "Пароль"
 #@ woocommerce
 msgctxt "placeholder"
 msgid "Notes about your order, e.g. special notes for delivery."
-msgstr "Примечания к вашему заказу, например, до скольки привезти ваш заказ."
+msgstr "Примечания к вашему заказу, например, до скольких привезти ваш заказ."
 
 #: classes/class-wc-countries.php:924
 #@ woocommerce
