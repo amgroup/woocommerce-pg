@@ -165,10 +165,12 @@ if ( ! is_admin() || defined('DOING_AJAX') ) {
 	 * @see woocommerce_checkout_login_form()
 	 * @see woocommerce_checkout_coupon_form()
 	 * @see woocommerce_order_review()
+	 * @see woocommerce_checkout_order_notes()
 	 */
 	add_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_login_form', 10 );
 	add_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
 	add_action( 'woocommerce_checkout_order_review', 'woocommerce_order_review', 10 );
+	add_action( 'woocommerce_checkout_order_notes', 'woocommerce_order_notes', 10 );
 
 	/**
 	 * Cart
