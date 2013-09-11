@@ -1509,3 +1509,16 @@ if ( ! function_exists( 'woocommerce_template_single_shipping' ) ) {
 	 woocommerce_get_template( 'single-product/product-shipping.php' );
     }
 }
+
+if ( ! function_exists( 'woocommerce_order_notes' ) ) {
+
+        /**
+         * Output the WooCommerce Customer Note at Checkout
+         *
+         * @access public
+         * @return void
+         */
+        function woocommerce_order_notes() {
+		woocommerce_get_template('checkout/form-order-notes.php' );
+        }
+}
