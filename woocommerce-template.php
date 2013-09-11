@@ -1511,7 +1511,6 @@ if ( ! function_exists( 'woocommerce_template_single_shipping' ) ) {
 }
 
 if ( ! function_exists( 'woocommerce_order_notes' ) ) {
-
         /**
          * Output the WooCommerce Customer Note at Checkout
          *

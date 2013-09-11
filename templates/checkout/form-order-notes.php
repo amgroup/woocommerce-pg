@@ -10,12 +10,14 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 global $woocommerce;
+$checkout = $woocommerce->checkout;
 ?>
 
 <?php do_action('woocommerce_before_order_notes', $checkout); ?>
 
 <?php if (get_option('woocommerce_enable_order_comments')!='no') : ?>
 	<div id="checkout_order_notes">
+
 	<?php if ($woocommerce->cart->ship_to_billing_address_only()) : ?>
 
 		<h3><?php _e( 'Additional Information', 'woocommerce' ); ?></h3>
