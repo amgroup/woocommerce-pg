@@ -1,6 +1,6 @@
 .delivery-box { padding: 10px 10px; auto; border-radius: 8px; border: 1px dotted #F0D48D; margin-bottom: 8px; }
 .delivery-box .title { color: black; }
-.delivery-box .title .big { font-size: 16px; font-family: Oswald; text-transform: uppercase; }
+.delivery-box .title .big { font-size: 16px; text-transform: uppercase; }
 
 #shipping_method .marked   { text-decoration: underline; font-weight: normal; color: #0a78a3; }
 #shipping_method li.level1 { color: #3BB63B; font-weight: mormal; }
