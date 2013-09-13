@@ -48,6 +48,16 @@ class WC_Email_New_Order extends WC_Email {
 			$this->recipient = get_option( 'admin_email' );
 	}
 
+	/*
+         * get_attachments function.
+         *
+         * @access public
+         * @return string
+         */
+        function get_attachments($order_id) {
+                return apply_filters( 'woocommerce_email_attachments_' . $this->id, $order_id );
+        }
+
 	/**
 	 * trigger function.
 	 *
