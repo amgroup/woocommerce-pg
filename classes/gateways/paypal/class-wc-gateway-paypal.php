@@ -30,7 +30,7 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
         $this->icon         = apply_filters( 'woocommerce_paypal_icon', $woocommerce->plugin_url() . '/assets/images/icons/paypal.png' );
         $this->has_fields   = false;
         $this->liveurl      = 'https://www.paypal.com/cgi-bin/webscr';
-		$this->testurl      = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+	$this->testurl      = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
         $this->method_title = __( 'PayPal', 'woocommerce' );
         $this->notify_url   = str_replace( 'https:', 'http:', add_query_arg( 'wc-api', 'WC_Gateway_Paypal', home_url( '/' ) ) );
 
@@ -74,7 +74,7 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
      * @return bool
      */
     function is_valid_for_use() {
-        if ( ! in_array( get_woocommerce_currency(), apply_filters( 'woocommerce_paypal_supported_currencies', array( 'AUD', 'BRL', 'CAD', 'MXN', 'NZD', 'HKD', 'SGD', 'USD', 'EUR', 'JPY', 'TRY', 'NOK', 'CZK', 'DKK', 'HUF', 'ILS', 'MYR', 'PHP', 'PLN', 'SEK', 'CHF', 'TWD', 'THB', 'GBP', 'RMB' ) ) ) ) return false;
+        if ( ! in_array( get_woocommerce_currency(), apply_filters( 'woocommerce_paypal_supported_currencies', array( 'AUD', 'BRL', 'CAD', 'MXN', 'NZD', 'HKD', 'SGD', 'USD', 'EUR', 'JPY', 'TRY', 'NOK', 'CZK', 'DKK', 'HUF', 'ILS', 'MYR', 'PHP', 'PLN', 'SEK', 'CHF', 'TWD', 'THB', 'GBP', 'RMB', 'RUR', 'RUB' ) ) ) ) return false;
 
         return true;
     }
@@ -309,14 +309,14 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 		if ( get_option( 'woocommerce_prices_include_tax' ) == 'yes' || $order->get_order_discount() > 0 ) {
 
 			// Discount
-			$paypal_args['discount_amount_cart'] = $order->get_order_discount();
+			$paypal_args['discount_amount_cart'] = number_format( $order->get_order_discount(), 2, '.', '' );
 
 			// Don't pass items - paypal borks tax due to prices including tax. PayPal has no option for tax inclusive pricing sadly. Pass 1 item for the order items overall
 			$item_names = array();
 
 			if ( sizeof( $order->get_items() ) > 0 )
 				foreach ( $order->get_items() as $item )
-					if ( $item['qty'] )
+					if ( $item['qty'] > 1 )
 						$item_names[] = $item['name'] . ' x ' . $item['qty'];
 
 			$paypal_args['item_name_1'] 	= sprintf( __( 'Order %s' , 'woocommerce'), $order->get_order_number() ) . " - " . implode( ', ', $item_names );
@@ -331,13 +331,13 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 			if ( ( $order->get_shipping() + $order->get_shipping_tax() ) > 0 ) {
 				$paypal_args['item_name_2'] = __( 'Shipping via', 'woocommerce' ) . ' ' . ucwords( $order->shipping_method_title );
 				$paypal_args['quantity_2'] 	= '1';
-				$paypal_args['amount_2'] 	= number_format( $order->get_shipping() + $order->get_shipping_tax() , 2, '.', '' );
+				$paypal_args['amount_2'] 	= number_format( $order->get_shipping() + $order->get_shipping_tax(), 2, '.', '' );
 			}
 
 		} else {
 
 			// Tax
-			$paypal_args['tax_cart'] = $order->get_total_tax();
+			$paypal_args['tax_cart'] = number_format($order->get_total_tax(), 2, '.', '' );
 
 			// Cart Contents
 			$item_loop = 0;
@@ -357,7 +357,7 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 
 						$paypal_args[ 'item_name_' . $item_loop ] 	= $item_name;
 						$paypal_args[ 'quantity_' . $item_loop ] 	= $item['qty'];
-						$paypal_args[ 'amount_' . $item_loop ] 		= $order->get_item_subtotal( $item, false );
+						$paypal_args[ 'amount_' . $item_loop ] 		= number_format($order->get_item_total( $item, false ), 2, '.', '');
 
 						if ( $product->get_sku() )
 							$paypal_args[ 'item_number_' . $item_loop ] = $product->get_sku();
@@ -367,7 +367,7 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 
 			// Discount
 			if ( $order->get_cart_discount() > 0 )
-				$paypal_args['discount_amount_cart'] = round( $order->get_cart_discount(), 2 );
+				$paypal_args['discount_amount_cart'] = number_format($order->get_cart_discount(), 2, '.', '');
 
 			// Fees
 			if ( sizeof( $order->get_fees() ) > 0 ) {
@@ -376,7 +376,7 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 
 					$paypal_args[ 'item_name_' . $item_loop ] 	= $item['name'];
 					$paypal_args[ 'quantity_' . $item_loop ] 	= 1;
-					$paypal_args[ 'amount_' . $item_loop ] 		= $item['line_total'];
+					$paypal_args[ 'amount_' . $item_loop ] 		= number_format($item['line_total'], 2, '.', '');
 				}
 			}
 
