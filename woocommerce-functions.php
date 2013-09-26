@@ -1710,6 +1710,42 @@ function woocommerce_save_address() {
 add_action( 'template_redirect', 'woocommerce_save_address' );
 
 
+
+/*
+ *  Kidberries team
+ *  Checkout Fields Override
+ */
+
+function remove_validation_from_address_checkout_billing_fields( $fields ) {
+	global $woocommerce;
+	$block_name = 'billing_';
+
+	foreach( array('address_1', 'address_2', 'city', 'country', 'postcode' ) as $field ) {
+		if( ( $key = array_search( 'address-field', $fields[ $block_name . $field  ][ 'class' ] ) ) !== false ) {
+			unset( $fields[ $block_name . $field  ][ 'class' ][ $key ] );
+		}
+	}
+
+	return $fields;
+}
+
+function remove_validation_from_address_checkout_shipping_fields( $fields ) {
+	global $woocommerce;
+	$block_name = 'shipping_';
+
+	foreach( array('address_1', 'address_2', 'city', 'country', 'postcode' ) as $field ) {
+		if( ( $key = array_search( 'address-field', $fields[ $block_name . $field  ][ 'class' ] ) ) !== false ) {
+			unset( $fields[ $block_name . $field  ][ 'class' ][ $key ] );
+		}
+	}
+
+	return $fields;
+}
+
+add_filter( 'woocommerce_billing_fields', 'remove_validation_from_address_checkout_billing_fields', 1, 1 );
+add_filter( 'woocommerce_shipping_fields', 'remove_validation_from_address_checkout_shipping_fields', 1, 1 );
+
+
 /*
  *  Kidberries team
  *  Local Delivery Checkout Fields Override

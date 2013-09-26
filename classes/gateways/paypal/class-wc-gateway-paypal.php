@@ -463,15 +463,14 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 		$order = new WC_Order( $order_id );
 
 		if ( ! $this->form_submission_method ) {
-
 			$paypal_args = $this->get_paypal_args( $order );
 
-            // PayPal will reject the request if some fields undefined
-            if ! isset( $paypal_args['zip'] )
-                $paypal_args['zip'] = '101000';
+		// PayPal will reject the request if some fields undefined
+		if( ! isset( $paypal_args['zip'] ) )
+			$paypal_args['zip'] = '101000';
 
-            if ! isset( $paypal_args['country'] )
-                $paypal_args['country'] = 'RU';
+		if( ! isset( $paypal_args['country'] ) )
+			$paypal_args['country'] = 'RU';
 
 			$paypal_args = http_build_query( $paypal_args, '', '&' );
 

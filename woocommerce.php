@@ -341,7 +341,6 @@ class Woocommerce {
 		// Classes
 		include_once( 'classes/class-wc-query.php' );				// The main store queries
 		include_once( 'classes/class-wc-cart.php' );					// The main cart class
-		include_once( 'classes/class-wc-cart-sp.php' );					// The helper for calculating shipment for a single product. Based on cart class an extentds it.
 		include_once( 'classes/class-wc-tax.php' );					// Tax class
 		include_once( 'classes/class-wc-customer.php' ); 			// Customer class
 		include_once( 'classes/abstracts/abstract-wc-session.php' ); // Abstract for session implementations
