@@ -1604,7 +1604,6 @@ function woocommerce_json_search_products( $x = '', $post_types = array('product
 		);
 
 		$posts = array_unique(array_merge( get_posts( $args ), get_posts( $args2 ) ));
-
 	}
 
 	$found_products = array();
@@ -1625,6 +1624,124 @@ function woocommerce_json_search_products( $x = '', $post_types = array('product
 }
 
 add_action('wp_ajax_woocommerce_json_search_products', 'woocommerce_json_search_products');
+
+function woocommerce_json_search_products2( $x = '', $post_types = array('product') ) {
+	global $wpdb;
+	check_ajax_referer( 'search-products', 'security' );
+
+//	header( 'Content-Type: application/json; charset=utf-8' );
+	header( 'Content-Type: text/plain; charset=utf-8' );
+
+	$term = (string) urldecode(stripslashes(strip_tags($_GET['term'])));
+
+	if (empty($term)) die();
+	
+	preg_match_all('/".*?("|$)|((?<=[\r\n\t ",+])|^)[^\r\n\t ",+]+/', $term, $matches);
+	$terms = array_map('_search_terms_tidy', $matches[0]);
+	
+	$rank = "ts_rank( $wpdb->posts.tsv, to_tsquery('russian', fn.query2tsvector('" . implode(' ', $terms) . "')))";
+	$where = "$wpdb->posts.tsv @@ to_tsquery('russian', fn.query2tsvector('" . implode( ' ', $terms ) . "'))";
+	$q = "SELECT \"ID\", post_name FROM $wpdb->posts;";
+	
+	/*
+SELECT wp_posts.tsv::text, "ID", post_title
+FROM wp_posts
+WHERE
+post_type = 'product' AND
+(
+  wp_posts.tsv @@ to_tsquery('russian', fn.query2tsvector('WLP'))
+OR
+  wp_posts.tsv::text ~ lower('WLP')
+OR
+  "ID" = _text_to_bigint('WLP')
+)
+ORDER g
+	*/
+	echo $where;
+	//echo json_encode( $found_products );
+	//$wpdb->get_results("SELECT $distinct $wpdb->comments.* FROM");
+	
+	die();
+
+	if ( is_numeric( $term ) ) {
+
+		$args = array(
+			'post_type'			=> $post_types,
+			'post_status'	 	=> 'publish',
+			'posts_per_page' 	=> -1,
+			'post__in' 			=> array(0, $term),
+			'fields'			=> 'ids'
+		);
+
+		$args2 = array(
+			'post_type'			=> $post_types,
+			'post_status'	 	=> 'publish',
+			'posts_per_page' 	=> -1,
+			'post_parent' 		=> $term,
+			'fields'			=> 'ids'
+		);
+
+		$args3 = array(
+			'post_type'			=> $post_types,
+			'post_status' 		=> 'publish',
+			'posts_per_page' 	=> -1,
+			'meta_query' 		=> array(
+				array(
+				'key' 	=> '_sku',
+				'value' => $term,
+				'compare' => 'LIKE'
+				)
+			),
+			'fields'			=> 'ids'
+		);
+
+		$posts = array_unique(array_merge( get_posts( $args ), get_posts( $args2 ), get_posts( $args3 ) ));
+
+	} else {
+
+		$args = array(
+			'post_type'			=> $post_types,
+			'post_status' 		=> 'publish',
+			'posts_per_page' 	=> -1,
+			's' 				=> $term,
+			'fields'			=> 'ids'
+		);
+
+		$args2 = array(
+			'post_type'			=> $post_types,
+			'post_status' 		=> 'publish',
+			'posts_per_page' 	=> -1,
+			'meta_query' 		=> array(
+				array(
+				'key' 	=> '_sku',
+				'value' => $term,
+				'compare' => 'LIKE'
+				)
+			),
+			'fields'			=> 'ids'
+		);
+
+		$posts = array_unique(array_merge( get_posts( $args ), get_posts( $args2 ) ));
+	}
+
+	$found_products = array();
+
+	if ( $posts ) foreach ( $posts as $post ) {
+
+		$product = get_product( $post );
+
+		$found_products[ $post ] = woocommerce_get_formatted_product_name( $product );
+
+	}
+
+	$found_products = apply_filters( 'woocommerce_json_search_found_products', $found_products );
+
+	echo json_encode( $found_products );
+
+	die();
+}
+
+add_action('wp_ajax_woocommerce_json_search_products2', 'woocommerce_json_search_products2');
 
 /**
  * Search for product variations and return json
