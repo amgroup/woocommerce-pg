@@ -1035,7 +1035,7 @@ $woocommerce_settings['email'] = apply_filters('woocommerce_email_settings', arr
 	array(
 		'title' => __( '"Reply To" Email Address', 'woocommerce' ),
 		'desc' 		=> '',
-		'id' 		=> 'woocommerce_email_reply_address',
+		'id' 		=> 'woocommerce_email_replyto_address',
 		'type' 		=> 'email',
 		'custom_attributes' => array(
 			'multiple' 	=> 'multiple'

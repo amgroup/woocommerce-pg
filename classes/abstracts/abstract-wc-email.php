@@ -40,6 +40,9 @@ abstract class WC_Email extends WC_Settings_API {
 	/** @var string recipients for the email */
 	var $recipient;
 
+	/** @var string "Reply-To" for the email */
+	var $replyto;
+
 	/** @var string heading for the email content */
 	var $heading;
 
@@ -141,6 +144,8 @@ abstract class WC_Email extends WC_Settings_API {
 		if ( is_null( $this->template_base ) )
 			$this->template_base = $woocommerce->plugin_path() . '/templates/';
 
+		
+
 		// Settings
 		$this->heading 			= $this->get_option( 'heading', $this->heading );
 		$this->subject      	= $this->get_option( 'subject', $this->subject );
@@ -221,7 +226,15 @@ abstract class WC_Email extends WC_Settings_API {
 	 * @return string
 	 */
 	function get_headers() {
-		return apply_filters( 'woocommerce_email_headers', "Content-Type: " . $this->get_content_type() . "\r\n", $this->id, $this->object );
+		$headers = array();
+
+		$replyto = $this->get_replyto_address();
+		if ( $replyto )
+		    $headers[] = "Reply-To: " . $replyto;
+
+		$headers[] = "Content-Type: " . $this->get_content_type();
+
+		return apply_filters( 'woocommerce_email_headers', implode( "\r\n", $headers ), $this->id, $this->object );
 	}
 
 	/**
@@ -374,6 +387,16 @@ abstract class WC_Email extends WC_Settings_API {
 	 */
 	function get_from_name() {
 		return wp_specialchars_decode( esc_html( get_option( 'woocommerce_email_from_name' ) ) );
+	}
+
+	/**
+	 * Get "reply-to" email address.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	function get_replyto_address() {
+		return sanitize_email( get_option( 'woocommerce_email_replyto_address' ) );
 	}
 
 	/**
