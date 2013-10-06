@@ -2857,13 +2857,19 @@ msgstr "Сейчас у нас нет товара в таком количес�
 #, php-format
 #@ woocommerce
 msgid "You cannot add that amount to the cart. We have %s in stock and you already have %s in your cart."
-msgstr "Всё что было уже у вас в корзине. У нас больше не осталось этого товара. "
+msgstr "Всё что было уже у вас в корзине. У нас больше не осталось этого товара."
 
 
 #: classes/class-wc-cart.php:680
 #@ woocommerce
 msgid "You cannot add that product to the cart since the product is out of stock."
 msgstr "Вы не можете добавить товар в корзину, поскольку его нет в наличии."
+
+#: classes/class-wc-cart.php:680
+#@ woocommerce
+msgid "You cannot add &quot;%s&quot; to the cart because the product is out of stock."
+msgstr "К сожалению этот товар только что закончился."
+
 
 #: classes/class-wc-cart.php:1575
 #@ woocommerce
