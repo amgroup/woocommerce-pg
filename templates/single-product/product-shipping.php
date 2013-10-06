@@ -11,9 +11,8 @@ global $product;
 ?>
 
 <!-- Shipping methods -->
-<?php if ( $product->is_in_stock() ) : ?>
 <div class="delivery-box">
-    <span class="title"><span class="big">Доставка:</span></span>
+    <span class="title"><span class="big">Доставка 1:</span></span>
     <ul id="shipping_method">
     </ul>
     <small>* <em>стоимость доставки вашей корзины <strong>вместе с этим товаром</strong></em></small>
@@ -31,6 +30,5 @@ global $product;
         jQuery.post( woocommerce_params.ajax_url, data, function(response) { jQuery("#shipping_method").replaceWith( response ); });
     });
 </script>
-<?php endif; ?>
 <!-- /Shipping methods -->
 

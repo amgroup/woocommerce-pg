@@ -1865,7 +1865,7 @@ if( !function_exists( 'get_woocommerce_nonce_params' ) ) {
 */
 if( !function_exists( 'get_dynamic_shipping' ) ) {
     function get_dynamic_shipping() {
-		global $woocommerce;
+		global $woocommerce, $wpdb;
 
 		//check_ajax_referer( 'update-shipping-method', 'security' );
 
@@ -1875,8 +1875,19 @@ if( !function_exists( 'get_dynamic_shipping' ) ) {
 			$woocommerce->session->chosen_shipping_method = $_POST['shipping_method'];
 			
 			
-		if ( isset( $_POST['product_id'] ) )
+		if ( isset( $_POST['product_id'] ) ) {
+			if ( isset( $_POST['variation_id'] ) && ! $_POST['variation_id'] ) {
+				$_POST['variation_id'] = $wpdb->get_var(
+					$wpdb->prepare("
+						SELECT v.\"ID\" FROM $wpdb->posts v, $wpdb->postmeta vm
+                                                WHERE v.post_parent=%d AND v.\"ID\" = vm.post_id AND vm.meta_key = '_stock' AND vm.meta_value::bigint > 0
+                                                LIMIT 1",
+                                                $_POST['product_id']
+					)
+				);
+			}
 			$woocommerce->cart->add_to_cart( $_POST['product_id'], 1, $_POST['variation_id'] );
+                }
 
 		$woocommerce->cart->calculate_totals();
 		
