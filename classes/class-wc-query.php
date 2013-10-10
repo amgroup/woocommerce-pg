@@ -438,10 +438,10 @@ class WC_Query {
 
         $args['groupby'] = '';
         $args['join'] = "INNER JOIN {$wpdb->postmeta} s ON (s.post_id = {$wpdb->posts}.\"ID\" AND s.meta_key = '_stock')" . $args['join'];
-        $args['orderby'] = "(s.meta_value::numeric > 0)::integer DESC" . ($args['orderby']?', ':'') . $args['orderby'];
+        $args['orderby'] = "(s.meta_value::numeric > 0 AND s.meta_value::numeric IS NOT NULL) DESC" . ($args['orderby']?', ':'') . $args['orderby'];
 	$args['orderby'] .= ",s.meta_value::numeric DESC";
         
-        $args['distinct'] = 'DISTINCT';        
+        $args['distinct'] = 'DISTINCT';
         $args['fields'] .= ", " . preg_replace( '/ (DESC|ASC)/','', $args['orderby'] );
 
 		return apply_filters( 'woocommerce_get_catalog_ordering_args', $args );

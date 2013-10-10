@@ -159,11 +159,18 @@ class WC_Product_Variation extends WC_Product {
 			$this->sale_price_dates_from = $this->product_custom_fields['_sale_price_dates_to'][0];
 
 		// Prices
-		$this->price         = isset( $this->product_custom_fields['_price'][0] ) ? $this->product_custom_fields['_price'][0] : '';
-		$this->regular_price = isset( $this->product_custom_fields['_regular_price'][0] ) ? $this->product_custom_fields['_regular_price'][0] : '';
-		$this->sale_price    = isset( $this->product_custom_fields['_sale_price'][0] ) ? $this->product_custom_fields['_sale_price'][0] : '';
+		$this->price         = $this->parent->price;
+		$this->regular_price = $this->parent->regular_price;
+		$this->sale_price    = $this->parent->sale_price;
 
+		if( isset( $this->product_custom_fields['_price'][0] ) && $this->product_custom_fields['_price'][0] != '' )
+			$this->price = $this->product_custom_fields['_price'][0];
 
+		if( isset( $this->product_custom_fields['_regular_price'][0] ) && $this->product_custom_fields['_regular_price'][0] != '' )
+			$this->regular_price = $this->product_custom_fields['_regular_price'][0];
+
+		if( isset( $this->product_custom_fields['_sale_price'][0] ) && $this->product_custom_fields['_sale_price'][0] != '' )
+			$this->sale_price = $this->product_custom_fields['_sale_price'][0];
 
 		// Backwards compat for prices
 		if ( $this->price !== '' && $this->regular_price == '' ) {

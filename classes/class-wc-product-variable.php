@@ -232,7 +232,6 @@ class WC_Product_Variable extends WC_Product {
 	 * @return string
 	 */
 	public function get_price_html( $price = '' ) {
-
 		// Ensure variation prices are synced with variations
 		if ( $this->min_variation_price === '' || $this->min_variation_regular_price === '' || $this->price === '' ) {
 			$this->variable_product_sync();
@@ -429,7 +428,7 @@ class WC_Product_Variable extends WC_Product {
 					'is_in_stock'			=> $variation->is_in_stock(),
 					'is_downloadable' 		=> $variation->is_downloadable() ,
 					'is_virtual' 			=> $variation->is_virtual(),
-					'is_sold_individually' 	=> $variation->is_sold_individually() ? 'yes' : 'no',
+					'is_sold_individually'		=> $variation->is_sold_individually() ? 'yes' : 'no',
 				), $this, $variation );
 			}
 		}

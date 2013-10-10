@@ -1874,7 +1874,6 @@ if( !function_exists( 'get_dynamic_shipping' ) ) {
 		if ( isset( $_POST['shipping_method'] ) )
 			$woocommerce->session->chosen_shipping_method = $_POST['shipping_method'];
 			
-			
 		if ( isset( $_POST['product_id'] ) ) {
 			if ( isset( $_POST['variation_id'] ) && ! $_POST['variation_id'] ) {
 				$_POST['variation_id'] = $wpdb->get_var(
@@ -1888,9 +1887,6 @@ if( !function_exists( 'get_dynamic_shipping' ) ) {
 			}
 			$woocommerce->cart->add_to_cart( $_POST['product_id'], 1, $_POST['variation_id'] );
                 }
-
-		$woocommerce->cart->calculate_totals();
-		
 		woocommerce_get_template( 'single-product/single-product-shipping.php' );
 		
 		if ( isset( $_POST['product_id'] ) ) {
