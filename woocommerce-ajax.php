@@ -1867,7 +1867,7 @@ if( !function_exists( 'get_dynamic_shipping' ) ) {
     function get_dynamic_shipping() {
 		global $woocommerce, $wpdb;
 
-		//check_ajax_referer( 'update-shipping-method', 'security' );
+		check_ajax_referer( 'update-shipping-method', 'security' );
 
 		if ( ! defined('WOOCOMMERCE_CART') ) define( 'WOOCOMMERCE_CART', true );
 
