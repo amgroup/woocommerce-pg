@@ -311,3 +311,7 @@ add_filter( 'woocommerce_short_description', 'wpautop'            );
 add_filter( 'woocommerce_short_description', 'shortcode_unautop'  );
 add_filter( 'woocommerce_short_description', 'prepend_attachment' );
 add_filter( 'woocommerce_short_description', 'do_shortcode', 11 ); // AFTER wpautop()
+
+add_filter( 'editable_slug', 'woocommerce_editable_slug', 20, 4 );
+add_filter( 'sanitize_title', 'woocommerce_sanitize_title', 20, 3 );
+add_filter( 'wp_unique_post_slug', 'woocommerce_unique_post_slug', 20, 6 );

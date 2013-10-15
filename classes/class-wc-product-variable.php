@@ -401,6 +401,8 @@ class WC_Product_Variable extends WC_Product {
 					$attachment_id = get_post_thumbnail_id( $variation->get_variation_id() );
 
 					$attachment = wp_get_attachment_image_src( $attachment_id, apply_filters( 'single_product_large_thumbnail_size', 'shop_single' )  );
+                    $zoomed     = wp_get_attachment_image_src( $attachment_id, apply_filters( 'single_product_zommed_thumbnail_size', 'shop_zoomed' )  );
+
 					$image = $attachment ? current( $attachment ) : '';
 
 					$attachment = wp_get_attachment_image_src( $attachment_id, 'full'  );
@@ -414,21 +416,22 @@ class WC_Product_Variable extends WC_Product {
 				$available_variations[] = apply_filters( 'woocommerce_available_variation', array(
 					'variation_id' 			=> $child_id,
 					'attributes' 			=> $variation_attributes,
-					'image_src' 			=> $image,
-					'image_link' 			=> $image_link,
+					'image_src' 			=> esc_url( $image ),
+					'image_link' 			=> esc_url( $image_link ),
+					'image_zoomed' 			=> esc_url( current( $zoomed ) ),
 					'image_title'			=> $image_title,
 					'price_html' 			=> '<span class="price">' . $variation->get_price_html() . '</span>',
-					'availability_html' 		=> $availability_html,
-					'sku'				=> $variation->get_sku(),
-					'weight'			=> $variation->get_weight() . ' ' . esc_attr( get_option('woocommerce_weight_unit' ) ),
+					'availability_html' 	=> $availability_html,
+					'sku'				    => $variation->get_sku(),
+					'weight'			    => $variation->get_weight() . ' ' . esc_attr( get_option('woocommerce_weight_unit' ) ),
 					'dimensions'			=> $variation->get_dimensions(),
-					'min_qty' 			=> 1,
-					'max_qty' 			=> $this->backorders_allowed() ? '' : $variation->stock,
-					'backorders_allowed'		=> $this->backorders_allowed(),
+					'min_qty' 			    => 1,
+					'max_qty' 			    => $this->backorders_allowed() ? '' : $variation->stock,
+					'backorders_allowed'	=> $this->backorders_allowed(),
 					'is_in_stock'			=> $variation->is_in_stock(),
 					'is_downloadable' 		=> $variation->is_downloadable() ,
 					'is_virtual' 			=> $variation->is_virtual(),
-					'is_sold_individually'		=> $variation->is_sold_individually() ? 'yes' : 'no',
+					'is_sold_individually'	=> $variation->is_sold_individually() ? 'yes' : 'no',
 				), $this, $variation );
 			}
 		}

@@ -314,7 +314,7 @@
 					var $product 		= $(this).closest( '.product' );
 					var $product_img 	= $product.find( 'div.images img:eq(0)' );
 					var $product_link 	= $product.find( 'div.images a.zoom:eq(0)' );
-					var o_src 		= $product_img.attr('data-o_src');
+					var o_src 		    = $product_img.attr('data-o_src');
 					var o_title 		= $product_img.attr('data-o_title');
 			        var o_href 			= $product_link.attr('data-o_href');
 
@@ -408,18 +408,18 @@
 
 				// Show single variation details (price, stock, image)
 				.on( 'found_variation', function( event, variation ) {
-			      	var $variation_form = $(this);
 
-			        var $product 		= $( '.product' );
-				var $product_img 	= $product.find( 'div.images img:eq(0)' );
-				var $product_link 	= $product.find( 'div.images a.zoom:eq(0)' );
-				var o_src 		= $product_img.attr('data-o_src');
+			    var $variation_form = $(this);
+                var $product 	    = $( '.product-esqsential' );
+				var $product_img 	= $( '#image-zoom img' );
+				var $product_link 	= $( '#image-zoom' );
+				var o_src 		    = $product_img.attr('data-o_src');
 				var o_title 		= $product_img.attr('data-o_title');
-			        var o_href 		= $product_link.attr('data-o_href');
+                var o_href 		    = $product_link.attr('href');
 
-			        var variation_image = variation.image_src;
-			        var variation_link = variation.image_link;
-				var variation_title = variation.image_title;
+                var variation_image = variation.image_src;
+                var variation_link  = variation.image_zoomed;
+                var variation_title = variation.image_title;
 
 				$variation_form.find('.variations_button').show();
 			        $variation_form.find('.single_variation').html( variation.price_html + variation.availability_html );

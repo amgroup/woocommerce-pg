@@ -1153,10 +1153,12 @@ class Woocommerce {
 		$shop_thumbnail = $this->get_image_size( 'shop_thumbnail' );
 		$shop_catalog	= $this->get_image_size( 'shop_catalog' );
 		$shop_single	= $this->get_image_size( 'shop_single' );
+		$shop_zoomed	= $this->get_image_size( 'shop_zoomed' );
 
 		add_image_size( 'shop_thumbnail', $shop_thumbnail['width'], $shop_thumbnail['height'], $shop_thumbnail['crop'] );
 		add_image_size( 'shop_catalog', $shop_catalog['width'], $shop_catalog['height'], $shop_catalog['crop'] );
 		add_image_size( 'shop_single', $shop_single['width'], $shop_single['height'], $shop_single['crop'] );
+		add_image_size( 'shop_zoomed', $shop_zoomed['width'], $shop_zoomed['height'], $shop_zoomed['crop'] );
 	}
 
 
@@ -1471,7 +1473,7 @@ class Woocommerce {
 	public function get_image_size( $image_size ) {
 
 		// Only return sizes we define in settings
-		if ( ! in_array( $image_size, array( 'shop_thumbnail', 'shop_catalog', 'shop_single' ) ) )
+		if ( ! in_array( $image_size, array( 'shop_thumbnail', 'shop_catalog', 'shop_single', 'shop_zoomed' ) ) )
 			return apply_filters( 'woocommerce_get_image_size_' . $image_size, '' );
 
 		$size = get_option( $image_size . '_image_size', array() );

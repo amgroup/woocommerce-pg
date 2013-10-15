@@ -682,6 +682,20 @@ $woocommerce_settings['catalog'] = apply_filters('woocommerce_catalog_settings',
 	),
 
 	array(
+		'title' => __( 'Single Product Zoomed Image', 'woocommerce' ),
+		'desc' 		=> __( 'This is the size used by the main zoomed image on the product page.', 'woocommerce' ),
+		'id' 		=> 'shop_zoomed_image_size',
+		'css' 		=> '',
+		'type' 		=> 'image_width',
+		'default'	=> array(
+			'width' 	=> '700',
+			'height'	=> '700',
+			'crop'		=> 1
+		),
+		'desc_tip'	=>  true,
+	),
+
+	array(
 		'title' => __( 'Single Product Image', 'woocommerce' ),
 		'desc' 		=> __( 'This is the size used by the main image on the product page.', 'woocommerce' ),
 		'id' 		=> 'shop_single_image_size',
