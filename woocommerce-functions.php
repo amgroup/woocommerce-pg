@@ -1796,13 +1796,13 @@ add_filter( 'woocommerce_shipping_fields', 'local_delivery_override_shipping_fie
 
 function local_pickup_override_shipping_fields( $fields ) {
 	global $woocommerce;
-	if( 'local_pickup' === $woocommerce->session->chosen_shipping_method )
+	if( 'local_pickup' === $woocommerce->session->chosen_shipping_method || 'free_local_pickup' === $woocommerce->session->chosen_shipping_method )
 		return local_pickup_override_fields( $fields, 'shipping' );
 	return $fields;
 }
 function local_pickup_override_billing_fields( $fields ) {
 	global $woocommerce;
-	if( 'local_pickup' === $woocommerce->session->chosen_shipping_method )
+	if( 'local_pickup' === $woocommerce->session->chosen_shipping_method || 'free_local_pickup' === $woocommerce->session->chosen_shipping_method )
 		return local_pickup_override_fields( $fields, 'billing' );
 	return $fields;
 }

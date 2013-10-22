@@ -461,6 +461,8 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 	function process_payment( $order_id ) {
 
 		$order = new WC_Order( $order_id );
+        
+        do_action( 'woocommerce_order_status_pending_to_on-hold', $order->id );
 
 		if ( ! $this->form_submission_method ) {
 			$paypal_args = $this->get_paypal_args( $order );

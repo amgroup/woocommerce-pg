@@ -333,8 +333,8 @@ jQuery(document).ready(function($) {
 
 			var form_data = $form.data();
 
-			if ( form_data["blockUI.isBlocked"] != 1 )
-				$form.block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
+			//if ( form_data["blockUI.isBlocked"] != 1 )
+			$form.closest('div').block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
 
 			$.ajax({
 				type: 		'POST',
@@ -360,7 +360,8 @@ jQuery(document).ready(function($) {
 
 								$('.woocommerce-error, .woocommerce-message').remove();
 								$form.prepend( result.messages );
-								$form.removeClass('processing').unblock();
+								$form.removeClass('processing');
+								$form.closest('div').unblock();
 								$form.find( '.input-text, select' ).blur();
 
 								if (result.refresh=='true') $('body').trigger('update_checkout');
@@ -377,7 +378,8 @@ jQuery(document).ready(function($) {
 
 							$('.woocommerce-error, .woocommerce-message').remove();
 						  	$form.prepend( code );
-							$form.removeClass('processing').unblock();
+							$form.removeClass('processing');
+							$form.closest('div').unblock();
 							$form.find( '.input-text, select' ).blur();
 
 							$('html, body').animate({
@@ -399,7 +401,8 @@ jQuery(document).ready(function($) {
 
 		if ( $form.is('.processing') ) return false;
 
-		$form.addClass('processing').block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
+		$form.addClass('processing');
+		$form.closest('div').block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
 
 		var data = {
 			action: 			'woocommerce_apply_coupon',
@@ -413,7 +416,8 @@ jQuery(document).ready(function($) {
 			data: 		data,
 			success: 	function( code ) {
 				$('.woocommerce-error, .woocommerce-message').remove();
-				$form.removeClass('processing').unblock();
+				$form.removeClass('processing');
+				$form.closest('div').unblock();
 
 				if ( code ) {
 					$form.before( code );
