@@ -340,6 +340,17 @@ return JSON.stringify( phpUnserialize(php) );$$;
 
 ALTER FUNCTION fn.php2json(php text) OWNER TO wordpress;
 
+
+CREATE OR REPLACE FUNCTION is_positive(digit numeric) RETURNS boolean AS
+$BODY$
+ SELECT coalesce($1>0, false, true);
+$BODY$
+LANGUAGE sql IMMUTABLE COST 100;
+
+ALTER FUNCTION fn.is_positive(numeric) OWNER TO wordpress;
+
+
+
 --
 -- Name: post_tsv(); Type: FUNCTION; Schema: fn; Owner: wordpress
 --
