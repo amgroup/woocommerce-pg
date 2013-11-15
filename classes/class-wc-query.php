@@ -110,7 +110,6 @@ class WC_Query {
 		$this->product_query( $q );
 
 		if ( is_search() ) {
-            //add_filter( 'posts_clauses', array( $this, 'search_post_ranking' ) );
 		    add_filter( 'posts_where', array( $this, 'search_post_excerpt' ) );
 		    add_filter( 'wp', array( $this, 'remove_posts_where' ) );
 		}
@@ -142,25 +141,6 @@ class WC_Query {
 
 		return $where;
 	}
-
-    public function search_post_ranking( $args ) {
-		global $wpdb;
-       
-        $search_terms = $_GET['s'] ? $_GET['s'] : $_POST['s'];
-        
-        if( $search_terms ) {
-            $search_terms = urldecode($search_terms);
-            preg_match_all('/".*?("|$)|((?<=[\r\n\t ",+])|^)[^\r\n\t ",+]+/', $search_terms, $matches);
-            $search_terms = array_map('_search_terms_tidy', $matches[0]);
-            
-            $rank = "ts_rank_cd({$wpdb->posts}.tsv,  to_tsquery('russian', fn.query2tsvector('" . implode( ' ', $search_terms ) . "')))";
-            
-            //$args['fields']  .= ",{$rank}";
-            $args['orderby'] = "{$rank} DESC" . ($args['orderby']?', ':'') . $args['orderby'];
-        }
-        return $args;
-    }
-     
 
 	/**
 	 * wpseo_metadesc function.
@@ -195,6 +175,23 @@ class WC_Query {
 	 */
 	public function the_posts( $posts, $query = false ) {
 		global $woocommerce;
+
+		if( is_search() ) {
+			$max_rank = 0;
+				$not_ranked_posts = array();
+
+			foreach( $posts as $post ) {
+				$max_rank = $post->ts_rank > $max_rank ? $post->ts_rank : $max_rank;
+				$not_ranked_posts[] = $post;
+			}
+			$posts = array();
+
+			foreach( $not_ranked_posts as $post ) {
+				if( $post->ts_rank / $max_rank > 0.85 ) {
+					$posts[] = $post;
+				}
+			}
+		}
 
 		// Abort if there's no query
 		if ( ! $query )

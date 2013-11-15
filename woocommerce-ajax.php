@@ -1879,27 +1879,24 @@ if( !function_exists( 'get_dynamic_shipping' ) ) {
 				$_POST['variation_id'] = $wpdb->get_var(
 					$wpdb->prepare("
 						SELECT v.\"ID\" FROM $wpdb->posts v, $wpdb->postmeta vm
-                                                WHERE v.post_parent=%d AND v.\"ID\" = vm.post_id AND vm.meta_key = '_stock' AND vm.meta_value::bigint > 0
+                                                WHERE v.post_parent=%d AND v.\"ID\" = vm.post_id AND vm.meta_key = '_stock' AND vm.meta_value::bigint >= 0
                                                 LIMIT 1",
                                                 $_POST['product_id']
 					)
 				);
 			}
-			$woocommerce->cart->add_to_cart( $_POST['product_id'], 1, $_POST['variation_id'] );
+			$cart_item_key = $woocommerce->cart->add_to_cart( $_POST['product_id'], 1, $_POST['variation_id'], '', array(), true );
                 }
 		woocommerce_get_template( 'single-product/single-product-shipping.php' );
 		
-		if ( isset( $_POST['product_id'] ) ) {
-			foreach( $woocommerce->cart->cart_contents as $key => $value ) {
-				$product_id = $woocommerce->cart->cart_contents[ $key ]['product_id'];
-				$variation_id = $woocommerce->cart->cart_contents[ $key ]['variation_id'];
-				if( $_POST['product_id'] == $product_id && $_POST['variation_id'] == $variation_id ) {
-					$woocommerce->cart->set_quantity( $key, 0 );
-					break;
-				}
-			}
+		if( !empty( $woocommerce->cart->cart_contents[$cart_item_key] ) ) {
+		    $woocommerce->cart->cart_contents[$cart_item_key]["quantity"] -= 1;
+
+		    if( $woocommerce->cart->cart_contents[$cart_item_key]["quantity"] <= 0 )
+		        unset( $woocommerce->cart->cart_contents[$cart_item_key]["quantity"] );
+		    $woocommerce->cart->calculate_totals();
 		}
-		$woocommerce->cart->calculate_totals(); // needed ????
+		
 		die();
     }
 	add_action( 'wp_ajax_nopriv_get_dynamic_shipping', 'get_dynamic_shipping' );

@@ -849,7 +849,7 @@ class WC_Cart {
 		 * @param array $cart_item_data extra cart item data we want to pass into the item
 		 * @return bool
 		 */
-		public function add_to_cart( $product_id, $quantity = 1, $variation_id = '', $variation = '', $cart_item_data = array() ) {
+		public function add_to_cart( $product_id, $quantity = 1, $variation_id = '', $variation = '', $cart_item_data = array(), $ignore_stock = false ) {
 			global $woocommerce;
 		if ( $quantity <= 0 ) return false;
 
@@ -872,18 +872,17 @@ class WC_Cart {
 				$quantity = 1;
 
 			// Check product is_purchasable
-			if ( ! $product_data->is_purchasable() ) {
+			if ( ! $product_data->is_purchasable() && ! $ignore_stock ) {
 				$woocommerce->add_error( sprintf( __( 'Sorry, &quot;%s&quot; cannot be purchased.', 'woocommerce' ), $product_data->get_title() ) );
 				return false;
 			}
 	
 			// Stock check - only check if we're managing stock and backorders are not allowed
-			if ( ! $product_data->is_in_stock() ) {
+			if ( ! $product_data->is_in_stock() && ! $ignore_stock ) {
 				$woocommerce->add_error( sprintf( __( 'You cannot add &quot;%s&quot; to the cart because the product is out of stock.', 'woocommerce' ), $product_data->get_title() ) );
 
 				return false;
-			} elseif ( ! $product_data->has_enough_stock( $quantity ) ) {
-
+			} elseif ( ! $product_data->has_enough_stock( $quantity ) && ! $ignore_stock ) {
 				$woocommerce->add_error( sprintf(__( 'You cannot add that amount of &quot;%s&quot; to the cart because there is not enough stock (%s remaining).', 'woocommerce' ), $product_data->get_title(), $product_data->get_stock_quantity() ));
 
 				return false;
@@ -895,7 +894,7 @@ class WC_Cart {
 				$in_cart_quantity = $cart_item_key ? $this->cart_contents[$cart_item_key]['quantity'] : 0;
 
 				// If its greater than 0, its already in the cart
-				if ( $in_cart_quantity > 0 ) {
+				if ( $in_cart_quantity > 0 && ! $ignore_stock ) {
 					$woocommerce->add_error( sprintf('<a href="%s" class="button">%s</a> %s', get_permalink(woocommerce_get_page_id('cart')), __( 'View Cart &rarr;', 'woocommerce' ), __( 'You already have this item in your cart.', 'woocommerce' ) ) );
 					return false;
 				}
@@ -904,7 +903,7 @@ class WC_Cart {
 			// Stock check - this time accounting for whats already in-cart
 			$product_qty_in_cart = $this->get_cart_item_quantities();
 
-			if ( $product_data->managing_stock() ) {
+			if ( $product_data->managing_stock() && ! $ignore_stock ) {
 
 				// Variations
 				if ( $variation_id && $product_data->variation_has_stock ) {
@@ -920,9 +919,7 @@ class WC_Cart {
 						$woocommerce->add_error( sprintf(__( '<a href="%s" class="button">%s</a> You cannot add that amount to the cart &mdash; we have %s in stock and you already have %s in your cart.', 'woocommerce' ), get_permalink(woocommerce_get_page_id('cart')), __( 'View Cart &rarr;', 'woocommerce' ), $product_data->get_stock_quantity(), $product_qty_in_cart[ $product_id ] ));
 						return false;
 					}
-
 				}
-
 			}
 
 			// If cart_item_key is set, the item is already in the cart
@@ -953,7 +950,7 @@ class WC_Cart {
 
 			$this->calculate_totals();
 
-			return true;
+			return $cart_item_key;
 		}
 
 		/**
@@ -987,6 +984,7 @@ class WC_Cart {
 			}
 
 			$this->calculate_totals();
+			return empty($this->cart_contents[$cart_item_key]) ? 0 : $this->cart_contents[$cart_item_key]['quantity'];
 		}
 
     /*-----------------------------------------------------------------------------------*/

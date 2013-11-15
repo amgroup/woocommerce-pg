@@ -418,18 +418,18 @@ function woocommerce_add_to_cart_action( $url = false ) {
 	// Simple Products
     } else {
 
-		$quantity 			= empty( $_REQUEST['quantity'] ) ? 1 : apply_filters( 'woocommerce_stock_amount', $_REQUEST['quantity'] );
+		$quantity = empty( $_REQUEST['quantity'] ) ? 1 : apply_filters( 'woocommerce_stock_amount', $_REQUEST['quantity'] );
 
 		// Add to cart validation
 		$passed_validation 	= apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, $quantity );
 
 		if ( $passed_validation ) {
     		// Add the product to the cart
-    		if ( $woocommerce->cart->add_to_cart( $product_id, $quantity ) ) {
+    		    if ( $woocommerce->cart->add_to_cart( $product_id, $quantity ) ) {
     			woocommerce_add_to_cart_message( $product_id );
     			$was_added_to_cart = true;
     			$added_to_cart[] = $product_id;
-    		}
+    		    }
 		}
 
     }
