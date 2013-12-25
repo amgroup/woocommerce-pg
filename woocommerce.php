@@ -391,7 +391,6 @@ class Woocommerce {
 		$methods[] = 'WC_Shipping_International_Delivery';
 		$methods[] = 'WC_Shipping_Local_Delivery';
 		$methods[] = 'WC_Shipping_Local_Pickup';
-		$methods[] = 'WC_Shipping_Russianpost';
 
 		return $methods;
 	}

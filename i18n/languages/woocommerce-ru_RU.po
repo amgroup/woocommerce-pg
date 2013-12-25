@@ -2856,6 +2856,7 @@ msgstr "Сейчас у нас нет товара в таком количес�
 #: classes/class-wc-cart.php:781
 #, php-format
 #@ woocommerce
+
 msgid "You cannot add that amount to the cart. We have %s in stock and you already have %s in your cart."
 msgstr "Всё что было уже у вас в корзине. У нас больше не осталось этого товара."
 
@@ -2904,6 +2905,28 @@ msgstr "К сожалению, у нас нет достаточно \"%s\" в �
 #@ woocommerce
 msgid "Sorry, we do not have enough \"%s\" in stock to fulfill your order. Please edit your cart and try again. We apologise for any inconvenience caused."
 msgstr "К сожалению, у нас нет достаточно \"%s\" в наличии для исполнения заказа. Пожалуйста, измените значение в корзине и попробуйте еще раз. Мы приносим свои извинения за данное неудобство."
+
+#@ woocommerce
+msgid "You cannot add that amount to the cart"
+msgstr "К сожалению, не получилось добавить в корзину"
+
+
+#@ woocommerce
+msgid "we have %d in stock and you"
+msgid_plural "we have %d in stock and you"
+msgstr[0] "у нас всё закончилось."
+msgstr[1] "у нас была всего %d вещь и"
+msgstr[2] "у нас была всего %d вещи и"
+msgstr[3] "у нас была всего %d вещей и"
+
+#@ woocommerce
+msgid "already have %d in your cart."
+msgid_plural "already have %d in your cart."
+msgstr[0] " "
+msgstr[1] "в корзине уже лежит эта %d вещь."
+msgstr[2] "в корзине лежат все эти %d вещи."
+msgstr[3] "в корзине лежит все эти %d вещей."
+
 
 #: classes/class-wc-cart.php:1519
 #: classes/class-wc-order.php:491

@@ -909,14 +909,24 @@ class WC_Cart {
 				if ( $variation_id && $product_data->variation_has_stock ) {
 
 					if ( isset( $product_qty_in_cart[ $variation_id ] ) && ! $product_data->has_enough_stock( $product_qty_in_cart[ $variation_id ] + $quantity ) ) {
-						$woocommerce->add_error( sprintf(__( '<a href="%s" class="button">%s</a> You cannot add that amount to the cart &mdash; we have %s in stock and you already have %s in your cart.', 'woocommerce' ), get_permalink(woocommerce_get_page_id('cart')), __( 'View Cart &rarr;', 'woocommerce' ), $product_data->get_stock_quantity(), $product_qty_in_cart[ $variation_id ] ));
+						$woocommerce->add_error(
+						    sprintf('<a href="%s" class="button">%s</a> ', get_permalink(woocommerce_get_page_id('cart')), __( 'View Cart &rarr;', 'woocommerce' ) ) .
+						    __( 'You cannot add that amount to the cart', 'woocommerce' ) . ' &mdash; ' .
+						    sprintf( _n( 'we have %d in stock and you', 'we have %d in stock and you', $product_data->get_stock_quantity(), 'woocommerce' ), $product_data->get_stock_quantity() ) . ' ' .
+						    sprintf( _n( 'already have %d in your cart.', 'already have %d in your cart.', $product_qty_in_cart[ $product_id ], 'woocommerce' ), $product_qty_in_cart[ $product_id ] )
+						);
 						return false;
 					}
 
 				// Products
 				} else {
 					if ( isset( $product_qty_in_cart[ $product_id ] ) && ! $product_data->has_enough_stock( $product_qty_in_cart[ $product_id ] + $quantity ) ) {
-						$woocommerce->add_error( sprintf(__( '<a href="%s" class="button">%s</a> You cannot add that amount to the cart &mdash; we have %s in stock and you already have %s in your cart.', 'woocommerce' ), get_permalink(woocommerce_get_page_id('cart')), __( 'View Cart &rarr;', 'woocommerce' ), $product_data->get_stock_quantity(), $product_qty_in_cart[ $product_id ] ));
+						$woocommerce->add_error(
+						    sprintf('<a href="%s" class="button">%s</a> ', get_permalink(woocommerce_get_page_id('cart')), __( 'View Cart &rarr;', 'woocommerce' ) ) .
+						    __( 'You cannot add that amount to the cart', 'woocommerce' ) . ' &mdash; ' .
+						    sprintf( _n( 'we have %d in stock and you', 'we have %d in stock and you', $product_data->get_stock_quantity(), 'woocommerce' ), $product_data->get_stock_quantity() ) . ' ' .
+						    sprintf( _n( 'already have %d in your cart.', 'already have %d in your cart.', $product_qty_in_cart[ $product_id ], 'woocommerce' ), $product_qty_in_cart[ $product_id ] )
+						);
 						return false;
 					}
 				}

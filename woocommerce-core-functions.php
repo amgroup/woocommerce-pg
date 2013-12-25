@@ -1644,6 +1644,62 @@ function get_woocommerce_term_meta( $term_id, $key, $single = true ) {
 
 
 /**
+ * WooCommerce Term Meta API - Get closest term meta
+ *
+ * @access public
+ * @param mixed $term_id
+ * @param mixed $key
+ * @param bool $single (default: true)
+ * @return mixed
+ */
+function get_woocommerce_term_meta_closest( $term_id, $key, $single = true ) {
+	global $wpdb;
+$closest_term_id = $wpdb->get_var( $wpdb->prepare(
+    "WITH RECURSIVE tree ( term_taxonomy_id, term_id, parent, level,path ) AS (
+      SELECT
+        tt.term_taxonomy_id,
+        tt.term_id,
+        tt.parent,
+        1 AS level,
+        tt.term_id::text AS path
+      FROM
+        wp_term_taxonomy tt
+      WHERE
+        tt.term_id = %s
+      UNION
+      SELECT
+        tt2.term_taxonomy_id,
+        tt2.term_id,
+        tt2.parent,
+        level+1 AS level,
+        (tree.path || '/' || tt2.term_id::text) AS path
+      FROM
+        wp_term_taxonomy tt2,
+        tree
+      WHERE
+        tt2.term_id != tt2.parent AND
+        tt2.term_id = tree.parent
+    )
+    SELECT
+      term_id
+    FROM
+      tree,
+      wp_woocommerce_termmeta tm
+    WHERE
+      tm.woocommerce_term_id = tree.term_id AND
+      meta_key = %s AND meta_value ~ '\s'
+    ORDER BY path
+    LIMIT 1",
+    $term_id,
+    $key
+));
+if( $closest_term_id )
+    $term_id = $closest_term_id;
+return get_metadata( 'woocommerce_term', $term_id, $key, $single );
+}
+
+
+/**
  * Move a term before the a	given element of its hierarchy level
  *
  * @access public
