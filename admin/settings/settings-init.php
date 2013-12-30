@@ -99,7 +99,21 @@ $woocommerce_settings['general'] = apply_filters('woocommerce_general_settings',
 
 	array( 'type' => 'sectionend', 'id' => 'general_options'),
 
+
+
+
+
 	array(	'title' => __( 'Cart, Checkout and Accounts', 'woocommerce' ), 'type' => 'title', 'id' => 'checkout_account_options' ),
+
+	array(
+		'title' => __( 'Order prefix', 'woocommerce' ),
+		'id' 		=> 'woocommerce_order_prefix',
+		'default'	=> 'OL-',
+		'type' 		=> 'text',
+		'class'		=> '',
+		'placeholder'	=> 'OL-',
+		'desc_tip'	=>  __( 'This preffix will use for all orders. Etc.: <strong>OL-</strong>12345', 'woocommerce' )
+	),
 
 	array(
 		'title' => __( 'Coupons', 'woocommerce' ),
