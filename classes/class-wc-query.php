@@ -174,7 +174,7 @@ class WC_Query {
 	 * @return void
 	 */
 	public function the_posts( $posts, $query = false ) {
-		global $woocommerce;
+		global $woocommerce, $wpdb;
 
 		if( is_search() ) {
 			$max_rank = 0;

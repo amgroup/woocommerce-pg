@@ -1072,43 +1072,6 @@ class WC_Countries {
 		$address_fields = apply_filters( 'woocommerce_billing_fields', $address_fields, $country );
 		$address_fields = apply_filters( 'woocommerce_shipping_fields', $address_fields, $country );
 
-/*
-		// Billing/Shipping Specific
-		if ( $type == 'billing_' ) {
-
-			$address_fields['billing_email'] = array(
-				'label' 		=> __( 'Email Address', 'woocommerce' ),
-				'required' 		=> true,
-				'class' 		=> array( 'form-row-first' ),
-				'validate'		=> array( 'email' ),
-			);
-			$address_fields['billing_phone'] = array(
-				'label' 		=> __( 'Phone', 'woocommerce' ),
-				'required' 		=> true,
-				'class' 		=> array( 'form-row-last' ),
-				'clear'			=> true
-			);
-
-			$address_fields = apply_filters( 'woocommerce_billing_fields', $address_fields, $country );
-
-		} elseif( $type == 'shipping_' ) {
-
-			$address_fields['shipping_email'] = array(
-				'label' 		=> __( 'Email Address', 'woocommerce' ),
-				'required' 		=> true,
-				'class' 		=> array( 'form-row-first' ),
-				'validate'		=> array( 'email' ),
-			);
-			$address_fields['shipping_phone'] = array(
-				'label' 		=> __( 'Phone', 'woocommerce' ),
-				'required' 		=> true,
-				'class' 		=> array( 'form-row-last' ),
-				'clear'			=> true
-			);
-
-			$address_fields = apply_filters( 'woocommerce_shipping_fields', $address_fields, $country );
-		}
-*/
 		// Return
 		return $address_fields;
 	}

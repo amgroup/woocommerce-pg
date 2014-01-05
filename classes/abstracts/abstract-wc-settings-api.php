@@ -221,6 +221,7 @@ abstract class WC_Settings_API {
     	$data['type'] 			= isset( $data['type'] ) ? $data['type'] : 'text';
     	$data['desc_tip']		= isset( $data['desc_tip'] ) ? $data['desc_tip'] : false;
     	$data['description']    = isset( $data['description'] ) ? $data['description'] : '';
+	$data['placeholder'] = isset( $data['placeholder'] ) ? $data['placeholder'] : '';
 
 		// Description handling
 		if ( $data['desc_tip'] === true ) {
@@ -253,7 +254,7 @@ abstract class WC_Settings_API {
 			$html .= '</th>' . "\n";
 			$html .= '<td class="forminp">' . "\n";
 				$html .= '<fieldset><legend class="screen-reader-text"><span>' . wp_kses_post( $data['title'] ) . '</span></legend>' . "\n";
-				$html .= '<input class="input-text regular-input ' . esc_attr( $data['class'] ) . '" type="' . esc_attr( $data['type'] ) . '" name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" style="' . esc_attr( $data['css'] ) . '" value="' . esc_attr( $this->get_option( $key ) ) . '" placeholder="' . esc_attr( $data['placeholder'] ) . '" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . ' />';
+				$html .= '<input class="input-text regular-input ' . esc_attr( $data['class'] ) . '" type="' . esc_attr( $data['type'] ) . '" name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" style="' . esc_attr( $data['css'] ) . '" value="' . esc_attr( $this->get_option( $key ) ) . '" placeholder="' . esc_attr( $data['placeholder'] ) . '" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . ' data-placeholder="' . esc_attr( $data['placeholder'] )  . '" />';
 
 				if ( $description )
 					$html .= ' <p class="description">' . wp_kses_post( $description ) . '</p>' . "\n";
@@ -285,6 +286,7 @@ abstract class WC_Settings_API {
     	$data['css'] 			= isset( $data['css'] ) ? $data['css'] : '';
     	$data['desc_tip']		= isset( $data['desc_tip'] ) ? $data['desc_tip'] : false;
     	$data['description']    = isset( $data['description'] ) ? $data['description'] : '';
+	$data['placeholder'] = isset( $data['placeholder'] ) ? $data['placeholder'] : '';
 
 		// Description handling
 		if ( $data['desc_tip'] === true ) {
@@ -317,7 +319,7 @@ abstract class WC_Settings_API {
 			$html .= '</th>' . "\n";
 			$html .= '<td class="forminp">' . "\n";
 				$html .= '<fieldset><legend class="screen-reader-text"><span>' . wp_kses_post( $data['title'] ) . '</span></legend>' . "\n";
-				$html .= '<input class="input-text regular-input ' . esc_attr( $data['class'] ) . '" type="password" name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" style="' . esc_attr( $data['css'] ) . '" value="' . esc_attr( $this->get_option( $key ) ) . '" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . ' />';
+				$html .= '<input class="input-text regular-input ' . esc_attr( $data['class'] ) . '" type="password" name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" style="' . esc_attr( $data['css'] ) . '" value="' . esc_attr( $this->get_option( $key ) ) . '" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . ' data-placeholder="' . esc_attr( $data['placeholder'] )  . '" />';
 
 				if ( $description )
 					$html .= ' <p class="description">' . wp_kses_post( $description ) . '</p>' . "\n";
@@ -382,7 +384,7 @@ abstract class WC_Settings_API {
 			$html .= '</th>' . "\n";
 			$html .= '<td class="forminp">' . "\n";
 				$html .= '<fieldset><legend class="screen-reader-text"><span>' . wp_kses_post( $data['title'] ) . '</span></legend>' . "\n";
-				$html .= '<textarea rows="3" cols="20" class="input-text wide-input ' . esc_attr( $data['class'] ) . '" placeholder="' . esc_attr( $data['placeholder'] ) . '" name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" style="' . esc_attr( $data['css'] ) . '" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . '>' . esc_textarea( $this->get_option( $key ) ) . '</textarea>';
+				$html .= '<textarea rows="3" cols="20" class="input-text wide-input ' . esc_attr( $data['class'] ) . '" placeholder="' . esc_attr( $data['placeholder'] ) . '" name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" style="' . esc_attr( $data['css'] ) . '" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . ' data-placeholder="' . esc_attr( $data['placeholder'] )  . '">' . esc_textarea( $this->get_option( $key ) ) . '</textarea>';
 
 				if ( $description )
 					$html .= ' <p class="description">' . wp_kses_post( $description ) . '</p>' . "\n";
@@ -415,6 +417,7 @@ abstract class WC_Settings_API {
     	$data['css'] 		    = isset( $data['css'] ) ? $data['css'] : '';
     	$data['desc_tip']		= isset( $data['desc_tip'] ) ? $data['desc_tip'] : false;
     	$data['description']    = isset( $data['description'] ) ? $data['description'] : '';
+	$data['placeholder'] = isset( $data['placeholder'] ) ? $data['placeholder'] : '';
 
 		// Description handling
 		if ( $data['desc_tip'] === true ) {
@@ -447,7 +450,7 @@ abstract class WC_Settings_API {
 			$html .= '<td class="forminp">' . "\n";
 				$html .= '<fieldset><legend class="screen-reader-text"><span>' . wp_kses_post( $data['title'] ) . '</span></legend>' . "\n";
 				$html .= '<label for="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '">';
-				$html .= '<input style="' . esc_attr( $data['css'] ) . '" name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" type="checkbox" value="1" ' . checked( $this->get_option( $key ), 'yes', false ) . ' class="' . esc_attr( $data['class'] ).'" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . ' /> ' . wp_kses_post( $data['label'] ) . '</label><br />' . "\n";
+				$html .= '<input style="' . esc_attr( $data['css'] ) . '" name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" type="checkbox" value="1" ' . checked( $this->get_option( $key ), 'yes', false ) . ' class="' . esc_attr( $data['class'] ).'" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . ' data-placeholder="' . esc_attr( $data['placeholder'] )  . '" /> ' . wp_kses_post( $data['label'] ) . '</label><br />' . "\n";
 
 				if ( $description )
 					$html .= ' <p class="description">' . wp_kses_post( $description ) . '</p>' . "\n";
@@ -480,6 +483,7 @@ abstract class WC_Settings_API {
     	$data['css'] 			= isset( $data['css'] ) ? $data['css'] : '';
     	$data['desc_tip']		= isset( $data['desc_tip'] ) ? $data['desc_tip'] : false;
     	$data['description']    = isset( $data['description'] ) ? $data['description'] : '';
+	$data['placeholder'] = isset( $data['placeholder'] ) ? $data['placeholder'] : '';
 
 		// Description handling
 		if ( $data['desc_tip'] === true ) {
@@ -512,11 +516,17 @@ abstract class WC_Settings_API {
 			$html .= '</th>' . "\n";
 			$html .= '<td class="forminp">' . "\n";
 				$html .= '<fieldset><legend class="screen-reader-text"><span>' . wp_kses_post( $data['title'] ) . '</span></legend>' . "\n";
-				$html .= '<select name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" style="' . esc_attr( $data['css'] ) . '" class="select ' .esc_attr( $data['class'] ) . '" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . '>';
+				$html .= '<select name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" style="' . esc_attr( $data['css'] ) . '" class="select ' .esc_attr( $data['class'] ) . '" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . ' data-placeholder="' . esc_attr( $data['placeholder'] )  . '">';
 
-				foreach ($data['options'] as $option_key => $option_value) :
-					$html .= '<option value="' . esc_attr( $option_key ) . '" '.selected( $option_key, esc_attr( $this->get_option( $key ) ), false ).'>' . esc_attr( $option_value ) . '</option>';
-				endforeach;
+				foreach ($data['options'] as $option_key => $option_value) {
+					$option_disabled = '';
+					if($option_value == '~splitter~' ) {
+						$option_key         = '---';
+						$option_value       = '---';
+						$option_disabled    = 'disabled="disabled" ';
+					}
+					$html .= '<option ' . $option_disabled . 'value="' . esc_attr( $option_key ) . '" '.selected( $option_key, esc_attr( $this->get_option( $key ) ), false ).'>' . esc_attr( $option_value ) . '</option>';
+				}
 
 				$html .= '</select>';
 
@@ -551,6 +561,7 @@ abstract class WC_Settings_API {
     	$data['css'] 			= isset( $data['css'] ) ? $data['css'] : '';
     	$data['desc_tip']		= isset( $data['desc_tip'] ) ? $data['desc_tip'] : false;
     	$data['description']    = isset( $data['description'] ) ? $data['description'] : '';
+	$data['placeholder'] = isset( $data['placeholder'] ) ? $data['placeholder'] : '';
 
 		// Description handling
 		if ( $data['desc_tip'] === true ) {
@@ -583,10 +594,16 @@ abstract class WC_Settings_API {
 			$html .= '</th>' . "\n";
 			$html .= '<td class="forminp">' . "\n";
 				$html .= '<fieldset><legend class="screen-reader-text"><span>' . wp_kses_post( $data['title'] ) . '</span></legend>' . "\n";
-				$html .= '<select multiple="multiple" style="' . esc_attr( $data['css'] ) . '" class="multiselect ' . esc_attr( $data['class'] ) . '" name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '[]" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . '>';
+				$html .= '<select multiple="multiple" style="' . esc_attr( $data['css'] ) . '" class="multiselect ' . esc_attr( $data['class'] ) . '" name="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '[]" id="' . esc_attr( $this->plugin_id . $this->id . '_' . $key ) . '" ' . disabled( $data['disabled'], true, false ) . ' ' . implode( ' ', $custom_attributes ) . ' data-placeholder="' . esc_attr( $data['placeholder'] )  . '">';
 
 				foreach ( $data['options'] as $option_key => $option_value) {
-					$html .= '<option value="' . esc_attr( $option_key ) . '" ' . selected( in_array( $option_key, $this->get_option( $key, array() ) ), true, false ) . '>' . esc_attr( $option_value ) . '</option>';
+					$option_disabled = '';
+					if($option_value == '~splitter~' ) {
+						$option_key         = '---';
+						$option_value       = '---';
+						$option_disabled    = 'disabled="disabled" ';
+					}
+					$html .= '<option ' . $option_disabled . 'value="' . esc_attr( $option_key ) . '" ' . selected( in_array( $option_key, $this->get_option( $key, array() ) ), true, false ) . '>' . esc_attr( $option_value ) . '</option>';
 				}
 
 				$html .= '</select>';

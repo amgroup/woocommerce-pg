@@ -233,19 +233,14 @@ abstract class WC_Shipping_Method extends WC_Settings_API {
      */
     function get_shipping_discout( $package = array() ) {
         $shipping_discout = 0;
-//echo "<pre>";
         foreach( $package['contents'] as $key => $value ) {
             if( isset( $package['contents'][$key]['line_shipping_discount'] ) )
                 if( isset( $package['contents'][$key]['line_shipping_discount'][ $this->id ] ) ) {
-//echo $key . ": " . $this->id . ": " .$package['contents'][$key]['line_shipping_discount'][ $this->id ] . "\n";
                     $shipping_discout += $package['contents'][$key]['line_shipping_discount'][ $this->id ];
                 }
         }
-//echo "==================\n";
-//echo $shipping_discout  . "\n";
-//echo "<pre>";
-		return $shipping_discout;
-	}
+	return $shipping_discout;
+    }
 
 
 	/**
@@ -259,5 +254,70 @@ abstract class WC_Shipping_Method extends WC_Settings_API {
 	 */
 	function supports( $feature ) {
 		return apply_filters( 'woocommerce_shipping_method_supports', in_array( $feature, $this->supports ) ? true : false, $feature, $this );
+	}
+
+	function init_settings() {
+		global $woocommerce;
+
+		wp_register_script( 'admin_shippng_method_checkout_fields', $woocommerce->plugin_url() . '/assets/js/admin/shipping-methods-checkout-fields.js', array('jquery') );
+		wp_enqueue_script( 'admin_shippng_method_checkout_fields' );
+
+		$options =  array(
+                        'billing_first_name' => 'Billing first name',
+                        'billing_last_name' => 'Billing last name',
+                        'billing_middle_name' => 'Billing middle name',
+                        'billing_email' => 'Billing email',
+                        'billing_phone' => 'Billing phone',                        
+                        'billing_company' => 'Billing company',
+                        'billing_address_1' => 'Billing address_1',
+                        'billing_address_2' => 'Billing address_2',
+                        'billing_city' => 'Billing city',
+                        'billing_state' => 'Billing state',
+                        'billing_postcode' => 'Billing postcode',
+                        'billing_country' => 'Billing country',
+                        'splitter1' => '~splitter~',
+
+                        'shipping_first_name' => 'Shipping first name',
+                        'shipping_last_name' => 'Shipping last name',
+                        'shipping_middle_name' => 'Shipping middle name',
+                        'shipping_email' => 'Shipping email',
+                        'shipping_phone' => 'Shipping phone',                        
+                        'shipping_company' => 'Shipping company',
+                        'shipping_address_1' => 'Shipping address_1',
+                        'shipping_address_2' => 'Shipping address_2',
+                        'shipping_city' => 'Shipping city',
+                        'shipping_state' => 'Shipping state',
+                        'shipping_postcode' => 'Shipping postcode',
+                        'shipping_country' => 'Shipping country',
+                        'splitter2' => '~splitter~',
+
+                        'order_comments'    => 'Order comments'
+		);
+
+		$this->form_fields['checkout_fields'] = array(
+                                'title'                 => __( 'Checkout fields for', 'woocommerce') . ' ' . $this->method_title,
+                                'type'                  => 'multiselect',
+                                'label'                 => __( 'These fields will be used at the checkout page as <strong>NOT</strong> required', 'woocommerce' ),
+				'options'		=> $options,
+				'description'		=> __( 'Uncheck them all if you need use all fields', 'woocommerce' ),
+				'desc_tip'		=> true,
+                                'default'               => 'no',
+				'class'			=> 'chosen_select shipping_checkout_fields',
+				'css'			=> 'width: 100%',
+                        );
+
+		$this->form_fields['checkout_fields_required'] = array(
+                                'title'                 => __('Required checkout fields for', 'woocommerce') . ' ' . $this->method_title,
+                                'type'                  => 'multiselect',
+                                'label'                 => __( 'These fields will be used at the checkout page as required', 'woocommerce' ),
+				'options'		=> $options,
+				'description'		=> __( 'Uncheck them all if you need use all fields', 'woocommerce' ),
+				'desc_tip'		=> true,
+                                'default'               => 'no',
+				'class'			=> 'chosen_select shipping_checkout_fields_required',
+				'css'			=> 'width: 100%',
+                        );
+		parent::init_settings();
+		return;
 	}
 }

@@ -298,7 +298,8 @@ class WC_Order {
 	 * @return string
 	 */
 	public function get_order_number() {
-		return apply_filters( 'woocommerce_order_number', _x( 'OL-', 'hash before order number', 'woocommerce' ) . $this->id, $this );
+		$order_prefix = get_option('woocommerce_order_prefix');
+		return apply_filters( 'woocommerce_order_number', _x( $order_prefix, 'hash before order number', 'woocommerce' ) . $this->id, $this );
 	}
 
 	/**
