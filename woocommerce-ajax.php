@@ -1848,11 +1848,8 @@ if( !function_exists( 'get_data_product_variations' ) ) {
  * 
  * AJAX dinamic load nonce params
 */
-if( !function_exists( 'get_woocommerce_nonce_params' ) ) {
-    function get_woocommerce_nonce_params(){
-         global $woocommerce;
-
-        header( 'Content-Type: application/javascript; charset=UTF-8' );
+if( !function_exists( 'woocommerce_nonce_params' ) ) {
+    function woocommerce_nonce_params(){
 
         // Variables for JS scripts
         $woocommerce_params = array(
@@ -1871,6 +1868,15 @@ if( !function_exists( 'get_woocommerce_nonce_params' ) ) {
         foreach( $woocommerce_params as $nonce => $value ) {
             echo "woocommerce_params['" . $nonce . "']='" . $value . "';";
         }
+    }
+}
+
+if( !function_exists( 'get_woocommerce_nonce_params' ) ) {
+    function get_woocommerce_nonce_params(){
+	global $woocommerce;
+
+        header( 'Content-Type: application/javascript; charset=UTF-8' );
+	echo $woocommerce->nonce_params();
         die();
     }
     add_action( 'wp_ajax_nopriv_get_woocommerce_nonce_params', 'get_woocommerce_nonce_params' );
@@ -1881,10 +1887,26 @@ if( !function_exists( 'get_woocommerce_nonce_params' ) ) {
  * Kidberries team
 */
 if( !function_exists( 'get_dynamic_shipping' ) ) {
+    // Will be removed!
     function get_dynamic_shipping() {
+	woocommerce_shipping_methods();
+    }
+    add_action( 'wp_ajax_nopriv_get_dynamic_shipping', 'get_dynamic_shipping' );
+    add_action( 'wp_ajax_get_dynamic_shipping', 'get_dynamic_shipping' );
+}
+
+if( !function_exists( 'woocommerce_shipping_methods' ) ) {
+    function woocommerce_shipping_methods() {
 		global $woocommerce, $wpdb;
 
 		if ( ! defined('WOOCOMMERCE_CART') ) define( 'WOOCOMMERCE_CART', true );
+
+		if ( isset( $_POST['shipping_method'] ) )
+			$woocommerce->session->chosen_shipping_method = $_POST['shipping_method'];
+		if ( ! empty( $_POST['shipping_method_variant'] ) )
+			$woocommerce->session->chosen_shipping_method_variant = $_POST['shipping_method_variant'];
+		if ( ! empty( $_POST['shipping_method_sub_variant'] ) )
+			$woocommerce->session->chosen_shipping_method_sub_variant = $_POST['shipping_method_sub_variant'];
 
 		$woocommerce->session->chosen_payment_method  = empty( $_POST['payment_method'] ) ? '' : $_POST['payment_method'];
 
@@ -1942,7 +1964,7 @@ if( !function_exists( 'get_dynamic_shipping' ) ) {
 
 		$woocommerce->cart->calculate_totals();
 
-		woocommerce_get_template( 'shipping/methods.php' );
+		woocommerce_get_template( 'shipping/methods.php', array('ajax'=>'async'));
 
 		if( !empty( $woocommerce->cart->cart_contents[$cart_item_key] ) ) {
 		    $woocommerce->cart->cart_contents[$cart_item_key]["quantity"] -= 1;
@@ -1955,8 +1977,8 @@ if( !function_exists( 'get_dynamic_shipping' ) ) {
 
 		die();
     }
-	add_action( 'wp_ajax_nopriv_get_dynamic_shipping', 'get_dynamic_shipping' );
-	add_action( 'wp_ajax_get_dynamic_shipping', 'get_dynamic_shipping' );
+	add_action( 'wp_ajax_nopriv_woocommerce_shipping_methods', 'woocommerce_shipping_methods' );
+	add_action( 'wp_ajax_woocommerce_shipping_methods', 'woocommerce_shipping_methods' );
 }
 
 if( !function_exists( 'checkout_shipping_form' ) ) {

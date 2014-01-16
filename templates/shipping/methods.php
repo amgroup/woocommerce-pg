@@ -14,7 +14,9 @@ global $woocommerce;
 $available_methods = $woocommerce->shipping->get_available_shipping_methods();
 $salt = '_' . rand(100000,999999);
 ?>
-
+<pre>
+<?php //var_dump($woocommerce->session) ?>
+</pre>
 <!-- Shipping methods -->
 <?php
 if ( $available_methods ) {
@@ -73,7 +75,7 @@ if ( $available_methods ) {
 	// Show select boxes for methods
 	} elseif ( get_option('woocommerce_shipping_method_format') == 'select' ) {
 
-		echo '<select class="shipping_method shipping_methods collection" name="shipping_method">';
+		echo '<select class="shipping_method shipping_methods collection' . ($ajax ? ' async' : ' sync') . '" name="shipping_method">';
 
 		foreach ( $available_methods as $method ) {
 			$selected = selected( $method->id, $woocommerce->session->chosen_shipping_method, false);
@@ -87,7 +89,7 @@ if ( $available_methods ) {
 	// Show radio buttons for methods
 	} else {
 
-		echo '<ul class="shipping_methods collection">';
+		echo '<ul class="shipping_methods collection' . ($ajax ? ' async' : ' sync') . '">';
 		foreach ( $available_methods as $method ) {
 			$checked = checked( $method->id, $woocommerce->session->chosen_shipping_method, false);
 			if( $checked ) $checked_id = $method->method_id;
@@ -99,17 +101,16 @@ if ( $available_methods ) {
 
 // No shipping methods are available
 } else {
-
 	if ( ! $woocommerce->customer->get_shipping_country() || ! $woocommerce->customer->get_shipping_state() || ! $woocommerce->customer->get_shipping_postcode() ) {
 
-		echo '<p class="shipping_methods collection">' . __( 'Please choose product options to see available shipping methods.', 'woocommerce' ) . '</p>';
+		echo '<p class="shipping_methods collection' . ($ajax ? ' async' : ' sync') . '">' . __( 'Please choose product options to see available shipping methods.', 'woocommerce' ) . '</p>';
 
 	} else {
 
 		$customer_location = $woocommerce->countries->countries[ $woocommerce->customer->get_shipping_country() ];
 
 		echo apply_filters( 'woocommerce_no_shipping_available_html',
-			'<p class="shipping_methods collection">' .
+			'<p class="shipping_methods collection' . ($ajax ? ' async' : ' sync') . '">' .
 			sprintf( __( 'Sorry, it seems that there are no available shipping methods for your location (%s).', 'woocommerce' ) . ' ' . __( 'If you require assistance or wish to make alternate arrangements please contact us.', 'woocommerce' ), $customer_location ) .
 			'</p>'
 		);
@@ -118,151 +119,3 @@ if ( $available_methods ) {
 ?>
 <input type="hidden" name="shipping_method_variant" value="<?php echo $woocommerce->session->chosen_shipping_method_variant; ?>" />
 <input type="hidden" name="shipping_method_sub_variant" value="<?php echo $woocommerce->session->chosen_shipping_method_sub_variant; ?>" />
-
-<script type="text/javascript">
-	jQuery(document).ready(function($) {
-	    var xhr_m;
-	    var xhr_r;
-	    var xhr_sf;
-	    var xhr_bf;
-	    var block_css = { message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6 }};
-        
-        // Update shipping methods
-
-        function update_shipping_methods(data) {
-            if( $( '.shipping_methods.collection' ).size() ) {
-		$( '.shipping_methods.collection' ).parent().block(block_css);
-
-		$.extend( data, {
-		    shipping_method: $('.shipping_method:checked').val() || $('.shipping_method').val(),
-		    action:  'woocommerce_shipping_methods_form',
-		    security: woocommerce_params.shipping_methods_nonce
-		});
-
-                if (xhr_m) xhr_m.abort();
-			    xhr_m = $.ajax({
-				    type:		'POST',
-				    url:		woocommerce_params.ajax_url,
-				    data:		data,
-				    success:	function(response) {
-					    $('.shipping_methods.collection').parent().empty().unblock().html( $(response) );
-				    }
-			    });
-
-		}
-        }
-
-        // Update order_review        
-        function update_order_review(data) {
-            if( $( '#order_review' ).size() ) {
-			    $( '#order_review').block(block_css);
-
-		        $.extend(data, {
-			        action:		'woocommerce_update_order_review',
-			        security: 	woocommerce_params.update_order_review_nonce
-		        });
-
-                if (xhr_r) xhr_r.abort();
-			    xhr_r = $.ajax({
-				    type:		'POST',
-				    url:		woocommerce_params.ajax_url,
-				    data:		data,
-				    success:	function(response) {
-					    $( '#order_review' ).unblock().html( $(response) );
-				    }
-			    });
-			}        
-        }
-
-        // Update shipping fields        
-        function update_shipping_fields(data) {
-			if( $( '#checkout_shipping_address' ).size() ) {
-			    $( '#checkout_shipping_address').parent().block(block_css);
-
-		        $.extend(data, {
-			        action:		'checkout_shipping_form',
-			        security: 	woocommerce_params.checkout_shipping_form_nonce
-		        });
-
-                if (xhr_sf) xhr_sf.abort();
-			    xhr_sf = $.ajax({
-				    type:		'POST',
-				    url:		woocommerce_params.ajax_url,
-				    data:		data,
-				    success:	function(response) {
-					    $( '#checkout_shipping_address' ).html( $(response) );
-					    $( '#checkout_shipping_address' ).parent().unblock();
-				    }
-			    });
-			}        
-        }
-
-		// Update billing fields        
-        function update_billing_fields(data) {
-			if( $( '#checkout_billing_address' ).size() ) {
-			    $( '#checkout_billing_address').parent().block(block_css);
-
-		        $.extend(data, {
-			        action:		'checkout_billing_form',
-			        security: 	woocommerce_params.checkout_billing_form_nonce
-		        });
-
-                if (xhr_bf) xhr_bf.abort();
-			    xhr_bf = $.ajax({
-				    type:		'POST',
-				    url:		woocommerce_params.ajax_url,
-				    data:		data,
-				    success:	function(response) {
-					    $( '#checkout_billing_address' ).html( $(response) );
-					    $( '#checkout_billing_address' ).parent().unblock();
-				    }
-			    });
-			}        
-        }
-
-        // Get Form Data
-        function get_form_data(el) {
-            var data = {};
-
-            $.each( $(el).closest('form').serializeArray(), function() {
-                if (data[this.name] !== undefined) {
-                    if (!data[this.name].push)
-                        data[this.name] = [data[this.name]];
-                    data[this.name].push(this.value || '');
-                } else {
-                    data[this.name] = this.value || '';
-                }
-            });
-            return data;
-        }
-        
-		$('.shipping_method').change(function(){
-			var data = get_form_data(this);
-            
-            update_shipping_methods( data );
-            update_order_review( data );
-            update_shipping_fields( data );
-            update_billing_fields( data );
-		});
-        
-        
-		$("input[name=\'shipping_method_variant\']:first" ).change(function(){
-			var data = get_form_data(this);
-
-            update_shipping_methods( data );
-            update_shipping_methods( data );
-            update_order_review( data );
-		});
-        
-		$("input[name=\'shipping_method_sub_variant\']:first" ).change(function(){
-			var data = get_form_data(this);
-
-            update_shipping_methods( data );
-            update_order_review( data );
-            update_shipping_fields( data );
-            update_billing_fields( data );
-		});
-	});
-</script>
-<!-- /Shipping methods -->
-
