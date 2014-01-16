@@ -18,6 +18,7 @@ class WC_Shipping_Rate {
 	var $id 		= '';
 	var $label 		= '';
 	var $label_extra= '';
+    var $multicost  = 0;
 	var $cost 		= 0;
 	var $cost_real  = 0;
 	var $info       = array();
@@ -34,10 +35,11 @@ class WC_Shipping_Rate {
 	 * @param mixed $taxes
 	 * @return void
 	 */
-	public function __construct( $id, $label, $cost, $cost_real, $taxes, $method_id, $label_extra, $info ) {
-		$this->id 		= $id;
+	public function __construct( $id, $label, $multicost, $cost, $cost_real, $taxes, $method_id, $label_extra, $info ) {
+		$this->id 		    = $id;
 		$this->label 		= $label;
 		$this->label_extra	= $label_extra;
+        $this->multicost 	= $multicost;
 		$this->cost 		= $cost;
 		$this->cost_real	= $cost_real;
 		$this->taxes 		= $taxes ? $taxes : array();

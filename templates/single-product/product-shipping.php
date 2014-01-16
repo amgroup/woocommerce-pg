@@ -12,7 +12,7 @@ global $product;
 
 <!-- Shipping methods -->
 <div class="delivery-box">
-    <span class="title"><span class="big">Доставка 1:</span></span>
+    <span class="title"><span class="big">Доставка:</span></span>
     <ul id="shipping_method">
     </ul>
     <small>* <em>стоимость доставки вашей корзины <strong>вместе с этим товаром</strong></em></small>

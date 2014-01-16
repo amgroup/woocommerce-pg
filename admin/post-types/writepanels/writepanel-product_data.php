@@ -345,22 +345,44 @@ function woocommerce_product_data_box() {
 
 		</div>
                 <script type="text/javascript">
-                    jQuery(document).ready(function(){
-                        jQuery(".enable_variation[data-attribute]").each(function(){
-                            var dataAttribute = jQuery(this).attr('data-attribute');
-                            var variation     = jQuery(this).find('input[name^="attribute_variation"]');
-                            var changeable    = jQuery(this).find('input[name^="attribute_changeable"]');
+                    jQuery(document).ready(function($){
+                        $(".enable_variation[data-attribute]").each(function(){
+                            var $this = $(this);
 
-                            if( variation.attr("checked") ) { changeable.attr( {"checked":null} ).parent().hide(); }
-                            else if( changeable.attr("checked") ) { variation.parent().hide(); }
+                            var $variation  = $this.find('input[name^="attribute_variation"]');
+                            var $changeable = $this.find('input[name^="attribute_changeable"]');
 
-                            variation.change(function(){
-                                if( variation.attr("checked") ) { changeable.parent().hide("fast"); }
-                                else { changeable.parent().show("fast"); }
+                            if( $variation.attr("checked") ) { $changeable.attr( {"checked":null} ).parent().hide(); }
+                            else if( $changeable.attr("checked") ) { $variation.parent().hide(); }
+
+                            $variation.change(function(){
+                                if( $variation.attr("checked") ) { $changeable.parent().hide("fast");	}
+                                else { $changeable.parent().show("fast"); }
+								
+								if( ! $variation.attr("checked") && ! $changeable.attr("checked") ) {
+									$(this).closest("table").find("select[multiple=multiple]").closest('tr').show();
+								} else {
+									$select = $(this).closest("table").find("select[multiple=multiple]")
+									$select.find("option").attr( {selected:"selected"} );
+									$select.closest('tr').hide();
+									$select.trigger("liszt:updated");
+									$(".button.save_attributes").trigger("click");
+								}
                             });
-                            changeable.change(function(){
-                                if( changeable.attr("checked") ) { variation.parent().hide("fast"); }
-                                else { variation.parent().show("fast"); }
+
+                            $changeable.change(function(){
+                                if( $changeable.attr("checked") ) { $variation.parent().hide("fast"); }
+                                else { $variation.parent().show("fast"); }
+
+								if( ! $variation.attr("checked") && ! $changeable.attr("checked") ) {
+									$(this).closest("table").find("select[multiple=multiple]").closest('tr').show();
+								} else {
+									$select = $(this).closest("table").find("select[multiple=multiple]")
+									$select.find("option").attr( {selected:"selected"} );
+									$select.closest('tr').hide();
+									$select.trigger("liszt:updated");
+									$(".button.save_attributes").trigger("click");
+								}
                             });
                         });
                     })

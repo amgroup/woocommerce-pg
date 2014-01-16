@@ -56,79 +56,6 @@
 	        return match;
         }
 
-	// Pretty Chooser
-	var selects = $(this).find('.variations select');
-	/*if( selects.length === 2 && !($(this).find('.variations.pretty'))[0] ) {
-		$(this).find('.variations').hide();
-		$(this).find('.single_variation_wrap').show();
-		$(this).find('.single_variation_wrap button, .single_variation_wrap input.qty').addClass('disabled').attr({'disabled':1});
-
-		longest  = $(selects[0]).find('option').length >  $(selects[1]).find('option').length ? $(selects[0]) : $(selects[1]);
-		shortest = $(selects[0]).find('option').length <= $(selects[1]).find('option').length ? $(selects[0]) : $(selects[1]);
-
-		$(this).find('.variations').after('<table style="margin-bottom: 30px;" class="variations pretty" cellspacing="0" ><tbody id="pretty_chooser"/></table>');
-		var table = $('#pretty_chooser');
-		table.append( '<tr><td class="h longest" rowspan="' + (longest.find('option[value!=""]').length + 1) + '"><div>' + $(this).find('.variations label[for="' + longest.attr('id') + '"]').html() + '</div></td><td class="h shortest" colspan="' + shortest.find('option[value!=""]').length + '">' + $(this).find('.variations label[for="' + shortest.attr('id') + '"]').html() + '</td></tr>' );
-		table.find(".h.longest").css({width:table.find(".h.longest").css('line-height'),height:'0px'});
-		table.find(".h.longest div").css({MozTransform:"rotate(-90deg)",WebkitTransform:"rotate(-90deg)",OTransform:"rotate(-90deg)",writingMode:"tb-rl",width: table.find(".h.longest").css('line-height')});
-
-		longest.find('option[value!=""]').each(function(){
-			table.append("<tr/>");
-			row = table.find("tr:last");
-			var row_class = $(this).val();
-
-			shortest.find('option[value!=""]').each(function(){
-				var element = $('<button class="' + ['variant', row_class, $(this).val()].join(" ") + '" data-attribute_' + longest.attr('id') + '="' + row_class + '" data-attribute_' + shortest.attr('id') + '="' + $(this).val() + '">' + $(this).html() + '</button>');
-				element.css({borderColor:row_class});
-				element.css({borderColor: $(this).val() });
-				row.append('<td class="variant"></td>');
-				row.find('td:last').append(element);
-			});
-		});
-
-		table.find("td").css({textAlign: 'center'});
-		table.find("td.variant").css({padding:0,margin:0});
-		table.find("td.variant button.variant").css( {fontSize: '12px',fontWeigth:'bold',padding:'2px 5px',margin:'2px',borderStyle:'solid',borderRadius:'5px', borderWidth:'4px',textShadow:'none'});
-		table.find("td.variant button.variant").click(function(event){
-			event.preventDefault();
-
-			if( !$(this).attr('ref') ) {
-				var data = $(this).data();
-				var variations = $('form[data-product_variations]').data('product_variations');
-
-				for( var i in variations) {
-					var variant = variations[i]['attributes'];
-					var found = 0;
-					for( var j in data ) {
-						if( data[j] == variant[j] ) found += 1;
-					}
-					if( found === 2 ) {
-						$(this).attr({'ref':variations[i]['variation_id']});
-						break;
-					}
-				}
-			}
-
-			if( $(this).attr('ref') ) {
-				$('input[name="variation_id"]').val( $(this).attr('ref') );
-				$("td.variant button.variant").removeClass("checked").css({backgroundColor:'inherit'});
-				$('form.variations_form.cart').find('.single_variation_wrap button, .single_variation_wrap input.qty').removeClass('disabled').attr({'disabled':null});
-				var data = $(this).data();
-				for( var i in data ) {
-					var id = ( i ).replace(/(attribute_)/,'#');
-					$(id).val( data[i] );
-				}
-				$('form.variations_form.cart').trigger('check_variations');
-				$(this).addClass("checked").css({backgroundColor:'rgb(253, 181, 51)'});
-			}
-			else {
-				$(this).addClass('disabled');
-			}
-		});
-
-		
-	}*/
-	// End Pretty Chooser
 	
         // Unbind any existing events
         this.unbind( 'check_variations update_variation_values found_variation' );
@@ -209,6 +136,35 @@
 						.trigger( 'check_variations', [ $(this).attr('name'), true ] );
 
 				} )
+
+                // Select have been changed
+			    .on('woocommerce_variation_select_change', function( event ) {
+return;
+	                // Choose Helper
+	                var selects = $(this).find('.variations select');
+	                selects.each(function(){
+				$this = $(this);
+		                if( $this.find('option').length == 2 ) {
+					var old_val = $this.val();
+//			                $this.closest('.select-wrapper').hide();
+//			                $('label[for="' + $this.attr('id') + '"]').hide();
+
+			                $this.find('option[value!=""]').addClass('active').attr('selected','selected');
+					if( $this.val() != old_val ) {
+						$this.trigger('select_auto_change');
+						$('.variations_form').trigger( 'check_variations' );
+/*
+			                if( ! $('.shop_attributes tr').hasClass( $(this).attr('id') ) ) {
+				                var tr = $('.shop_attributes tr:first');
+				                tr.parent().prepend( '<tr class="' + $(this).attr('id') + (tr.hasClass('alt') ? '' : ' alt') + '"><th>' + $('label[for="' + $(this).attr('id') + '"]').html() + '</th><td>' + $(this).find('option.active').html() + '</td></tr>' );
+			                } else {
+				                var td = $('.shop_attributes tr.' + $(this).attr('id') + ' td' ).html( $(this).find('option.active').html() );
+			                }
+*/
+					}
+		                }
+	                });
+			    })
 
 				// Check variations
 				.on( 'check_variations', function( event, exclude, focus ) {
@@ -395,7 +351,6 @@
 				            }
 
 				        }
-
 				        // Detach inactive
 				        current_attr_select.find('option:gt(0):not(.active)').remove();
 
@@ -410,7 +365,7 @@
 				.on( 'found_variation', function( event, variation ) {
 
 			    var $variation_form = $(this);
-                var $product 	    = $( '.product-esqsential' );
+            			var $product 	    = $( '.product-esqsential,.type-product,.product' );
 				var $product_img 	= $( '#image-zoom img' );
 				var $product_link 	= $( '#image-zoom' );
 				var o_src 		    = $product_img.attr('data-o_src');
@@ -422,6 +377,8 @@
                 var variation_title = variation.image_title;
 
 				$variation_form.find('.variations_button').show();
+				$variation_form.find('input[name="quantity"]').removeAttr("disabled");
+
 			        $variation_form.find('.single_variation').html( variation.price_html + variation.availability_html );
 			        $('.single_variation.alternate').html( '<p class="price">' + $(variation.price_html).find('.amount').html() + '</p>' );
 
@@ -495,6 +452,7 @@
 
 			        if ( ! variation.is_in_stock && ! variation.backorders_allowed ) {
 				        $variation_form.find('.variations_button').hide();
+					$variation_form.find('input[name=quantity]').attr('disabled', 'disabled');
 			        }
 
 			        if ( variation.min_qty )

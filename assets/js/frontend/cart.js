@@ -24,17 +24,11 @@ jQuery(document).ready(function($) {
         } else if( $(this).hasClass('shipping_method_variant') ) {
             data.shipping_method_variant = $('.shipping_method_variant').val();
         }
-        /*
-        console.log( data.shipping_method );
-        console.log( data.shipping_method_variant );
-        console.log( data.shipping_method_sub_variant );
-*/
 	        $('div.cart_totals').block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
 
 
                 if( $('select.russianpost_places.ajax-chzn-select').val() ) {
                         data.shipping_method_variant = $('select.russianpost_places.ajax-chzn-select').val();
-                        //data.hidden_city     = $('select.russianpost_places.ajax-chzn-select option[value="'+data.hidden_postcode+'"]').html();
                         data.s_city          = $('select.russianpost_places.ajax-chzn-select option[value="'+data.shipping_method_variant+'"]').html();
                
                 }

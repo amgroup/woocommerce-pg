@@ -79,28 +79,3 @@ if ( $available_methods ) {
 	}
 }
 ?>
-<script type="text/javascript">
-    jQuery(document).ready(function(){ 
-        jQuery('#russianpost_places')
-            .chosen({no_results_text: "Ничего не найдено!"})
-            .ajaxChosen({
-                minTermLength: 2,
-                afterTypeDelay: 500,
-                keepTypingMsg: "Продолжайте набирать...",
-                lookingForMsg: "Ищем в базе",
-                type: 'POST',
-                url: woocommerce_params.ajax_url,
-                data: {action:'get_russianpost_places'},
-                jsonTermKey: "place",
-                dataType: 'json'
-            }, function (data) {
-                var results = [];
-                jQuery.each(data, function (i, item) {
-                    results.push({ value: item.value, text: item.text });
-                });
-                return results;
-            });
-    });
-</script>
-
-

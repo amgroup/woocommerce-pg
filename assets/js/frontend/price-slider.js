@@ -37,10 +37,11 @@ jQuery(document).ready(function($) {
 			
 		}
 	});
-	
+
 	$('.price_slider').slider({
 		range: true,
 		animate: true,
+		step: 10,
 		min: min_price,
 		max: max_price,
 		values: [current_min_price,current_max_price],
@@ -52,17 +53,14 @@ jQuery(document).ready(function($) {
 			$('body').trigger('price_slider_create', [current_min_price, current_max_price]);
 		},
 		slide: function( event, ui ) {
-			
 			$( "input#min_price" ).val(ui.values[ 0 ]);
 			$( "input#max_price" ).val(ui.values[ 1 ]);
-			
+
 			$('body').trigger('price_slider_slide', [ui.values[ 0 ], ui.values[ 1 ]] );
 		},
 		change: function( event, ui ) {
-			
 			$('body').trigger('price_slider_change', [ui.values[ 0 ], ui.values[ 1 ]] );
 			
 		},
 	});
-	
 });

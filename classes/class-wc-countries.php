@@ -678,7 +678,7 @@ class WC_Countries {
 				'label' 		=> __( 'Address', 'woocommerce' ),
 				'placeholder'		=> __( 'Street address', 'woocommerce' ),
 				'required' 		=> true,
-				'class' 		=> array( 'form-row-wide', 'address-field' ),
+//				'class' 		=> array( 'form-row-wide', 'address-field' ),
 				),
 			'address_2' => array(
 				'placeholder' 	=> _x( 'Apartment, suite, unit etc. (optional)', 'placeholder', 'woocommerce' ),

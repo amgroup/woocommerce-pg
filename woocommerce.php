@@ -1141,7 +1141,6 @@ class Woocommerce {
 		);
 	}
 
-
 	/**
 	 * Init images.
 	 *
@@ -1266,7 +1265,7 @@ class Woocommerce {
 
 		wp_localize_script( 'woocommerce', 'woocommerce_params', apply_filters( 'woocommerce_params', $woocommerce_params ) );
 
-		// YES, it is dirty hack from KIDBERRIES.COM developers! =) It is for true chachin HTML pages.
+		// YES, it is dirty hack from KIDBERRIES.COM developers! =)
 		wp_localize_script( 'woocommerce', "woocommerce_params_ajax = jQuery(function(){jQuery.ajax({type:'POST',url:woocommerce_params.ajax_url,data:{action:'get_woocommerce_nonce_params'},async:false})}); woocommerce_params_ajax", "undefined");
 
 		// CSS Styles

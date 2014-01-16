@@ -1974,6 +1974,9 @@ msgstr "Налог"
 msgid "Shipping Methods"
 msgstr "Методы доставки"
 
+msgid "Shipping method"
+msgstr "Доставка"
+
 #: admin/settings/settings-init.php:947
 #: admin/woocommerce-admin-settings.php:189
 #: admin/woocommerce-admin-settings.php:268
@@ -2462,7 +2465,7 @@ msgstr "Введите артикул этого варианта или ост�
 #: templates/single-product/product-attributes.php:22
 #@ woocommerce
 msgid "Weight"
-msgstr "Вес"
+msgstr "Вес вместе с упаковкой"
 
 #: admin/post-types/writepanels/writepanel-product-type-variable.php:178
 #: admin/post-types/writepanels/writepanel-product-type-variable.php:386
@@ -2602,12 +2605,11 @@ msgstr "Даты действия цены распродажи"
 msgid "Sale Price Time"
 msgstr "Время действия цены распродажи"
 
-
 #: admin/post-types/writepanels/writepanel-product_data.php:151
 #: templates/single-product/product-attributes.php:31
 #@ woocommerce
 msgid "Dimensions"
-msgstr "Размеры"
+msgstr "Габаритные размеры упаковки"
 
 #: admin/post-types/product.php:527
 #: admin/post-types/product.php:772
@@ -11541,3 +11543,6 @@ msgstr "Скидка на сумму"
 
 msgid "Fixed Total"
 msgstr "Фиксированная стоимость"
+
+msgid "You need to select all options"
+msgstr "Пожалуйста, выберите вариант этой вещи"

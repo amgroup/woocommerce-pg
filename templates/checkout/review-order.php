@@ -42,7 +42,7 @@ $available_methods = $woocommerce->shipping->get_available_shipping_methods();
 
 				<tr class="shipping">
 					<th><?php _e( 'Shipping', 'woocommerce' ); ?></th>
-					<td><?php woocommerce_get_template( 'cart/shipping-methods.php', array( 'available_methods' => $available_methods ) ); ?></td>
+					<td><?php woocommerce_get_template( 'single-product/single-product-shipping.php', array( 'available_methods' => $available_methods ) ); ?></td>
 				</tr>
 
 				<?php do_action('woocommerce_review_order_after_shipping'); ?>

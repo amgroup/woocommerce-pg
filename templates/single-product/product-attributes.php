@@ -20,6 +20,43 @@ if ( empty( $attributes ) && ( ! $product->enable_dimensions_display() || ( ! $p
 ?>
 <table class="shop_attributes">
 
+	<?php foreach ($attributes as $attribute) :
+		if ( ! isset( $attribute['is_visible'] ) || ! $attribute['is_visible'] ) continue;
+		if ( $attribute['is_taxonomy'] && ! taxonomy_exists( $attribute['name'] ) ) continue;
+
+		$alt = $alt * -1;
+		?>
+
+		<tr class="<?php if ( $alt == 1 ) echo 'alt'; ?>">
+			<th><?php echo $woocommerce->attribute_label( $attribute['name'] ); ?></th>
+			<td>
+			<span <?php if ( $attribute['is_changeable'] ) echo ' class="changeable attribute name attribute_' . $attribute['name'] . '"'; ?>>
+				<?php
+				if ( $attribute['is_taxonomy'] ) {
+
+					$values = woocommerce_get_product_terms( $product->id, $attribute['name'], 'names' );
+					if ( ! $attribute['is_changeable'] || sizeof($values) < 2 )
+						echo apply_filters( 'woocommerce_attribute', wpautop( wptexturize( implode( ', ', $values ) ) ), $attribute, $values );
+					else
+						echo apply_filters( 'woocommerce_attribute', wpautop( '<small>' . __('You need to select all options', 'woocommerce') . '</small>'), $attribute, $values );
+
+				} else {
+
+					// Convert pipes to commas and display values
+					$values = array_map( 'trim', explode( '|', $attribute['value'] ) );
+					if ( ! $attribute['is_changeable'] || sizeof($values) < 2  )
+						echo apply_filters( 'woocommerce_attribute', wpautop( wptexturize( implode( ', ', $values ) ) ), $attribute, $values );
+					else
+						echo apply_filters( 'woocommerce_attribute', wpautop( '<small>' . __('You need to select all options', 'woocommerce') . '</small>'), $attribute, $values );
+
+				}
+			?>
+			</span>
+			</td>
+		</tr>
+
+	<?php endforeach; ?>
+
 	<?php if ( $product->enable_dimensions_display() ) : ?>
 
 		<?php if ( $product->has_weight() ) : $alt = $alt * -1; ?>
@@ -41,37 +78,6 @@ if ( empty( $attributes ) && ( ! $product->enable_dimensions_display() || ( ! $p
 		<?php endif; ?>
 
 	<?php endif; ?>
-
-	<?php foreach ($attributes as $attribute) :
-		if ( ! isset( $attribute['is_visible'] ) || ! $attribute['is_visible'] ) continue;
-		if ( $attribute['is_taxonomy'] && ! taxonomy_exists( $attribute['name'] ) ) continue;
-
-		$alt = $alt * -1;
-		?>
-
-		<tr class="<?php if ( $alt == 1 ) echo 'alt'; ?>">
-			<th><?php echo $woocommerce->attribute_label( $attribute['name'] ); ?></th>
-			<td>
-			<span <?php if ( $attribute['is_changeable'] ) echo ' class="changeable attribute name attribute_' . $attribute['name'] . '"'; ?>>
-				<?php
-				if ( $attribute['is_taxonomy'] ) {
-
-					$values = woocommerce_get_product_terms( $product->id, $attribute['name'], 'names' );
-					echo apply_filters( 'woocommerce_attribute', wpautop( wptexturize( implode( ', ', $values ) ) ), $attribute, $values );
-
-				} else {
-
-					// Convert pipes to commas and display values
-					$values = array_map( 'trim', explode( '|', $attribute['value'] ) );
-					echo apply_filters( 'woocommerce_attribute', wpautop( wptexturize( implode( ', ', $values ) ) ), $attribute, $values );
-
-				}
-			?>
-			</span>
-			</td>
-		</tr>
-
-	<?php endforeach; ?>
 
 </table>
 

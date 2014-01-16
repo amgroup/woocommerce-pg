@@ -1518,7 +1518,7 @@ function woocommerce_price_filter_init() {
 
 	if ( is_active_widget( false, false, 'price_filter', true ) && ! is_admin() ) {
 
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+//		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		wp_register_script( 'wc-price-slider', $woocommerce->plugin_url() . '/assets/js/frontend/price-slider' . $suffix . '.js', array( 'jquery-ui-slider' ), '1.6', true );
 
@@ -1710,7 +1710,7 @@ function woocommerce_save_address() {
 add_action( 'template_redirect', 'woocommerce_save_address' );
 
 
-function woocommerce_editable_slug($permalink,$id, $new_title, $new_slug) {
+function woocommerce_editable_slug($permalink, $id, $new_title, $new_slug) {
     return $permalink;
 }
 
@@ -1726,96 +1726,66 @@ function woocommerce_unique_post_slug($slug, $post_ID, $post_status, $post_type,
 
 
 /*
- *  Kidberries team
+ *  CartOn Team
  *  Checkout Fields Override
  */
-
-function remove_validation_from_address_checkout_billing_fields( $fields ) {
+function override_checkout_fields( $fields ) {
 	global $woocommerce;
-	$block_name = 'billing_';
 
-	foreach( array('address_1', 'address_2', 'city', 'country', 'postcode' ) as $field ) {
-		if( ( $key = array_search( 'address-field', $fields[ $block_name . $field  ][ 'class' ] ) ) !== false ) {
-			unset( $fields[ $block_name . $field  ][ 'class' ][ $key ] );
+	if( isset( $woocommerce->session->chosen_shipping_method ) ) {
+		$settings = get_option( 'woocommerce_' . $woocommerce->session->chosen_shipping_method . '_settings', null);
+
+		if( is_array( $settings[ 'checkout_fields' ] ) && count( $settings[ 'checkout_fields' ] ) ) {
+
+
+			// billing fields
+			foreach( $fields['billing'] as $key => $value ) {
+				if(in_array( $key, $settings['checkout_fields'] )) {
+
+					if( count( $settings[ 'checkout_fields_required' ] ) ) {
+						if( in_array( $key, $settings[ 'checkout_fields_required' ] ) ) {
+							$fields['billing'][ $key ]['required'] = true;
+						} else {
+							$fields['billing'][ $key ]['required'] = false;
+						}
+					}
+				} else {
+					unset( $fields['billing'][ $key ] );
+				}
+			}
+			if( count( $fields['billing'] ) == 0 )
+				unset( $fields['billing'] );
+
+
+			// shipping fields
+			foreach( $fields['shipping'] as $key => $value ) {
+				if( in_array( $key, $settings[ 'checkout_fields' ] ) ) {
+					if( count( $settings[ 'checkout_fields_required' ] ) ) {
+						if( in_array( $key, $settings[ 'checkout_fields_required' ] ) ) {
+							$fields['shipping'][ $key ]['required'] = true;
+						} else {
+							$fields['shipping'][ $key ]['required'] = false;
+						}
+					}
+				} else {
+					unset( $fields['shipping'][ $key ] );
+				}
+			}
+			if( count( $fields['shipping'] ) == 0 )
+				unset( $fields['shipping'] );
 		}
 	}
 
-	return $fields;
-}
+	if( count( $fields['billing'] ) )
+		$fields['billing']  = array_in_order( $fields['billing'], array('billing_country','billing_postcode','billing_city','billing_address_1','billing_address_2','billing_first_name','billing_middle_name','billing_last_name','billing_phone','billing_email') );
 
-function remove_validation_from_address_checkout_shipping_fields( $fields ) {
-	global $woocommerce;
-	$block_name = 'shipping_';
-
-	foreach( array('address_1', 'address_2', 'city', 'country', 'postcode' ) as $field ) {
-		if( ( $key = array_search( 'address-field', $fields[ $block_name . $field  ][ 'class' ] ) ) !== false ) {
-			unset( $fields[ $block_name . $field  ][ 'class' ][ $key ] );
-		}
-	}
+	if( count( $fields['shipping'] ) )
+		$fields['shipping'] = array_in_order( $fields['shipping'], array('shipping_country','shipping_postcode','shipping_city','shipping_address_1','shipping_address_2','shipping_first_name','shipping_middle_name','shipping_last_name','shipping_phone','shipping_email') );
 
 	return $fields;
 }
+add_filter( 'woocommerce_checkout_fields',  'override_checkout_fields' );
 
-add_filter( 'woocommerce_billing_fields', 'remove_validation_from_address_checkout_billing_fields', 1, 1 );
-add_filter( 'woocommerce_shipping_fields', 'remove_validation_from_address_checkout_shipping_fields', 1, 1 );
-
-
-/*
- *  Kidberries team
- *  Local Delivery Checkout Fields Override
- */
-
-function local_delivery_override_shipping_fields( $fields ) {
-	global $woocommerce;
-	if( 'local_delivery' === $woocommerce->session->chosen_shipping_method )
-		return local_delivery_override_fields( $fields, 'shipping' );
-	return $fields;
-}
-function local_delivery_override_billing_fields( $fields ) {
-	global $woocommerce;
-	if( 'local_delivery' === $woocommerce->session->chosen_shipping_method )
-		return local_delivery_override_fields( $fields, 'billing' );
-	return $fields;
-}
-function local_delivery_override_fields( $fields, $block_name ) {
-
-    unset( $fields[ $block_name . '_first_name' ][ 'required' ] );
-    foreach( array('country','last_name', 'postcode', 'state', 'company', 'address_2', 'city' ) as $field ) {
-        unset( $fields[ $block_name . '_' . $field ] );
-    }
-    return $fields;
-}
-add_filter( 'woocommerce_billing_fields', 'local_delivery_override_billing_fields', 1, 1 );
-add_filter( 'woocommerce_shipping_fields', 'local_delivery_override_shipping_fields', 1, 1 );
-
-
-
-/*
- *  Local Pickup Checkout Fields Override
- */
-
-function local_pickup_override_shipping_fields( $fields ) {
-	global $woocommerce;
-	if( 'local_pickup' === $woocommerce->session->chosen_shipping_method || 'free_local_pickup' === $woocommerce->session->chosen_shipping_method )
-		return local_pickup_override_fields( $fields, 'shipping' );
-	return $fields;
-}
-function local_pickup_override_billing_fields( $fields ) {
-	global $woocommerce;
-	if( 'local_pickup' === $woocommerce->session->chosen_shipping_method || 'free_local_pickup' === $woocommerce->session->chosen_shipping_method )
-		return local_pickup_override_fields( $fields, 'billing' );
-	return $fields;
-}
-function local_pickup_override_fields( $fields, $block_name ) {
-
-    unset( $fields[ $block_name . '_first_name' ][ 'required' ] );
-    foreach( array('country','last_name', 'postcode', 'state', 'company', 'address_1', 'address_2', 'city' ) as $field ) {
-        unset( $fields[ $block_name . '_' . $field ] );
-    }
-    return $fields;
-}
-add_filter( 'woocommerce_billing_fields', 'local_pickup_override_billing_fields', 1, 1 );
-add_filter( 'woocommerce_shipping_fields', 'local_pickup_override_shipping_fields', 1, 1 );
 
 function mb_transliterate($string) { 
     $table = array( 
@@ -1847,4 +1817,17 @@ function mb_transliterate($string) {
     $output = preg_replace('/ +/', '-', $output);
  
     return $output; 
+}
+
+function array_in_order($array,$order) {
+    $ordered = array();
+    foreach($order as $key) {
+	if( !is_null($key) ) {
+	    if(array_key_exists($key,$array)) {
+		$ordered[$key] = $array[$key];
+		unset($array[$key]);
+	    }
+	}
+    }
+    return $ordered + $array;
 }

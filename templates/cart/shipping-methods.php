@@ -9,10 +9,8 @@
 
 global $woocommerce;
 
-
 // If at least one shipping method is available
 if ( $available_methods ) {
-
 	// Prepare text labels with price for each shipping method
 	foreach ( $available_methods as $method ) {
 		if( $woocommerce->session->chosen_shipping_method == $method->id ) {
@@ -102,26 +100,4 @@ if ( $available_methods ) {
 }
 
 ?>
-<script type="text/javascript">
-    jQuery(document).ready(function(){
-        jQuery('select.ajax-chzn-select.russianpost_places')
-            .chosen({no_results_text: "Ничего не найдено!"})
-            .ajaxChosen({
-                minTermLength: 2,
-                afterTypeDelay: 500,
-                keepTypingMsg: "Продолжайте набирать...",
-                lookingForMsg: "Ищем в базе",
-                type: 'POST',
-                url: woocommerce_params.ajax_url,
-                data: {action:'get_russianpost_places'},
-                jsonTermKey: "place",
-                dataType: 'json'
-            }, function (data) {
-                var results = [];
-                jQuery.each(data, function (i, item) {
-                    results.push({ value: item.value, text: item.text });
-                });
-                return results;
-            });
-    });
-</script>
+

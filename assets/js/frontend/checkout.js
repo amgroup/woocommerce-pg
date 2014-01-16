@@ -1,5 +1,25 @@
 jQuery(document).ready(function($) {
 
+	$('#order_review')
+
+	/* Payment option selection */
+
+	.on( 'click', '.payment_methods input.input-radio', function() {
+		if ( $('.payment_methods input.input-radio').length > 1 ) {
+			$('div.payment_box').filter(':visible').slideUp(250);
+			if ($(this).is(':checked')) {
+				$('div.payment_box.' + $(this).attr('ID')).slideDown(250);
+			}
+		} else {
+			$('div.payment_box').show();
+		}
+	})
+
+	// Trigger initial click
+	.find('input[name=payment_method]:checked').click();
+
+
+return;
     $('form select.chzn-select').chosen({no_results_text: "Продолжайте набирать!"});
 
 	var updateTimer;
@@ -44,8 +64,6 @@ jQuery(document).ready(function($) {
 		$('#order_methods, #order_review').block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
 
 		var data = {
-			action: 			'woocommerce_update_order_review',
-			security: 			woocommerce_params.update_order_review_nonce,
 			payment_method:		payment_method,
 			country: 			country,
 			state: 				state,
@@ -58,22 +76,27 @@ jQuery(document).ready(function($) {
 			s_postcode: 		s_postcode,
 			s_city:				s_city,
 			s_address:			s_address,
-			s_address_2:		s_address_2,
-			post_data:			$('form.checkout').serialize()
+			s_address_2:			s_address_2,
+//			post_data:			$('form.checkout').serialize()
 		};
-        $.extend(data, custom_data);
+		$.extend(data, custom_data);
 
-		xhr = $.ajax({
+		$.extend(data, {
+			action:		'woocommerce_get_shipping_methods',
+			security:	woocommerce_params.get_shipping_methods_nonce
+		});
+
+
+		$.ajax({
 			type: 		'POST',
 			url: 		woocommerce_params.ajax_url,
 			data: 		data,
 			success: 	function( response ) {
-				if ( response ) {
-					var order_output = $(response);
-					$('#order_review').html( order_output.html() );
 
-					//$('body').trigger( 'updated_checkout' );
-                    $('body').trigger( 'update_checkout_fields' );
+					var shipping = $(response);
+					$('#shipping_method').html( shipping.html() );
+
+					$('body').trigger( 'update_checkout_fields' );
 
 					if( jQuery().chosen ) {
 						$(".chzn-select.shipping_method_variant")
@@ -81,12 +104,12 @@ jQuery(document).ready(function($) {
 							.change( function(e){
 								var This = $(this);
 								var Val  = $(this).val();
-                                var Text = This.find('option[value="' + Val + '"]').html();
-                                var custom_data = {};
+								var Text = This.find('option[value="' + Val + '"]').html();
+								var custom_data = {};
 
 								This.find('option[value="' + Val + '"]').attr('selected','selected');
 								if( This.hasClass('s_city') ) {
-                                    custom_data.shipping_method_variant = Val;
+								custom_data.shipping_method_variant = Val;
 
 									if( $('input[name="shiptobilling"]:checked') ) {
 										$('#billing_city').val( Text );
@@ -102,8 +125,8 @@ jQuery(document).ready(function($) {
                         jQuery('select.ajax-chzn-select.russianpost_places')
                             .chosen({no_results_text: "Ничего не найдено! "})
                             .change(function(e){
-								var This = $(this);
-								var Val  = $(this).val();
+                                var This = $(this);
+                                var Val  = $(this).val();
                                 var Text = This.find('option[value="' + Val + '"]').html();
                                 var custom_data = {};
 
@@ -115,7 +138,7 @@ jQuery(document).ready(function($) {
                                 }
                                 $('#shipping_city').val( Text );
                                 custom_data.s_city = Text;
-                                
+
                                 custom_data.hidden_postcode = Val;
                                 custom_data.shipping_method_variant = Val;
                                 custom_data.hidden_city = Text;
@@ -138,6 +161,25 @@ jQuery(document).ready(function($) {
                                 return results;
                             });
                     }
+			}
+		});
+
+
+		$.extend(data, {
+			action:		'woocommerce_update_order_review',
+			security: 	woocommerce_params.update_order_review_nonce
+		});
+
+		xhr = $.ajax({
+			type: 		'POST',
+			url: 		woocommerce_params.ajax_url,
+			data: 		data,
+			success: 	function( response ) {
+				if ( response ) {
+					var order_output = $(response);
+					$('#order_review').html( order_output.html() );
+
+					//$('body').trigger( 'updated_checkout' );
 				}
 			}
 		});

@@ -88,17 +88,22 @@ function woocommerce_ajax_update_shipping_method() {
 
 	if ( isset( $_POST['shipping_method'] ) )
 		$woocommerce->session->chosen_shipping_method = $_POST['shipping_method'];
+	if ( ! empty( $_POST['shipping_method_variant'] ) )
+		$woocommerce->session->chosen_shipping_method_variant = $_POST['shipping_method_variant'];
+	if ( ! empty( $_POST['shipping_method_sub_variant'] ) )
+		$woocommerce->session->chosen_shipping_method_sub_variant = $_POST['shipping_method_sub_variant'];
+
 
 	$woocommerce->cart->calculate_totals();
 
 	woocommerce_cart_totals();
 
+	$woocommerce->clear_product_transients();
 	die();
 }
 
 add_action('wp_ajax_woocommerce_update_shipping_method', 'woocommerce_ajax_update_shipping_method');
 add_action('wp_ajax_nopriv_woocommerce_update_shipping_method', 'woocommerce_ajax_update_shipping_method');
-
 
 /**
  * AJAX update order review on checkout
@@ -122,47 +127,54 @@ function woocommerce_ajax_update_order_review() {
 	do_action( 'woocommerce_checkout_update_order_review', $_POST['post_data'] );
 
 	$woocommerce->session->chosen_shipping_method = empty( $_POST['shipping_method'] ) ? '' : $_POST['shipping_method'];
+	if ( ! empty( $_POST['shipping_method_variant'] ) )
+		$woocommerce->session->chosen_shipping_method_variant = $_POST['shipping_method_variant'];
+	if ( ! empty( $_POST['shipping_method_sub_variant'] ) )
+		$woocommerce->session->chosen_shipping_method_sub_variant = $_POST['shipping_method_sub_variant'];
+
 	$woocommerce->session->chosen_payment_method  = empty( $_POST['payment_method'] ) ? '' : $_POST['payment_method'];
 
-	if ( isset( $_POST['country'] ) )
-		$woocommerce->customer->set_country( $_POST['country'] );
+	if ( isset( $_POST['billing_country'] ) )
+		$woocommerce->customer->set_country( $_POST['billing_country'] );
 
-	if ( isset( $_POST['state'] ) )
+	if ( isset( $_POST['billing_state'] ) )
 		$woocommerce->customer->set_state( $_POST['state'] );
 
-	if ( isset( $_POST['postcode'] ) )
-		$woocommerce->customer->set_postcode( $_POST['postcode'] );
+	if ( isset( $_POST['billing_postcode'] ) )
+		$woocommerce->customer->set_postcode( $_POST['billing_postcode'] );
 
-	if ( isset( $_POST['city'] ) )
-		$woocommerce->customer->set_city( $_POST['city'] );
+	if ( isset( $_POST['billing_city'] ) )
+		$woocommerce->customer->set_city( $_POST['billing_city'] );
 
-	if ( isset( $_POST['address'] ) )
-		$woocommerce->customer->set_address( $_POST['address'] );
+	if ( isset( $_POST['billing_address'] ) )
+		$woocommerce->customer->set_address( $_POST['billing_address'] );
 
-	if ( isset( $_POST['address_2'] ) )
-		$woocommerce->customer->set_address_2( $_POST['address_2'] );
+	if ( isset( $_POST['billing_address_2'] ) )
+		$woocommerce->customer->set_address_2( $_POST['billing_address_2'] );
 
-	if ( isset( $_POST['s_country'] ) )
-		$woocommerce->customer->set_shipping_country( $_POST['s_country'] );
+	if ( isset( $_POST['shipping_country'] ) )
+		$woocommerce->customer->set_shipping_country( $_POST['shipping_country'] );
 
-	if ( isset( $_POST['s_state'] ) )
-		$woocommerce->customer->set_shipping_state( $_POST['s_state'] );
+	if ( isset( $_POST['shipping_state'] ) )
+		$woocommerce->customer->set_shipping_state( $_POST['shipping_state'] );
 
-	if ( isset( $_POST['s_postcode'] ) )
-		$woocommerce->customer->set_shipping_postcode( $_POST['s_postcode'] );
+	if ( isset( $_POST['shipping_postcode'] ) )
+		$woocommerce->customer->set_shipping_postcode( $_POST['shipping_postcode'] );
 
-	if ( isset( $_POST['s_city'] ) )
-		$woocommerce->customer->set_shipping_city( $_POST['s_city'] );
+	if ( isset( $_POST['shipping_city'] ) )
+		$woocommerce->customer->set_shipping_city( $_POST['shipping_city'] );
 
-	if ( isset( $_POST['s_address'] ) )
-		$woocommerce->customer->set_shipping_address( $_POST['s_address'] );
+	if ( isset( $_POST['shipping_address'] ) )
+		$woocommerce->customer->set_shipping_address( $_POST['shipping_address'] );
 
-	if ( isset( $_POST['s_address_2'] ) )
-		$woocommerce->customer->set_shipping_address_2( $_POST['s_address_2'] );
+	if ( isset( $_POST['shipping_address_2'] ) )
+		$woocommerce->customer->set_shipping_address_2( $_POST['shipping_address_2'] );
 
 	$woocommerce->cart->calculate_totals();
 
 	do_action( 'woocommerce_checkout_order_review' ); // Display review order table
+
+	$woocommerce->clear_product_transients();
 
 	die();
 }
@@ -1847,7 +1859,12 @@ if( !function_exists( 'get_woocommerce_nonce_params' ) ) {
             'update_order_review_nonce'        => wp_create_nonce( "update-order-review" ),
             'apply_coupon_nonce'               => wp_create_nonce( "apply-coupon" ),
             'update_shipping_method_nonce'     => wp_create_nonce( "update-shipping-method" ),
+            'get_shipping_methods_nonce'       => wp_create_nonce( "get-shipping-methods" ),
+            'shipping_methods_nonce'           => wp_create_nonce( "shipping-methods" ),
             'add_to_cart_nonce'                => wp_create_nonce( "add-to-cart" ),
+            'checkout_billing_form_nonce'      => wp_create_nonce( "checkout-billing-form" ),
+            'checkout_shipping_form_nonce'    => wp_create_nonce( "checkout-shipping-form" ),
+
         );
         apply_filters( 'woocommerce_params', $woocommerce_params );
 
@@ -1867,13 +1884,48 @@ if( !function_exists( 'get_dynamic_shipping' ) ) {
     function get_dynamic_shipping() {
 		global $woocommerce, $wpdb;
 
-		//check_ajax_referer( 'update-shipping-method', 'security' );
-
 		if ( ! defined('WOOCOMMERCE_CART') ) define( 'WOOCOMMERCE_CART', true );
 
-		if ( isset( $_POST['shipping_method'] ) )
-			$woocommerce->session->chosen_shipping_method = $_POST['shipping_method'];
-			
+		$woocommerce->session->chosen_payment_method  = empty( $_POST['payment_method'] ) ? '' : $_POST['payment_method'];
+
+		if ( isset( $_POST['country'] ) )
+			$woocommerce->customer->set_country( $_POST['billing_country'] );
+
+		if ( isset( $_POST['billing_state'] ) )
+			$woocommerce->customer->set_state( $_POST['billing_state'] );
+
+		if ( isset( $_POST['billing_postcode'] ) )
+			$woocommerce->customer->set_postcode( $_POST['billing_postcode'] );
+
+		if ( isset( $_POST['billing_city'] ) )
+			$woocommerce->customer->set_city( $_POST['billing_city'] );
+
+		if ( isset( $_POST['billing_address_1'] ) )
+			$woocommerce->customer->set_address( $_POST['billing_address_1'] );
+
+		if ( isset( $_POST['billing_address_2'] ) )
+			$woocommerce->customer->set_address_2( $_POST['billing_address_2'] );
+
+		if ( isset( $_POST['shipping_country'] ) )
+			$woocommerce->customer->set_shipping_country( $_POST['shipping_country'] );
+
+		if ( isset( $_POST['shipping_state'] ) )
+			$woocommerce->customer->set_shipping_state( $_POST['shipping_state'] );
+
+		if ( isset( $_POST['shipping_postcode'] ) )
+			$woocommerce->customer->set_shipping_postcode( $_POST['shipping_postcode'] );
+
+		if ( isset( $_POST['shipping_city'] ) )
+			$woocommerce->customer->set_shipping_city( $_POST['shipping_city'] );
+
+		if ( isset( $_POST['shipping_address_1'] ) )
+			$woocommerce->customer->set_shipping_address( $_POST['shipping_address_1'] );
+
+		if ( isset( $_POST['shipping_address_2'] ) )
+			$woocommerce->customer->set_shipping_address_2( $_POST['shipping_address_2'] );
+
+
+
 		if ( isset( $_POST['product_id'] ) ) {
 			if ( isset( $_POST['variation_id'] ) && ! $_POST['variation_id'] ) {
 				$_POST['variation_id'] = $wpdb->get_var(
@@ -1887,16 +1939,20 @@ if( !function_exists( 'get_dynamic_shipping' ) ) {
 			}
 			$cart_item_key = $woocommerce->cart->add_to_cart( $_POST['product_id'], 1, $_POST['variation_id'], '', array(), true );
                 }
-		woocommerce_get_template( 'single-product/single-product-shipping.php' );
-		
+
+		$woocommerce->cart->calculate_totals();
+
+		woocommerce_get_template( 'shipping/methods.php' );
+
 		if( !empty( $woocommerce->cart->cart_contents[$cart_item_key] ) ) {
 		    $woocommerce->cart->cart_contents[$cart_item_key]["quantity"] -= 1;
-
 		    if( $woocommerce->cart->cart_contents[$cart_item_key]["quantity"] <= 0 )
 		        unset( $woocommerce->cart->cart_contents[$cart_item_key]["quantity"] );
 		    $woocommerce->cart->calculate_totals();
 		}
-		
+
+		$woocommerce->clear_product_transients();
+
 		die();
     }
 	add_action( 'wp_ajax_nopriv_get_dynamic_shipping', 'get_dynamic_shipping' );
@@ -1905,7 +1961,26 @@ if( !function_exists( 'get_dynamic_shipping' ) ) {
 
 if( !function_exists( 'checkout_shipping_form' ) ) {
     function checkout_shipping_form() {
-		global $woocommerce;
+		check_ajax_referer( 'checkout-shipping-form', 'security' );
+		
+		if ( isset( $_POST['shipping_country'] ) )
+			$woocommerce->customer->set_shipping_country( $_POST['shipping_country'] );
+
+		if ( isset( $_POST['shipping_state'] ) )
+			$woocommerce->customer->set_shipping_state( $_POST['shipping_state'] );
+
+		if ( isset( $_POST['shipping_postcode'] ) )
+			$woocommerce->customer->set_shipping_postcode( $_POST['shipping_postcode'] );
+
+		if ( isset( $_POST['shipping_city'] ) )
+			$woocommerce->customer->set_shipping_city( $_POST['shipping_city'] );
+
+		if ( isset( $_POST['shipping_address_1'] ) )
+			$woocommerce->customer->set_shipping_address( $_POST['shipping_address_1'] );
+			
+		if ( isset( $_POST['shipping_address_2'] ) )
+			$woocommerce->customer->set_shipping_address_2( $_POST['shipping_address_2'] );
+
 		$woocommerce->checkout()->checkout_form_shipping();
 		die();
     }
@@ -1916,9 +1991,49 @@ if( !function_exists( 'checkout_shipping_form' ) ) {
 if( !function_exists( 'checkout_billing_form' ) ) {
     function checkout_billing_form() {
 		global $woocommerce;
+
+		check_ajax_referer( 'checkout-billing-form', 'security' );
+		
+		if ( isset( $_POST['billing_country'] ) )
+			$woocommerce->customer->set_country( $_POST['billing_country'] );
+
+		if ( isset( $_POST['billing_state'] ) )
+			$woocommerce->customer->set_state( $_POST['billing_state'] );
+
+		if ( isset( $_POST['billing_postcode'] ) )
+			$woocommerce->customer->set_postcode( $_POST['billing_postcode'] );
+
+		if ( isset( $_POST['billing_city'] ) )
+			$woocommerce->customer->set_city( $_POST['billing_city'] );
+
+		if ( isset( $_POST['billing_address_1'] ) )
+			$woocommerce->customer->set_address( $_POST['billing_address_1'] );
+			
+		if ( isset( $_POST['billing_address_2'] ) )
+			$woocommerce->customer->set_addres2( $_POST['billing_address_2'] );
+
 		$woocommerce->checkout()->checkout_form_billing();
 		die();
     }
 	add_action( 'wp_ajax_nopriv_checkout_billing_form', 'checkout_billing_form' );
 	add_action( 'wp_ajax_checkout_billing_form', 'checkout_billing_form' );
 }
+
+
+
+/**
+ * AJAX get shipping methods
+ *
+ * @access public
+ * @return void
+ */
+if( !function_exists( 'woocommerce_ajax_shipping_methods_form' ) ) {
+	function woocommerce_ajax_shipping_methods_form() {
+		check_ajax_referer( 'shipping-methods', 'security' );
+		get_dynamic_shipping();
+	}
+
+	add_action('wp_ajax_woocommerce_shipping_methods_form', 'woocommerce_ajax_shipping_methods_form');
+	add_action('wp_ajax_nopriv_woocommerce_shipping_methods_form', 'woocommerce_ajax_shipping_methods_form');
+}
+

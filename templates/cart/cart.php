@@ -148,8 +148,6 @@ $woocommerce->show_messages();
 
 <?php do_action( 'woocommerce_after_cart_table' ); ?>
 
-</form>
-
 <div class="cart-collaterals">
 
 	<?php do_action('woocommerce_cart_collaterals'); ?>
@@ -161,5 +159,7 @@ $woocommerce->show_messages();
 </div>
 
 <?php do_action( 'woocommerce_after_cart' ); ?>
+
+</form>
 
 <input type="submit" class="checkout-button button alt" value="<?php _e( 'Buy it', 'woocommerce' ); ?>" onclick="javascript:jQuery('form input.checkout-button.button.alt').click();" />
