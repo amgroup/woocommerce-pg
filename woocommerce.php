@@ -1229,7 +1229,7 @@ class Woocommerce {
 			wp_enqueue_script( 'chosen' );
 			wp_enqueue_script( 'ajax-chosen' );
 			wp_enqueue_script( 'wc-shipping-methods-async' );
-			wp_enqueue_script( 'wc-single-product-shipping' );
+			wp_enqueue_script( 'wc-single-product' );
 			wp_enqueue_style( 'woocommerce_chosen_styles', $this->plugin_url() . '/assets/css/chosen.css' );
 		}
 

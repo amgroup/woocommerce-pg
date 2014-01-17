@@ -1831,3 +1831,29 @@ function array_in_order($array,$order) {
     }
     return $ordered + $array;
 }
+
+
+function woocommerce_get_attr_terms( $taxonomy, $in_stock = 1 ) {
+    global $wpdb;
+
+    return $wpdb->get_results( $wpdb->prepare("
+		SELECT
+			t.*,
+			tt.*,
+			tm.*,
+			(SELECT sum(s.meta_value::numeric) FROM $wpdb->term_relationships r, $wpdb->postmeta v, $wpdb->postmeta s, $wpdb->posts p WHERE r.object_id=v.post_id AND v.meta_value=t.slug AND v.post_id=p.\"ID\" AND s.post_id IN (v.post_id,p.post_parent) AND s.meta_key='_stock' AND s.meta_value::numeric>0) AS count
+		FROM $wpdb->terms t, $wpdb->term_taxonomy tt, $wpdb->term_relationships tr, $wpdb->posts p, $wpdb->postmeta pm, $wpdb->woocommerce_termmeta tm
+		WHERE
+		  tt.taxonomy=%s
+		  AND tt.term_id = t.term_id
+		  AND tr.term_taxonomy_id = tt.term_taxonomy_id
+		  AND tr.object_id IN (p.post_parent,p.\"ID\") AND p.post_type IN ('product','product_variation')
+		  AND pm.post_id IN (p.\"ID\") AND pm.meta_key='_stock' AND pm.meta_value::numeric > 0
+		  AND tm.woocommerce_term_id = t.term_id
+		  --AND (SELECT sum(s.meta_value::numeric) FROM $wpdb->term_relationships r, $wpdb->postmeta v, $wpdb->postmeta s, $wpdb->posts p WHERE r.object_id=v.post_id AND v.meta_value=t.slug AND v.post_id=p.\"ID\" AND s.post_id IN (v.post_id,p.post_parent) AND s.meta_key='_stock' AND s.meta_value::numeric>0) > 0
+
+
+		 GROUP BY t.term_id,tt.term_taxonomy_id, tm.meta_id
+		 ORDER BY tm.meta_value, t.term_id
+         ", $taxonomy ) );
+}
