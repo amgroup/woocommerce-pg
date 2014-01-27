@@ -25,6 +25,15 @@
 				    data:		data,
 				    success:	function(response) {
 					    $('.shipping_methods.collection').parent().empty().unblock().html( $(response) );
+					    update_order_review( data );
+					    update_shipping_fields( data );
+					    update_billing_fields( data );
+				    },
+				    error:	function(response) {
+					    $('.shipping_methods.collection').parent().empty().unblock();
+					    update_order_review( data );
+					    update_shipping_fields( data );
+					    update_billing_fields( data );
 				    }
 			    });
 
@@ -114,33 +123,10 @@
             return data;
         }
         
-		$('.shipping_method').live("change", function(){
-			var data = get_form_data(this);
-            
-            update_shipping_methods( data );
-            update_order_review( data );
-            update_shipping_fields( data );
-            update_billing_fields( data );
-		});
+	$('.shipping_method, input[name=shipping_method_variant]:first, input[name=shipping_method_sub_variant]:first').live("change", function(){
+		update_shipping_methods( get_form_data(this) );
+	});
         
-        
-		$("input[name=shipping_method_variant]:first" ).live("change", function(){
-			var data = get_form_data(this);
-
-            update_shipping_methods( data );
-            update_shipping_methods( data );
-            update_order_review( data );
-		});
-        
-		$("input[name=shipping_method_sub_variant]:first" ).live("change", function(){
-			var data = get_form_data(this);
-
-            update_shipping_methods( data );
-            update_order_review( data );
-            update_shipping_fields( data );
-            update_billing_fields( data );
-		});
-
 	    if( $( ".shipping_methods.collection" ).hasClass("sync" ) ) {
 		$( ".shipping_methods.collection" ).parent().block(block_css);
 			var data = get_form_data( $( ".shipping_methods.collection" ) );
