@@ -131,11 +131,12 @@ function woocommerce_custom_order_columns( $column ) {
 			echo esc_html( strip_tags( $the_order->get_formatted_order_total() ) );
 		break;
 		case "order_date" :
+			$i18n = get_option('date_format') . ' ' . get_option('time_format');
 
 			if ( '0000-00-00 00:00:00' == $post->post_date ) {
 				$t_time = $h_time = __( 'Unpublished', 'woocommerce' );
 			} else {
-				$t_time = get_the_time( __( 'Y/m/d g:i:s A', 'woocommerce' ), $post );
+				$t_time = get_the_time( $i18n, $post );
 
 				$gmt_time = strtotime( $post->post_date_gmt );
 				$time_diff = current_time('timestamp', 1) - $gmt_time;
@@ -143,7 +144,7 @@ function woocommerce_custom_order_columns( $column ) {
 				if ( $time_diff > 0 && $time_diff < 24*60*60 )
 					$h_time = sprintf( __( '%s ago', 'woocommerce' ), human_time_diff( $gmt_time, current_time('timestamp', 1) ) );
 				else
-					$h_time = get_the_time( __( 'Y/m/d', 'woocommerce' ), $post );
+					$h_time = get_the_time( $i18n, $post );
 			}
 
 			echo '<abbr title="' . esc_attr( $t_time ) . '">' . esc_html( apply_filters( 'post_date_column_time', $h_time, $post ) ) . '</abbr>';

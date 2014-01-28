@@ -1688,7 +1688,7 @@ $closest_term_id = $wpdb->get_var( $wpdb->prepare(
       wp_woocommerce_termmeta tm
     WHERE
       tm.woocommerce_term_id = tree.term_id AND
-      meta_key = %s AND meta_value ~ '\s'
+      meta_key = %s AND meta_value != ''
     ORDER BY path
     LIMIT 1",
     $term_id,

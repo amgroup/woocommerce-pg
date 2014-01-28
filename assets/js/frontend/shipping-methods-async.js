@@ -25,6 +25,8 @@
 				    data:		data,
 				    success:	function(response) {
 					    $('.shipping_methods.collection').parent().empty().unblock().html( $(response) );
+					    $(document).trigger('updated:shipping_method');
+
 					    update_order_review( data );
 					    update_shipping_fields( data );
 					    update_billing_fields( data );
@@ -107,34 +109,18 @@
 			}        
         }
 
-        // Get Form Data
-        function get_form_data(el) {
-            var data = {};
-
-            $.each( $(el).closest('form').serializeArray(), function() {
-                if (data[this.name] !== undefined) {
-                    if (!data[this.name].push)
-                        data[this.name] = [data[this.name]];
-                    data[this.name].push(this.value || '');
-                } else {
-                    data[this.name] = this.value || '';
-                }
-            });
-            return data;
-        }
-        
 	$('.shipping_method, input[name=shipping_method_variant]:first, input[name=shipping_method_sub_variant]:first').live("change", function(){
-		update_shipping_methods( get_form_data(this) );
+		update_shipping_methods( closest_form_data(this) );
 	});
         
 	    if( $( ".shipping_methods.collection" ).hasClass("sync" ) ) {
 		$( ".shipping_methods.collection" ).parent().block(block_css);
-			var data = get_form_data( $( ".shipping_methods.collection" ) );
+			var data = closest_form_data( $( ".shipping_methods.collection" ) );
 
 			    $.extend( data, {
 				shipping_method: $(".shipping_method:checked").val() || $('.shipping_method').val(),
 			        action:  "woocommerce_shipping_methods",
-				security: woocommerce_params.shipping_methods_nonce
+					security: woocommerce_params.shipping_methods_nonce
 			    });
 
 			    if (xhr_m) xhr_m.abort();

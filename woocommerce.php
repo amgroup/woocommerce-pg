@@ -1234,6 +1234,7 @@ class Woocommerce {
 		}
 
 		// Global frontend scripts
+		wp_enqueue_script( 'functions', $frontend_script_path . 'functions' . $suffix . '.js', array( 'jquery', 'jquery-blockui' ), $this->version, true );
 		wp_enqueue_script( 'woocommerce', $frontend_script_path . 'woocommerce' . $suffix . '.js', array( 'jquery', 'jquery-blockui' ), $this->version, true );
 		wp_enqueue_script( 'wc-cart-fragments', $frontend_script_path . 'cart-fragments' . $suffix . '.js', array( 'jquery', 'jquery-cookie' ), $this->version, true );
 		wp_enqueue_script( 'jquery-placeholder' );

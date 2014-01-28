@@ -1,69 +1,9 @@
 jQuery(document).ready(function($) {
 
-	$(document)
-		.on( 'updated:shipping_method', function() {
-			var $form = $('*[name=shipping_method]:first').closest('form');
-			var data = closest_form_data( $form );
-			var block_css = {message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}};
-
-			//$('.shop_table.cart').block( block_css );
-			
-			$('.cart_totals tr').each(function(){
-					var $this = $(this);
-					if( $this.hasClass('shipping') ) return;
-					$this.find('td').block( block_css );
-			});
-
-			$.post( $form.attr('action'), data, function(response) {
-				//$('table.shop_table.cart').replaceWith( $(response).find('table.shop_table.cart') ).unblock();
-
-				$('.cart_totals tr').each(function(){
-					var $this = $(this);
-					if( $this.hasClass('shipping') ) return;
-					$this.replaceWith( $(response).find( ".cart_totals tr." + ( $this.attr("class") ).replace( " ", "." ) ) ).unblock();
-				});
-			});
-		});
-
-	$('p.password, form.login, .checkout_coupon, div.shipping_address').hide();
-
-	$('input.show_password').change(function(){
-		$('p.password').slideToggle();
-	});
-
-	$('a.showlogin').click(function(){
-		$('form.login').slideToggle();
-		return false;
-	});
-
-	$('a.showcoupon').click(function(){
-		$('.checkout_coupon').slideToggle();
-		$('#coupon_code').focus();
-		return false;
-	});
-
-	$('#shiptobilling input').change(function(){
-		$('div.shipping_address').hide();
-		if (!$(this).is(':checked')) {
-			$('div.shipping_address').slideDown();
-		}
-	}).change();
-
-	if ( woocommerce_params.option_guest_checkout == 'yes' ) {
-
-		$('div.create-account').hide();
-
-		$('input#createaccount').change(function(){
-			$('div.create-account').hide();
-			if ($(this).is(':checked')) {
-				$('div.create-account').slideDown();
-			}
-		}).change();
-
-	}
+	$('#order_review')
 
 	/* Payment option selection */
-	$('#order_review')
+
 	.on( 'click', '.payment_methods input.input-radio', function() {
 		if ( $('.payment_methods input.input-radio').length > 1 ) {
 			$('div.payment_box').filter(':visible').slideUp(250);
@@ -77,45 +17,46 @@ jQuery(document).ready(function($) {
 
 	// Trigger initial click
 	.find('input[name=payment_method]:checked').click();
-});
 
 
-jQuery(document).ready(function($) {
-	return;
+return;
+    $('form select.chzn-select').chosen({no_results_text: "Продолжайте набирать!"});
 
 	var updateTimer;
 	var dirtyInput = false;
 	var xhr;
 
-	function update_checkout() {
+	function update_checkout(custom_data) {
 
 		if (xhr) xhr.abort();
 
-		if ( $('select#shipping_method').size() > 0 || $('input#shipping_method').size() > 0 )
-			var method = $('#shipping_method').val();
+		if ( $('select#shipping_method').size() > 0 )
+			custom_data.shipping_method = $('select#shipping_method').val();
 		else
-			var method = $('input[name=shipping_method]:checked').val();
+			custom_data.shipping_method = $('input[name=shipping_method]:checked').val();
+
+        //console.log(custom_data);
 
 		var payment_method 	= $('#order_review input[name=payment_method]:checked').val();
 		var country 		= $('#billing_country').val();
-		var state 			= $('#billing_state').val();
+		var state 		    = $('#billing_state').val();
 		var postcode 		= $('input#billing_postcode').val();
-		var city	 		= $('input#billing_city').val();
-		var address	 		= $('input#billing_address_1').val();
+		var city	 	    = $('input#billing_city').val();
+		var address	 	    = $('input#billing_address_1').val();
 		var address_2	 	= $('input#billing_address_2').val();
 
-		if ( $('#shiptobilling input').is(':checked') || $('#shiptobilling input').size() == 0 ) {
+		if ( $('#shiptopayer input').is(':checked') || $('#shiptopayer input').size() == 0 ) {
 			var s_country 	= country;
 			var s_state 	= state;
 			var s_postcode 	= postcode;
-			var s_city 		= city;
+			var s_city 	    = city;
 			var s_address 	= address;
 			var s_address_2	= address_2;
 		} else {
 			var s_country 	= $('#shipping_country').val();
 			var s_state 	= $('#shipping_state').val();
 			var s_postcode 	= $('input#shipping_postcode').val();
-			var s_city 		= $('input#shipping_city').val();
+			var s_city 	    = $('input#shipping_city').val();
 			var s_address 	= $('input#shipping_address_1').val();
 			var s_address_2	= $('input#shipping_address_2').val();
 		}
@@ -123,9 +64,6 @@ jQuery(document).ready(function($) {
 		$('#order_methods, #order_review').block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
 
 		var data = {
-			action: 			'woocommerce_update_order_review',
-			security: 			woocommerce_params.update_order_review_nonce,
-			shipping_method: 	method,
 			payment_method:		payment_method,
 			country: 			country,
 			state: 				state,
@@ -138,9 +76,99 @@ jQuery(document).ready(function($) {
 			s_postcode: 		s_postcode,
 			s_city:				s_city,
 			s_address:			s_address,
-			s_address_2:		s_address_2,
-			post_data:			$('form.checkout').serialize()
+			s_address_2:			s_address_2,
+//			post_data:			$('form.checkout').serialize()
 		};
+		$.extend(data, custom_data);
+
+		$.extend(data, {
+			action:		'woocommerce_get_shipping_methods',
+			security:	woocommerce_params.get_shipping_methods_nonce
+		});
+
+
+		$.ajax({
+			type: 		'POST',
+			url: 		woocommerce_params.ajax_url,
+			data: 		data,
+			success: 	function( response ) {
+
+					var shipping = $(response);
+					$('#shipping_method').html( shipping.html() );
+
+					$('body').trigger( 'update_checkout_fields' );
+
+					if( jQuery().chosen ) {
+						$(".chzn-select.shipping_method_variant")
+							.chosen({no_results_text: "Ничего не найдено! "})
+							.change( function(e){
+								var This = $(this);
+								var Val  = $(this).val();
+								var Text = This.find('option[value="' + Val + '"]').html();
+								var custom_data = {};
+
+								This.find('option[value="' + Val + '"]').attr('selected','selected');
+								if( This.hasClass('s_city') ) {
+								custom_data.shipping_method_variant = Val;
+
+									if( $('input[name="shiptobilling"]:checked') ) {
+										$('#billing_city').val( Text );
+										custom_data.city = Text;
+									}
+									$('#shipping_city').val( Text );
+									custom_data.s_city = Text;
+								}
+								update_checkout(custom_data);
+							});
+					}
+                    if( jQuery().ajaxChosen ) {
+                        jQuery('select.ajax-chzn-select.russianpost_places')
+                            .chosen({no_results_text: "Ничего не найдено! "})
+                            .change(function(e){
+                                var This = $(this);
+                                var Val  = $(this).val();
+                                var Text = This.find('option[value="' + Val + '"]').html();
+                                var custom_data = {};
+
+                                This.find('option[value="' + Val + '"]').attr('selected','selected');
+
+                                if( $('input[name="shiptobilling"]:checked') ) {
+                                    $('#billing_city').val( Text );
+                                    custom_data.city = Text;
+                                }
+                                $('#shipping_city').val( Text );
+                                custom_data.s_city = Text;
+
+                                custom_data.hidden_postcode = Val;
+                                custom_data.shipping_method_variant = Val;
+                                custom_data.hidden_city = Text;
+
+                                update_checkout(custom_data);
+                            })
+                            .ajaxChosen({
+                                minTermLength: 2,
+                                afterTypeDelay: 500,
+                                keepTypingMsg: "Продолжайте набирать...",
+                                lookingForMsg: "Ищем в базе ",
+                                type: 'POST',
+                                url: woocommerce_params.ajax_url,
+                                data: {action:'get_russianpost_places'},
+                                jsonTermKey: "place",
+                                dataType: 'json'
+                            }, function (data) {
+                                var results = [];
+                                jQuery.each(data, function (i, item) { results.push({ value: item.value, text: item.text }); });
+                                return results;
+                            });
+                    }
+			}
+		});
+
+
+		$.extend(data, {
+			action:		'woocommerce_update_order_review',
+			security: 	woocommerce_params.update_order_review_nonce
+		});
 
 		xhr = $.ajax({
 			type: 		'POST',
@@ -149,8 +177,9 @@ jQuery(document).ready(function($) {
 			success: 	function( response ) {
 				if ( response ) {
 					var order_output = $(response);
-					$('#order_review').html(order_output.html());
-					$('body').trigger('updated_checkout');
+					$('#order_review').html( order_output.html() );
+
+					//$('body').trigger( 'updated_checkout' );
 				}
 			}
 		});
@@ -160,7 +189,34 @@ jQuery(document).ready(function($) {
 	// Event for updating the checkout
 	$('body').bind('update_checkout', function() {
 		clearTimeout(updateTimer);
-		update_checkout();
+
+        var custom_data = {};
+        
+        // RussianPost special fields 
+        if ( $('select.ajax-chzn-select.russianpost_places') ) {
+            var rp = $('select.ajax-chzn-select.russianpost_places');
+            $.extend(custom_data,{
+                hidden_postcode: rp.val(),
+                shipping_method_variant: rp.val(),
+                hidden_city:     rp.find( 'option[value="' + rp.val() + '"]').html(),
+                s_city:          rp.find( 'option[value="' + rp.val() + '"]').html()
+            });
+        }
+        
+		
+        // ShopLogistic special fields
+        if( $('input[name=shipping_method]:checked') ) {
+			var checked             = $('input[name=shipping_method]:checked').parent();
+			var checked_variant     = checked.find('.shipping_method_variant').val();
+			var checked_sub_variant = checked.find('.shipping_method_sub_variant:checked').val();
+
+            var custom_data = {
+                shipping_method_variant:     checked_variant,
+                shipping_method_sub_variant: checked_sub_variant
+            };
+        }
+
+		update_checkout(custom_data);
 	});
 
 	$('p.password, form.login, .checkout_coupon, div.shipping_address').hide();
@@ -180,24 +236,14 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
-	$('#shiptobilling input').change(function(){
-		$('div.shipping_address').hide();
-		if (!$(this).is(':checked')) {
-			$('div.shipping_address').slideDown();
-		}
-	}).change();
-
 	if ( woocommerce_params.option_guest_checkout == 'yes' ) {
-
 		$('div.create-account').hide();
-
 		$('input#createaccount').change(function(){
 			$('div.create-account').hide();
 			if ($(this).is(':checked')) {
 				$('div.create-account').slideDown();
 			}
 		}).change();
-
 	}
 
 	// Used for input change events below
@@ -247,20 +293,26 @@ jQuery(document).ready(function($) {
 	/* Update totals/taxes/shipping */
 
 	// Inputs/selects which update totals instantly
-	.on( 'change', 'select#shipping_method, input[name=shipping_method], #shiptobilling input, .update_totals_on_change select', function(){
+	.on( 'change', 'select#shipping_method, input[name=shipping_method], select#payment_method, input[name=payment_method], .update_totals_on_change select', function(){
 		clearTimeout( updateTimer );
 		dirtyInput = false;
 		$('body').trigger('update_checkout');
 	})
 
 	// Address-fields which refresh totals when all required fields are filled
-	.on( 'change', '.address-field input.input-text, .update_totals_on_change input.input-text', function() {
+	//.on( 'change', '.address-field input.input-text, .update_totals_on_change input.input-text', function() {
+    .on( 'change', '.update_totals_on_change input.input-text', function() {
 		if ( dirtyInput ) {
 			input_changed();
 		}
 	})
 
 	.on( 'change', '.address-field select', function() {
+		dirtyInput = this;
+		input_changed();
+	})
+
+	.on( 'change', '.shipping_method_variant, .shipping_method_sub_variant', function() {
 		dirtyInput = this;
 		input_changed();
 	})
@@ -323,8 +375,8 @@ jQuery(document).ready(function($) {
 
 			var form_data = $form.data();
 
-			if ( form_data["blockUI.isBlocked"] != 1 )
-				$form.block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
+			//if ( form_data["blockUI.isBlocked"] != 1 )
+			$form.closest('div').block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
 
 			$.ajax({
 				type: 		'POST',
@@ -350,7 +402,8 @@ jQuery(document).ready(function($) {
 
 								$('.woocommerce-error, .woocommerce-message').remove();
 								$form.prepend( result.messages );
-								$form.removeClass('processing').unblock();
+								$form.removeClass('processing');
+								$form.closest('div').unblock();
 								$form.find( '.input-text, select' ).blur();
 
 								if (result.refresh=='true') $('body').trigger('update_checkout');
@@ -364,9 +417,11 @@ jQuery(document).ready(function($) {
 							}
 						}
 						catch(err) {
+
 							$('.woocommerce-error, .woocommerce-message').remove();
 						  	$form.prepend( code );
-							$form.removeClass('processing').unblock();
+							$form.removeClass('processing');
+							$form.closest('div').unblock();
 							$form.find( '.input-text, select' ).blur();
 
 							$('html, body').animate({
@@ -388,7 +443,8 @@ jQuery(document).ready(function($) {
 
 		if ( $form.is('.processing') ) return false;
 
-		$form.addClass('processing').block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
+		$form.addClass('processing');
+		$form.closest('div').block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
 
 		var data = {
 			action: 			'woocommerce_apply_coupon',
@@ -402,7 +458,8 @@ jQuery(document).ready(function($) {
 			data: 		data,
 			success: 	function( code ) {
 				$('.woocommerce-error, .woocommerce-message').remove();
-				$form.removeClass('processing').unblock();
+				$form.removeClass('processing');
+				$form.closest('div').unblock();
 
 				if ( code ) {
 					$form.before( code );
@@ -510,6 +567,82 @@ jQuery(document).ready(function($) {
 
 	})
 
+    // Handle Checkout fields
+	.bind('update_checkout_fields', function() {
+        var billing_form =  { action: "checkout_billing_form" };
+        
+        $('#checkout_billing_address')
+            .addClass('processing')
+            .block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}})
+            .find('input,select,textarea')
+            .each(function(){
+                if( $(this).attr('type') == 'checkbox' ) {
+                    if( $(this).attr('checked') )
+                        billing_form[ $(this).attr('name') ] = 1;
+                } else {
+                    billing_form[ $(this).attr('name') ] = $(this).val();
+                }
+            });
+
+        $.ajax({
+            type: 		'POST',
+            url: 		woocommerce_params.ajax_url,
+            data: 		billing_form,
+            success: 	function( response ) { $('#checkout_billing_address').replaceWith(response); $('body').trigger('update_checkout_billing_fields_complete'); }
+        });
+        
+        if( $('#shiptopayer input:checked').val() != 'on' ) {
+            var shipping_form = { action: "checkout_shipping_form" };
+
+            $('#checkout_shipping_address')
+                .addClass('processing')
+                .block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}})
+                .find('input,select,textarea')
+                .each(function(){
+                    if( $(this).attr('type') == 'checkbox' )
+                        if( $(this).attr('checked') )
+                            shipping_form[ $(this).attr('name') ] = 1;
+                    else
+                        shipping_form[ $(this).attr('name') ] = $(this).val();
+                });
+
+            $.ajax({
+                type: 		'POST',
+                url: 		woocommerce_params.ajax_url,
+                data: 		shipping_form,
+                success: 	function( response ) { $('#checkout_shipping_address').replaceWith(response); $('body').trigger('update_checkout_shipping_fields_complete'); }
+            });
+        }
+    })
+    
+    .bind('update_checkout_billing_fields_complete',function(){
+        if( $('#shiptopayer input').attr('checked') ) { $('div.shipping_address').hide('fast'); }
+        $('#shiptopayer input').change(function(){
+            $('div.shipping_address').hide();
+            if (!$(this).attr('checked') ) { $('div.shipping_address').slideDown('fast'); }
+        });
+         
+        if ( woocommerce_params.option_guest_checkout == 'yes' ) {
+            $('div.create-account').hide();
+            $('input#createaccount').change(function(){
+                $('div.create-account').hide();
+                if ($(this).attr('checked') ) { $('div.create-account').slideDown('fast'); }
+            }).change();
+        }
+
+        $('#checkout_billing_address select.chzn-select').chosen({no_results_text: "Продолжайте набирать!"});
+    })
+
+    .bind('update_checkout_shipping_fields_complete',function(){
+        if( $('#shiptopayer input:checked').val() == 'on' ) { $('div.shipping_address').hide('fast'); }
+        $('#shiptopayer input').change(function(){
+            $('div.shipping_address').hide();
+            if (!$(this).is(':checked')) { $('div.shipping_address').slideDown('fast'); }
+        });
+        
+        $('#checkout_shipping_address select.chzn-select').chosen({no_results_text: "Продолжайте набирать!"});
+    })
+    
 	// Init trigger
 	.bind('init_checkout', function() {
 		$('#billing_country, #shipping_country, .country_to_state').change();
@@ -520,5 +653,5 @@ jQuery(document).ready(function($) {
 	if ( woocommerce_params.is_checkout == 1 ) {
 		$('body').trigger('init_checkout');
 	}
-
+    
 });

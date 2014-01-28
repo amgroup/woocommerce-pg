@@ -72,39 +72,6 @@ function woocommerce_ajax_apply_coupon() {
 add_action('wp_ajax_woocommerce_apply_coupon', 'woocommerce_ajax_apply_coupon');
 add_action('wp_ajax_nopriv_woocommerce_apply_coupon', 'woocommerce_ajax_apply_coupon');
 
-
-/**
- * AJAX update shipping method on cart page
- *
- * @access public
- * @return void
- */
-function woocommerce_ajax_update_shipping_method() {
-	global $woocommerce;
-
-	check_ajax_referer( 'update-shipping-method', 'security' );
-
-	if ( ! defined('WOOCOMMERCE_CART') ) define( 'WOOCOMMERCE_CART', true );
-
-	if ( isset( $_POST['shipping_method'] ) )
-		$woocommerce->session->chosen_shipping_method = $_POST['shipping_method'];
-	if ( ! empty( $_POST['shipping_method_variant'] ) )
-		$woocommerce->session->chosen_shipping_method_variant = $_POST['shipping_method_variant'];
-	if ( ! empty( $_POST['shipping_method_sub_variant'] ) )
-		$woocommerce->session->chosen_shipping_method_sub_variant = $_POST['shipping_method_sub_variant'];
-
-
-	$woocommerce->cart->calculate_totals();
-
-	woocommerce_cart_totals();
-
-	$woocommerce->clear_product_transients();
-	die();
-}
-
-add_action('wp_ajax_woocommerce_update_shipping_method', 'woocommerce_ajax_update_shipping_method');
-add_action('wp_ajax_nopriv_woocommerce_update_shipping_method', 'woocommerce_ajax_update_shipping_method');
-
 /**
  * AJAX update order review on checkout
  *
@@ -1855,7 +1822,6 @@ if( !function_exists( 'woocommerce_nonce_params' ) ) {
         $woocommerce_params = array(
             'update_order_review_nonce'        => wp_create_nonce( "update-order-review" ),
             'apply_coupon_nonce'               => wp_create_nonce( "apply-coupon" ),
-            'update_shipping_method_nonce'     => wp_create_nonce( "update-shipping-method" ),
             'get_shipping_methods_nonce'       => wp_create_nonce( "get-shipping-methods" ),
             'shipping_methods_nonce'           => wp_create_nonce( "shipping-methods" ),
             'add_to_cart_nonce'                => wp_create_nonce( "add-to-cart" ),
@@ -1983,8 +1949,10 @@ if( !function_exists( 'woocommerce_shipping_methods' ) ) {
 
 if( !function_exists( 'checkout_shipping_form' ) ) {
     function checkout_shipping_form() {
+		global $woocommerce;
+
 		check_ajax_referer( 'checkout-shipping-form', 'security' );
-		
+
 		if ( isset( $_POST['shipping_country'] ) )
 			$woocommerce->customer->set_shipping_country( $_POST['shipping_country'] );
 

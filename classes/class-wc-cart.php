@@ -2291,6 +2291,7 @@ class WC_Cart {
                 foreach ( $discounts as $discount ) {
                     // All Products is candidats for discount
                     $_candidats = array();
+					$_products_in_cart_ids = array();
 
                     foreach ( $this->cart_contents as $cart_item_key => $item ) {
                         $_candidat = $item;
@@ -2299,8 +2300,11 @@ class WC_Cart {
 
 						for ( $i=0; $i<$_candidat['quantity']; $i++ )
 							$_candidats[] = $_candidat;
+
+						$_products_in_cart_ids[] = $_candidat['product_id'];
 					}
                     $sizeof  = sizeof($_candidats);
+
 
 					// Check for "exclude_sale_items" 
 					if( $discount['exclude_sale_items'] == 'yes' ) {
@@ -2358,15 +2362,13 @@ class WC_Cart {
 
                     // Check for "product_categories_accompaining" is in cart
                     if( sizeof( $discount['product_categories_accompaining'] ) > 0 ) {
-						$products_ids = array();
-						foreach ( $_candidats as  $_candidat )
-							$products_ids[] = $_candidat['product_id'];
-			if( sizeof( $products_ids ) ) {
-	                    if( ! $wpdb->get_var(
+
+						if( sizeof( $_products_in_cart_ids ) ) {
+							if( ! $wpdb->get_var(
 									"SELECT DISTINCT 1
 									FROM {$wpdb->term_relationships} r, {$wpdb->term_taxonomy} t
 									WHERE
-									  r.object_id IN (". implode(',', $products_ids ) . ") AND
+									  r.object_id IN (". implode(',', $_products_in_cart_ids ) . ") AND
 									  r.term_taxonomy_id = t.term_taxonomy_id AND
 									  t.taxonomy = 'product_cat' AND
 									  t.term_id IN (" . implode(',', $discount['product_categories_accompaining']) . ")
@@ -2379,6 +2381,7 @@ class WC_Cart {
                     }
 					
 					// Check for "product_attributes" IT DOESNT IMPLEMENTED YET !!!
+					/*
 					if( sizeof( $discount['product_attributes'] ) > 0 ) {
                         $i = 0;
                         foreach ( $_candidats as  $_candidat ) {
@@ -2392,7 +2395,7 @@ class WC_Cart {
                             $i++;
                         }
                     }
-
+					*/
                     
                     // OK. We got the colection and processing now
                     $counter = 0;
@@ -2405,7 +2408,7 @@ class WC_Cart {
                     }
 
                     $times       = ($discount['times_the_amount'] > 0) ? $discount['times_the_amount'] : ($real_size_candidats ? $real_size_candidats : 1);
-                    $value       = $discount['discount_amount'];
+                    $value       = (float) $discount['discount_amount'];
                     $type        = $discount['discount_type'];
                     
                     if( $sizeof > 0 && $sizeof >= $times ) {
@@ -2420,7 +2423,7 @@ class WC_Cart {
 
                                         if ( isset ( $this->cart_contents[ $item_key ]['_processed_discount'] ) ) {
                                             if( in_array ( $discount["shop_discount"]->ID, $this->cart_contents[ $item_key ]['_processed_discount'] ) )
-                                                continue; //Discoutt shall be not double
+                                                continue; //Discount shall be not double
                                         } else {
                                             $this->cart_contents[ $item_key ]['_processed_discount'] = array();
                                         }
@@ -2437,19 +2440,19 @@ class WC_Cart {
                                             $this->cart_contents[ $item_key ]['line_total_discounted'] = $price;
 
                                         $discount_value = 0;
-
                                         switch ($type) {
                                             case 'percent_discout':
-                                                if( $discount['for_shipping'] )
+                                                if( $discount['for_shipping'] == 'yes' )
                                                     $discount_value = 0;
                                                 else
-                                                    $discount_value = (float) ( $price * ($value/100) );
+                                                    $discount_value = $price * $value / 100;
+													echo $discount_value . "\n";
                                                 break;
                                             case 'total_discout':
                                                 $discount_value = (float) ( $value / $times );
                                                 break;
                                             case 'fixed_total':
-                                                if( $discount['for_shipping'] )
+                                                if( $discount['for_shipping'] == 'yes' )
                                                     $discount_value = ($discout['discount_amount'] - ( $value / $times ));
                                                 else
                                                     $discount_value = (float) ($price - ( $value / $times ));

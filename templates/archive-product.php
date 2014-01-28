@@ -23,18 +23,19 @@ get_header('shop'); ?>
 		do_action('woocommerce_before_main_content');
 	?>
 
-        <?php if ( is_tax( 'product_cat' ) ) {
-            ?><h1 class="page-title product-category"><?php woocommerce_page_title(); ?></h1><?php
-            $term = get_term_by('slug', esc_attr( get_query_var('product_cat') ), 'product_cat');
-            $advertisement = html_entity_decode( get_woocommerce_term_meta_closest( $term->term_id, 'advertisement', true ) );
-            if( $advertisement ) {
-                ?><div class="category advertisement"><?php
-                    echo $advertisement;
-                ?></div><?php
-            }
+        <?php
+		if ( is_tax( 'product_cat' ) ) {
+			$term = get_term_by('slug', esc_attr( get_query_var('product_cat') ), 'product_cat');
+			$advertisement = html_entity_decode( get_post( get_woocommerce_term_meta_closest( $term->term_id, 'advertisement', true ) )->post_content );
+			if( $advertisement )
+				echo '<div class="category advertisement">' . $advertisement . '</div>';
+		    echo '<h1 class="page-title product-category">';
         } else {
-            ?><h1 class="page-title"><?php woocommerce_page_title(); ?></h1><?php
-        }?>
+            echo '<h1 class="page-title">';
+		}
+		woocommerce_page_title();
+		echo '</h1>';
+		?>
 
 		<?php do_action( 'woocommerce_archive_description' ); ?>
 

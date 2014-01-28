@@ -19,13 +19,18 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * @return void
  */
 function woocommerce_add_category_fields() {
-	global $woocommerce;
+	global $woocommerce, $wpdb;
     
-    $tinymce = array( 'textarea_rows' => get_option('default_post_edit_rows'), 'textarea_name' => 'advertisement' );
+    $pages = $wpdb->get_results("SELECT \"ID\", post_title FROM $wpdb->posts WHERE post_type='page' AND post_status='publish' ORDER BY post_date DESC");
 	?>
     <div class="form-field">
         <label for="advertisement"><?php echo __( 'Advertisement', 'woocommerce' ); ?></label>
-        <?php wp_editor( '', 'tinymce-advertisement-editor', $tinymce ); ?>
+		<select id="advertisement" name="advertisement" class="postform chosen_select">
+			<option value=""></option>
+			<?php foreach( $pages as $page ) : ?>
+			<option value="<?php echo $page->ID; ?>"><?php echo $page->post_title; ?></option>
+			<?php endforeach;?>
+		</select>
         <p><?php echo __( 'Category advertisement. It will be placed at the top of page before category name.', 'woocommerce' ); ?></p>
     </div>
     
@@ -138,10 +143,12 @@ add_action( 'product_cat_edit_form', 'woocommerce_edit_category_submitbutton' );
  * @return void
  */
 function woocommerce_edit_category_fields( $term, $taxonomy ) {
-	global $woocommerce;
-    $tinymce = array( 'textarea_rows' => get_option('default_post_edit_rows'), 'textarea_name' => 'advertisement', 'textarea_class' => 'postform' );
+	global $woocommerce, $wpdb;
     
+	$pages = $wpdb->get_results("SELECT \"ID\", post_title FROM $wpdb->posts WHERE post_type='page' AND post_status='publish' ORDER BY post_date DESC");
+	
 	$display_type	= get_woocommerce_term_meta( $term->term_id, 'display_type', true );
+	$advertisement	= get_woocommerce_term_meta( $term->term_id, 'advertisement', true );
 	$image 			= '';
 	$thumbnail_id 	= absint( get_woocommerce_term_meta( $term->term_id, 'thumbnail_id', true ) );
 	if ($thumbnail_id) :
@@ -153,7 +160,12 @@ function woocommerce_edit_category_fields( $term, $taxonomy ) {
     <tr class="form-field">
         <th scope="row" valign="top"><label for="advertisement"><?php echo __( 'Advertisement', 'woocommerce' ); ?></label></th>
         <td>
-            <?php wp_editor( html_entity_decode( get_woocommerce_term_meta( $term->term_id, 'advertisement', true ) ), 'tinymce-advertisement-editor', $tinymce ); ?>
+			<select id="advertisement" name="advertisement" class="postform chosen_select">
+				<option value="" <?php selected( '', $advertisement ); ?>></option>
+				<?php foreach( $pages as $page ) : ?>
+				<option value="<?php echo $page->ID; ?>" <?php selected( $page->ID, $advertisement ); ?>><?php echo $page->post_title; ?></option>
+				<?php endforeach;?>
+			</select>
             <br/>
             <span class="description"><?php echo __( 'Category advertisement. It will be placed at the top of page before category name.', 'woocommerce' ); ?></span>
         </td>

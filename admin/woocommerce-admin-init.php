@@ -422,9 +422,11 @@ function woocommerce_admin_scripts() {
 
     }
 
-    // Edit product category pages
-    if ( in_array( $screen->id, array('edit-product_cat') ) )
+	// Edit product category pages
+	if ( in_array( $screen->id, array('edit-product_cat') ) ) {
+		wp_enqueue_script( 'chosen' );
 		wp_enqueue_media();
+	}
 
 	// Product/Coupon/Orders
 	if ( in_array( $screen->id, array( 'shop_coupon', 'shop_order', 'product', 'shop_discount' ) ) ) {
