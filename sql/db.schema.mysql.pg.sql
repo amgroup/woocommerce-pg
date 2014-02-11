@@ -9,18 +9,16 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- Name: mysql; Type: SCHEMA; Schema: -; Owner: wordpress
+-- Name: mysql; Type: SCHEMA; Schema: -; Owner: -
 --
 
 CREATE SCHEMA mysql;
 
 
-ALTER SCHEMA mysql OWNER TO wordpress;
-
 SET search_path = mysql, pg_catalog;
 
 --
--- Name: TIME(timestamp without time zone); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: TIME(timestamp without time zone); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION "TIME"(timestamp without time zone) RETURNS time without time zone
@@ -30,10 +28,8 @@ SELECT mysql."time"($1)
 $_$;
 
 
-ALTER FUNCTION mysql."TIME"(timestamp without time zone) OWNER TO postgres;
-
 --
--- Name: _mysqlf_pgsql(text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: _mysqlf_pgsql(text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION _mysqlf_pgsql(text) RETURNS text
@@ -63,10 +59,8 @@ WHERE s IS NOT NULL),
 $_$;
 
 
-ALTER FUNCTION mysql._mysqlf_pgsql(text) OWNER TO postgres;
-
 --
--- Name: adddate(date, interval); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: adddate(date, interval); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION adddate(date, interval) RETURNS date
@@ -75,10 +69,8 @@ CREATE FUNCTION adddate(date, interval) RETURNS date
 SELECT ($1 + $2)::date; $_$;
 
 
-ALTER FUNCTION mysql.adddate(date, interval) OWNER TO postgres;
-
 --
--- Name: char(integer[]); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: char(integer[]); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION "char"(VARIADIC integer[]) RETURNS text
@@ -88,10 +80,8 @@ SELECT array_to_string(ARRAY(SELECT chr(unnest($1))),'')
 $_$;
 
 
-ALTER FUNCTION mysql."char"(VARIADIC integer[]) OWNER TO postgres;
-
 --
--- Name: concat(text[]); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: concat(text[]); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION concat(VARIADIC str text[]) RETURNS text
@@ -101,10 +91,8 @@ SELECT array_to_string($1, '');
 $_$;
 
 
-ALTER FUNCTION mysql.concat(VARIADIC str text[]) OWNER TO postgres;
-
 --
--- Name: concat_ws(text, text[]); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: concat_ws(text, text[]); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION concat_ws(separator text, VARIADIC str text[]) RETURNS text
@@ -114,10 +102,8 @@ SELECT array_to_string($2, $1);
 $_$;
 
 
-ALTER FUNCTION mysql.concat_ws(separator text, VARIADIC str text[]) OWNER TO postgres;
-
 --
--- Name: convert_tz(timestamp without time zone, text, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: convert_tz(timestamp without time zone, text, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION convert_tz(dt timestamp without time zone, from_tz text, to_tz text) RETURNS timestamp without time zone
@@ -127,10 +113,8 @@ SELECT ($1 AT TIME ZONE $2) AT TIME ZONE $3;
 $_$;
 
 
-ALTER FUNCTION mysql.convert_tz(dt timestamp without time zone, from_tz text, to_tz text) OWNER TO postgres;
-
 --
--- Name: curdate(); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: curdate(); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION curdate() RETURNS date
@@ -140,10 +124,8 @@ SELECT CURRENT_DATE
 $$;
 
 
-ALTER FUNCTION mysql.curdate() OWNER TO postgres;
-
 --
--- Name: date(anyelement); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: date(anyelement); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION date(anyelement) RETURNS date
@@ -153,10 +135,8 @@ SELECT $1::date;
 $_$;
 
 
-ALTER FUNCTION mysql.date(anyelement) OWNER TO postgres;
-
 --
--- Name: date_add(date, interval); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: date_add(date, interval); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION date_add(date, interval) RETURNS date
@@ -166,10 +146,8 @@ SELECT adddate($1, $2)
 $_$;
 
 
-ALTER FUNCTION mysql.date_add(date, interval) OWNER TO postgres;
-
 --
--- Name: date_format(date, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: date_format(date, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION date_format(date, text) RETURNS text
@@ -179,10 +157,8 @@ SELECT to_char($1, mysql._mysqlf_pgsql($2))
 $_$;
 
 
-ALTER FUNCTION mysql.date_format(date, text) OWNER TO postgres;
-
 --
--- Name: date_format(timestamp without time zone, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: date_format(timestamp without time zone, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION date_format(timestamp without time zone, text) RETURNS text
@@ -192,10 +168,8 @@ SELECT to_char($1, mysql._mysqlf_pgsql($2))
 $_$;
 
 
-ALTER FUNCTION mysql.date_format(timestamp without time zone, text) OWNER TO postgres;
-
 --
--- Name: date_sub(date, interval); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: date_sub(date, interval); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION date_sub(date, interval) RETURNS date
@@ -205,10 +179,8 @@ SELECT ($1 - $2)::date;
 $_$;
 
 
-ALTER FUNCTION mysql.date_sub(date, interval) OWNER TO postgres;
-
 --
--- Name: datediff(date, date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: datediff(date, date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION datediff(date, date) RETURNS integer
@@ -218,10 +190,8 @@ SELECT $1 - $2
 $_$;
 
 
-ALTER FUNCTION mysql.datediff(date, date) OWNER TO postgres;
-
 --
--- Name: day(date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: day(date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION day(date) RETURNS integer
@@ -231,10 +201,8 @@ SELECT dayofmonth($1)
 $_$;
 
 
-ALTER FUNCTION mysql.day(date) OWNER TO postgres;
-
 --
--- Name: dayname(date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: dayname(date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION dayname(date) RETURNS text
@@ -244,10 +212,8 @@ SELECT to_char($1, 'TMDay')
 $_$;
 
 
-ALTER FUNCTION mysql.dayname(date) OWNER TO postgres;
-
 --
--- Name: dayofmonth(date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: dayofmonth(date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION dayofmonth(date) RETURNS integer
@@ -257,10 +223,8 @@ SELECT EXTRACT(day from $1)::int
 $_$;
 
 
-ALTER FUNCTION mysql.dayofmonth(date) OWNER TO postgres;
-
 --
--- Name: dayofweek(date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: dayofweek(date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION dayofweek(date) RETURNS integer
@@ -270,10 +234,8 @@ SELECT EXTRACT(dow FROM $1)::int
 $_$;
 
 
-ALTER FUNCTION mysql.dayofweek(date) OWNER TO postgres;
-
 --
--- Name: dayofyear(date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: dayofyear(date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION dayofyear(date) RETURNS integer
@@ -283,10 +245,8 @@ SELECT EXTRACT(doy FROM $1)::int
 $_$;
 
 
-ALTER FUNCTION mysql.dayofyear(date) OWNER TO postgres;
-
 --
--- Name: elt(integer, text[]); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: elt(integer, text[]); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION elt(integer, VARIADIC text[]) RETURNS text
@@ -296,10 +256,8 @@ SELECT $2[$1];
 $_$;
 
 
-ALTER FUNCTION mysql.elt(integer, VARIADIC text[]) OWNER TO postgres;
-
 --
--- Name: field(text, text[]); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: field(text, text[]); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION field(text, VARIADIC text[]) RETURNS integer
@@ -314,10 +272,8 @@ CREATE FUNCTION field(text, VARIADIC text[]) RETURNS integer
 $_$;
 
 
-ALTER FUNCTION mysql.field(text, VARIADIC text[]) OWNER TO postgres;
-
 --
--- Name: field(character varying, text[]); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: field(character varying, text[]); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION field(character varying, VARIADIC text[]) RETURNS integer
@@ -332,10 +288,8 @@ LIMIT 1
 $_$;
 
 
-ALTER FUNCTION mysql.field(character varying, VARIADIC text[]) OWNER TO postgres;
-
 --
--- Name: find_in_set(text, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: find_in_set(text, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION find_in_set(str text, strlist text) RETURNS integer
@@ -350,10 +304,8 @@ SELECT i
 $_$;
 
 
-ALTER FUNCTION mysql.find_in_set(str text, strlist text) OWNER TO postgres;
-
 --
--- Name: foreign_key_checks(boolean); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: foreign_key_checks(boolean); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION foreign_key_checks(enable boolean) RETURNS bigint
@@ -378,10 +330,8 @@ END;
 $$;
 
 
-ALTER FUNCTION mysql.foreign_key_checks(enable boolean) OWNER TO postgres;
-
 --
--- Name: from_days(integer); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: from_days(integer); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION from_days(integer) RETURNS date
@@ -391,10 +341,8 @@ SELECT date '0001-01-01bc' + $1
 $_$;
 
 
-ALTER FUNCTION mysql.from_days(integer) OWNER TO postgres;
-
 --
--- Name: from_unixtime(double precision); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: from_unixtime(double precision); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION from_unixtime(double precision) RETURNS timestamp without time zone
@@ -404,10 +352,8 @@ SELECT to_timestamp($1)::timestamp
 $_$;
 
 
-ALTER FUNCTION mysql.from_unixtime(double precision) OWNER TO postgres;
-
 --
--- Name: get_format(text, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: get_format(text, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION get_format(text, text) RETURNS text
@@ -442,10 +388,8 @@ END;
 $_$;
 
 
-ALTER FUNCTION mysql.get_format(text, text) OWNER TO postgres;
-
 --
--- Name: group_concat_atom(text, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: group_concat_atom(text, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION group_concat_atom(column1 text, column2 text) RETURNS text
@@ -457,10 +401,8 @@ END;
 $$;
 
 
-ALTER FUNCTION mysql.group_concat_atom(column1 text, column2 text) OWNER TO postgres;
-
 --
--- Name: group_concat_atom(bigint, bigint); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: group_concat_atom(bigint, bigint); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION group_concat_atom(column1 bigint, column2 bigint) RETURNS text
@@ -472,10 +414,8 @@ END;
 $$;
 
 
-ALTER FUNCTION mysql.group_concat_atom(column1 bigint, column2 bigint) OWNER TO postgres;
-
 --
--- Name: group_concat_atom(bigint, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: group_concat_atom(bigint, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION group_concat_atom(column1 bigint, column2 text) RETURNS text
@@ -487,10 +427,8 @@ END;
 $$;
 
 
-ALTER FUNCTION mysql.group_concat_atom(column1 bigint, column2 text) OWNER TO postgres;
-
 --
--- Name: group_concat_atom(text, bigint); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: group_concat_atom(text, bigint); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION group_concat_atom(column1 text, column2 bigint) RETURNS text
@@ -502,10 +440,8 @@ END;
 $$;
 
 
-ALTER FUNCTION mysql.group_concat_atom(column1 text, column2 bigint) OWNER TO postgres;
-
 --
--- Name: group_concat_atom(text, text, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: group_concat_atom(text, text, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION group_concat_atom(column1 text, column2 text, delimiter text) RETURNS text
@@ -517,10 +453,8 @@ END;
 $$;
 
 
-ALTER FUNCTION mysql.group_concat_atom(column1 text, column2 text, delimiter text) OWNER TO postgres;
-
 --
--- Name: group_concat_atom(text, bigint, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: group_concat_atom(text, bigint, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION group_concat_atom(column1 text, column2 bigint, delimiter text) RETURNS text
@@ -532,10 +466,8 @@ END;
 $$;
 
 
-ALTER FUNCTION mysql.group_concat_atom(column1 text, column2 bigint, delimiter text) OWNER TO postgres;
-
 --
--- Name: group_concat_atom(bigint, text, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: group_concat_atom(bigint, text, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION group_concat_atom(column1 bigint, column2 text, delimiter text) RETURNS text
@@ -547,10 +479,8 @@ END;
 $$;
 
 
-ALTER FUNCTION mysql.group_concat_atom(column1 bigint, column2 text, delimiter text) OWNER TO postgres;
-
 --
--- Name: group_concat_atom(bigint, bigint, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: group_concat_atom(bigint, bigint, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION group_concat_atom(column1 bigint, column2 bigint, delimiter text) RETURNS text
@@ -562,10 +492,8 @@ END;
 $$;
 
 
-ALTER FUNCTION mysql.group_concat_atom(column1 bigint, column2 bigint, delimiter text) OWNER TO postgres;
-
 --
--- Name: hex(integer); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: hex(integer); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION hex(integer) RETURNS text
@@ -575,10 +503,8 @@ SELECT upper(to_hex($1));
 $_$;
 
 
-ALTER FUNCTION mysql.hex(integer) OWNER TO postgres;
-
 --
--- Name: hex(bigint); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: hex(bigint); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION hex(bigint) RETURNS text
@@ -588,10 +514,8 @@ SELECT upper(to_hex($1));
 $_$;
 
 
-ALTER FUNCTION mysql.hex(bigint) OWNER TO postgres;
-
 --
--- Name: hex(text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: hex(text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION hex(text) RETURNS text
@@ -601,10 +525,8 @@ SELECT upper(encode($1::bytea, 'hex'))
 $_$;
 
 
-ALTER FUNCTION mysql.hex(text) OWNER TO postgres;
-
 --
--- Name: hour(time without time zone); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: hour(time without time zone); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION hour(time without time zone) RETURNS integer
@@ -614,10 +536,8 @@ SELECT EXTRACT(hour FROM $1)::int;
 $_$;
 
 
-ALTER FUNCTION mysql.hour(time without time zone) OWNER TO postgres;
-
 --
--- Name: hour(timestamp without time zone); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: hour(timestamp without time zone); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION hour(timestamp without time zone) RETURNS integer
@@ -627,10 +547,8 @@ SELECT EXTRACT(hour FROM $1)::int;
 $_$;
 
 
-ALTER FUNCTION mysql.hour(timestamp without time zone) OWNER TO postgres;
-
 --
--- Name: last_day(date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: last_day(date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION last_day(date) RETURNS date
@@ -640,10 +558,8 @@ SELECT (date_trunc('month',$1 + interval '1 month'))::date - 1
 $_$;
 
 
-ALTER FUNCTION mysql.last_day(date) OWNER TO postgres;
-
 --
--- Name: lcase(text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: lcase(text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION lcase(str text) RETURNS text
@@ -653,10 +569,8 @@ SELECT lower($1)
 $_$;
 
 
-ALTER FUNCTION mysql.lcase(str text) OWNER TO postgres;
-
 --
--- Name: left(text, integer); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: left(text, integer); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION "left"(str text, len integer) RETURNS text
@@ -666,10 +580,8 @@ SELECT substring($1 FROM 1 FOR $2)
 $_$;
 
 
-ALTER FUNCTION mysql."left"(str text, len integer) OWNER TO postgres;
-
 --
--- Name: locate(text, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: locate(text, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION locate(substr text, str text) RETURNS integer
@@ -679,10 +591,8 @@ SELECT position($1 in $2)
 $_$;
 
 
-ALTER FUNCTION mysql.locate(substr text, str text) OWNER TO postgres;
-
 --
--- Name: makedate(integer, integer); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: makedate(integer, integer); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION makedate(year integer, dayofyear integer) RETURNS date
@@ -692,10 +602,8 @@ SELECT (date '0001-01-01' + ($1 - 1) * interval '1 year' + ($2 - 1) * interval '
 $_$;
 
 
-ALTER FUNCTION mysql.makedate(year integer, dayofyear integer) OWNER TO postgres;
-
 --
--- Name: maketime(integer, integer, double precision); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: maketime(integer, integer, double precision); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION maketime(integer, integer, double precision) RETURNS time without time zone
@@ -706,10 +614,8 @@ SELECT time '00:00:00' + $1 * interval '1 hour' + $2 * interval '1 min'
 $_$;
 
 
-ALTER FUNCTION mysql.maketime(integer, integer, double precision) OWNER TO postgres;
-
 --
--- Name: minute(timestamp without time zone); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: minute(timestamp without time zone); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION minute(timestamp without time zone) RETURNS integer
@@ -719,10 +625,8 @@ SELECT EXTRACT(minute FROM $1)::int
 $_$;
 
 
-ALTER FUNCTION mysql.minute(timestamp without time zone) OWNER TO postgres;
-
 --
--- Name: month(date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: month(date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION month(date) RETURNS integer
@@ -732,10 +636,8 @@ SELECT EXTRACT(month FROM $1)::int
 $_$;
 
 
-ALTER FUNCTION mysql.month(date) OWNER TO postgres;
-
 --
--- Name: monthname(date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: monthname(date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION monthname(date) RETURNS text
@@ -745,10 +647,19 @@ SELECT to_char($1, 'TMMonth')
 $_$;
 
 
-ALTER FUNCTION mysql.monthname(date) OWNER TO postgres;
+--
+-- Name: rand(); Type: FUNCTION; Schema: mysql; Owner: -
+--
+
+CREATE FUNCTION rand() RETURNS numeric
+    LANGUAGE plperlu
+    AS $$
+    return rand();
+$$;
+
 
 --
--- Name: reverse(text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: reverse(text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION reverse(str text) RETURNS text
@@ -760,10 +671,8 @@ SELECT array_to_string(ARRAY(SELECT substring($1 FROM i FOR 1)
 $_$;
 
 
-ALTER FUNCTION mysql.reverse(str text) OWNER TO postgres;
-
 --
--- Name: right(text, integer); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: right(text, integer); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION "right"(str text, len integer) RETURNS text
@@ -773,10 +682,8 @@ SELECT substring($1 FROM length($1) - $2 FOR $2)
 $_$;
 
 
-ALTER FUNCTION mysql."right"(str text, len integer) OWNER TO postgres;
-
 --
--- Name: space(integer); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: space(integer); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION space(n integer) RETURNS text
@@ -786,10 +693,8 @@ SELECT repeat(' ', $1)
 $_$;
 
 
-ALTER FUNCTION mysql.space(n integer) OWNER TO postgres;
-
 --
--- Name: str_to_date(text, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: str_to_date(text, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION str_to_date(text, text) RETURNS date
@@ -799,10 +704,8 @@ SELECT to_date($1, mysql._mysqlf_pgsql($2))
 $_$;
 
 
-ALTER FUNCTION mysql.str_to_date(text, text) OWNER TO postgres;
-
 --
--- Name: strcmp(text, text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: strcmp(text, text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION strcmp(text, text) RETURNS integer
@@ -814,10 +717,8 @@ ELSE 0 END;
 $_$;
 
 
-ALTER FUNCTION mysql.strcmp(text, text) OWNER TO postgres;
-
 --
--- Name: substring_index(text, text, integer); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: substring_index(text, text, integer); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION substring_index(str text, delim text, count integer) RETURNS text
@@ -832,10 +733,8 @@ END
 $_$;
 
 
-ALTER FUNCTION mysql.substring_index(str text, delim text, count integer) OWNER TO postgres;
-
 --
--- Name: time(timestamp without time zone); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: time(timestamp without time zone); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION "time"(timestamp without time zone) RETURNS time without time zone
@@ -845,10 +744,8 @@ SELECT $1::time
 $_$;
 
 
-ALTER FUNCTION mysql."time"(timestamp without time zone) OWNER TO postgres;
-
 --
--- Name: to_days(date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: to_days(date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION to_days(date) RETURNS integer
@@ -858,10 +755,8 @@ SELECT $1 - '0001-01-01bc'
 $_$;
 
 
-ALTER FUNCTION mysql.to_days(date) OWNER TO postgres;
-
 --
--- Name: ucase(text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: ucase(text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION ucase(str text) RETURNS text
@@ -871,10 +766,8 @@ SELECT upper($1)
 $_$;
 
 
-ALTER FUNCTION mysql.ucase(str text) OWNER TO postgres;
-
 --
--- Name: unhex(text); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: unhex(text); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION unhex(text) RETURNS text
@@ -884,10 +777,8 @@ SELECT convert_from(decode($1, 'hex'),'utf8');
 $_$;
 
 
-ALTER FUNCTION mysql.unhex(text) OWNER TO postgres;
-
 --
--- Name: unix_timestamp(); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: unix_timestamp(); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION unix_timestamp() RETURNS double precision
@@ -897,10 +788,8 @@ SELECT EXTRACT(epoch FROM current_timestamp)
 $$;
 
 
-ALTER FUNCTION mysql.unix_timestamp() OWNER TO postgres;
-
 --
--- Name: unix_timestamp(timestamp without time zone); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: unix_timestamp(timestamp without time zone); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION unix_timestamp(timestamp without time zone) RETURNS double precision
@@ -910,10 +799,8 @@ SELECT EXTRACT(epoch FROM $1)
 $_$;
 
 
-ALTER FUNCTION mysql.unix_timestamp(timestamp without time zone) OWNER TO postgres;
-
 --
--- Name: week(date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: week(date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION week(date) RETURNS integer
@@ -923,10 +810,8 @@ SELECT EXTRACT(week FROM $1)::int;
 $_$;
 
 
-ALTER FUNCTION mysql.week(date) OWNER TO postgres;
-
 --
--- Name: year(date); Type: FUNCTION; Schema: mysql; Owner: postgres
+-- Name: year(date); Type: FUNCTION; Schema: mysql; Owner: -
 --
 
 CREATE FUNCTION year(date) RETURNS integer
@@ -936,10 +821,8 @@ SELECT EXTRACT(year FROM $1)::int
 $_$;
 
 
-ALTER FUNCTION mysql.year(date) OWNER TO postgres;
-
 --
--- Name: group_concat(text); Type: AGGREGATE; Schema: mysql; Owner: postgres
+-- Name: group_concat(text); Type: AGGREGATE; Schema: mysql; Owner: -
 --
 
 CREATE AGGREGATE group_concat(text) (
@@ -948,10 +831,8 @@ CREATE AGGREGATE group_concat(text) (
 );
 
 
-ALTER AGGREGATE mysql.group_concat(text) OWNER TO postgres;
-
 --
--- Name: group_concat(bigint); Type: AGGREGATE; Schema: mysql; Owner: postgres
+-- Name: group_concat(bigint); Type: AGGREGATE; Schema: mysql; Owner: -
 --
 
 CREATE AGGREGATE group_concat(bigint) (
@@ -960,10 +841,8 @@ CREATE AGGREGATE group_concat(bigint) (
 );
 
 
-ALTER AGGREGATE mysql.group_concat(bigint) OWNER TO postgres;
-
 --
--- Name: group_concat(text, text); Type: AGGREGATE; Schema: mysql; Owner: postgres
+-- Name: group_concat(text, text); Type: AGGREGATE; Schema: mysql; Owner: -
 --
 
 CREATE AGGREGATE group_concat(text, text) (
@@ -972,10 +851,8 @@ CREATE AGGREGATE group_concat(text, text) (
 );
 
 
-ALTER AGGREGATE mysql.group_concat(text, text) OWNER TO postgres;
-
 --
--- Name: group_concat(bigint, text); Type: AGGREGATE; Schema: mysql; Owner: postgres
+-- Name: group_concat(bigint, text); Type: AGGREGATE; Schema: mysql; Owner: -
 --
 
 CREATE AGGREGATE group_concat(bigint, text) (
@@ -983,8 +860,6 @@ CREATE AGGREGATE group_concat(bigint, text) (
     STYPE = text
 );
 
-
-ALTER AGGREGATE mysql.group_concat(bigint, text) OWNER TO postgres;
 
 --
 -- PostgreSQL database dump complete

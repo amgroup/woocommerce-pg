@@ -9,18 +9,16 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- Name: fn; Type: SCHEMA; Schema: -; Owner: wordpress
+-- Name: fn; Type: SCHEMA; Schema: -; Owner: -
 --
 
 CREATE SCHEMA fn;
 
 
-ALTER SCHEMA fn OWNER TO wordpress;
-
 SET search_path = fn, pg_catalog;
 
 --
--- Name: __particular__text__512__idx(text); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: __particular__text__512__idx(text); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION __particular__text__512__idx(text text) RETURNS text
@@ -29,10 +27,72 @@ CREATE FUNCTION __particular__text__512__idx(text text) RETURNS text
 SELECT CASE WHEN length($1) <= 500 THEN substring($1,0,500) ELSE NULL END$_$;
 
 
-ALTER FUNCTION fn.__particular__text__512__idx(text text) OWNER TO wordpress;
+--
+-- Name: __wp_postmeta_meta_value_changed(); Type: FUNCTION; Schema: fn; Owner: -
+--
+
+CREATE FUNCTION __wp_postmeta_meta_value_changed() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+BEGIN
+  IF (TG_OP = 'DELETE') THEN
+    IF ( OLD.meta_key IN ('_sku' , '_seo-keywords', '_seo-title', '_seo-description' ) OR OLD.meta_key ~ '^attribute_pa_' ) THEN
+      UPDATE public.wp_posts SET fn.tsv=fn.post_tsv("ID") WHERE "ID" = fn.real_post_id( OLD.post_id );
+    END IF;  
+  ELSE
+    IF ( NEW.meta_key IN ('_sku' , '_seo-keywords', '_seo-title', '_seo-description' ) OR NEW.meta_key ~ '^attribute_pa_' ) THEN
+      UPDATE public.wp_posts SET fn.tsv=fn.post_tsv("ID") WHERE "ID" = fn.real_post_id( NEW.post_id );
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
 
 --
--- Name: _stock(bigint); Type: FUNCTION; Schema: fn; Owner: postgres
+-- Name: __wp_terms_deleted(); Type: FUNCTION; Schema: fn; Owner: -
+--
+
+CREATE FUNCTION __wp_terms_deleted() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  post RECORD;
+BEGIN
+  DELETE FROM  wp_postmeta
+  WHERE
+    meta_key = 'attribute_' || fn.uri_unescape((SELECT taxonomy FROM public.wp_term_taxonomy WHERE term_id = OLD.term_id LIMIT 1)) AND
+    fn.__particular__text__512__idx(meta_value) = fn.uri_unescape(OLD.slug);
+  RETURN OLD;
+END;
+$$;
+
+
+--
+-- Name: __wp_terms_slug_changed(); Type: FUNCTION; Schema: fn; Owner: -
+--
+
+CREATE FUNCTION __wp_terms_slug_changed() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  post RECORD;
+BEGIN
+  IF (TG_OP = 'UPDATE') THEN
+    UPDATE wp_postmeta
+    SET meta_value = fn.uri_unescape(NEW.slug)
+    WHERE
+      meta_key = 'attribute_' || fn.uri_unescape((SELECT taxonomy FROM public.wp_term_taxonomy WHERE term_id = NEW.term_id LIMIT 1)) AND
+      fn.__particular__text__512__idx(meta_value) = fn.uri_unescape(OLD.slug);
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+
+--
+-- Name: _stock(bigint); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION _stock(post_id bigint) RETURNS numeric
@@ -49,10 +109,8 @@ WHERE
   )$_$;
 
 
-ALTER FUNCTION fn._stock(post_id bigint) OWNER TO postgres;
-
 --
--- Name: _transient_wc_attribute_taxonomies(); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: _transient_wc_attribute_taxonomies(); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION _transient_wc_attribute_taxonomies() RETURNS text
@@ -64,10 +122,8 @@ return to_json( $r->{rows} );
 $_$;
 
 
-ALTER FUNCTION fn._transient_wc_attribute_taxonomies() OWNER TO wordpress;
-
 --
--- Name: between(time without time zone, time without time zone, time without time zone); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: between(time without time zone, time without time zone, time without time zone); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION "between"("from" time without time zone, "to" time without time zone, it time without time zone) RETURNS boolean
@@ -81,10 +137,53 @@ SELECT
  $_$;
 
 
-ALTER FUNCTION fn."between"("from" time without time zone, "to" time without time zone, it time without time zone) OWNER TO wordpress;
+--
+-- Name: category_path(bigint); Type: FUNCTION; Schema: fn; Owner: -
+--
+
+CREATE FUNCTION category_path(category_id bigint) RETURNS text
+    LANGUAGE sql
+    AS $_$    WITH RECURSIVE tree ( term_taxonomy_id, term_id, parent, description, level,path ) AS (
+      SELECT
+        tt.term_taxonomy_id,
+        tt.term_id,
+        tt.parent,
+        tt.description,
+        1 AS level,
+        tt.term_id::text AS path
+      FROM
+        wp_term_taxonomy tt
+      WHERE
+        tt.term_id = $1
+      UNION
+      SELECT
+        tt2.term_taxonomy_id,
+        tt2.term_id,
+        tt2.parent,
+        tt2.description,
+        level+1 AS level,
+        (tree.path || '/' || tt2.term_id::text) AS path
+      FROM
+        wp_term_taxonomy tt2,
+        tree
+      WHERE
+        tt2.term_id != tt2.parent AND
+        tt2.term_id = tree.parent
+    )
+    SELECT
+      path
+    FROM
+      tree,
+      wp_woocommerce_termmeta tm
+    WHERE
+      tm.woocommerce_term_id = tree.term_id AND
+      meta_key = 'order' AND meta_value != ''
+    ORDER BY path DESC
+    LIMIT 1$_$;
+
 
 --
--- Name: is_attribute(text, text, bigint); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: is_attribute(text, text, bigint); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION is_attribute(taxonomy text, name text, post_id bigint) RETURNS boolean
@@ -96,14 +195,11 @@ FROM wp_postmeta
 WHERE
   post_id = fn.real_post_id($3) AND
   meta_key='_product_attributes'
-        
 $_$;
 
 
-ALTER FUNCTION fn.is_attribute(taxonomy text, name text, post_id bigint) OWNER TO wordpress;
-
 --
--- Name: is_positive(numeric); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: is_positive(numeric); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION is_positive(digit numeric) RETURNS boolean
@@ -113,10 +209,8 @@ SELECT coalesce($1>0, false, true);
 $_$;
 
 
-ALTER FUNCTION fn.is_positive(digit numeric) OWNER TO wordpress;
-
 --
--- Name: jpath(text, text); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: jpath(text, text); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION jpath(path text, object text) RETURNS text[]
@@ -228,10 +322,8 @@ return out;
 $_$;
 
 
-ALTER FUNCTION fn.jpath(path text, object text) OWNER TO wordpress;
-
 --
--- Name: json2php(text); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: json2php(text); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION json2php(json text) RETURNS text
@@ -330,10 +422,8 @@ return serialize( eval(json) );
 $$;
 
 
-ALTER FUNCTION fn.json2php(json text) OWNER TO wordpress;
-
 --
--- Name: php2json(text); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: php2json(text); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION php2json(php text) RETURNS text
@@ -505,10 +595,8 @@ function phpUnserialize (phpstr) {
 return JSON.stringify( phpUnserialize(php) );$$;
 
 
-ALTER FUNCTION fn.php2json(php text) OWNER TO wordpress;
-
 --
--- Name: post_tsv(); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: post_tsv(); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION post_tsv() RETURNS trigger
@@ -523,10 +611,8 @@ END;
 $$;
 
 
-ALTER FUNCTION fn.post_tsv() OWNER TO wordpress;
-
 --
--- Name: post_tsv(bigint); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: post_tsv(bigint); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION post_tsv(post_id bigint) RETURNS tsvector
@@ -595,10 +681,8 @@ CREATE FUNCTION post_tsv(post_id bigint) RETURNS tsvector
   return $tsv;$_X$;
 
 
-ALTER FUNCTION fn.post_tsv(post_id bigint) OWNER TO wordpress;
-
 --
--- Name: real_post_id(bigint); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: real_post_id(bigint); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION real_post_id(id bigint) RETURNS bigint
@@ -615,10 +699,8 @@ LIMIT 1
 $_$;
 
 
-ALTER FUNCTION fn.real_post_id(id bigint) OWNER TO wordpress;
-
 --
--- Name: tax_is_attribute(text); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: tax_is_attribute(text); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION tax_is_attribute(taxonomy text) RETURNS boolean
@@ -628,10 +710,8 @@ CREATE FUNCTION tax_is_attribute(taxonomy text) RETURNS boolean
 $_$;
 
 
-ALTER FUNCTION fn.tax_is_attribute(taxonomy text) OWNER TO wordpress;
-
 --
--- Name: transient_wc_attribute_taxonomies(); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: transient_wc_attribute_taxonomies(); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION transient_wc_attribute_taxonomies() RETURNS trigger
@@ -649,10 +729,25 @@ CREATE FUNCTION transient_wc_attribute_taxonomies() RETURNS trigger
 END;$$;
 
 
-ALTER FUNCTION fn.transient_wc_attribute_taxonomies() OWNER TO wordpress;
+--
+-- Name: tsv(); Type: FUNCTION; Schema: fn; Owner: -
+--
+
+CREATE FUNCTION tsv() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF (NEW.post_type = 'product_variation') THEN RETURN NEW;
+  END IF;
+  
+  NEW.tsv         = fn.post_tsv(NEW."ID");
+  RETURN NEW;
+END;
+$$;
+
 
 --
--- Name: unserialize(text); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: unserialize(text); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION unserialize(php text) RETURNS text
@@ -824,10 +919,8 @@ function phpUnserialize (phpstr) {
 return JSON.stringify( phpUnserialize(php) );$$;
 
 
-ALTER FUNCTION fn.unserialize(php text) OWNER TO wordpress;
-
 --
--- Name: uri_escape(text); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: uri_escape(text); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION uri_escape(uri text) RETURNS text
@@ -840,10 +933,8 @@ return $uri;
 $_X$;
 
 
-ALTER FUNCTION fn.uri_escape(uri text) OWNER TO wordpress;
-
 --
--- Name: uri_unescape(text); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: uri_unescape(text); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION uri_unescape(uri text) RETURNS text
@@ -855,10 +946,8 @@ return decode('utf-8', uri_unescape($_[0]) );
 $_X$;
 
 
-ALTER FUNCTION fn.uri_unescape(uri text) OWNER TO wordpress;
-
 --
--- Name: wp_plainto_tsquery(regconfig, text); Type: FUNCTION; Schema: fn; Owner: wordpress
+-- Name: wp_plainto_tsquery(regconfig, text); Type: FUNCTION; Schema: fn; Owner: -
 --
 
 CREATE FUNCTION wp_plainto_tsquery(regconfig, text) RETURNS tsquery
@@ -867,8 +956,6 @@ CREATE FUNCTION wp_plainto_tsquery(regconfig, text) RETURNS tsquery
 SELECT plainto_tsquery($1,$2);
 $_$;
 
-
-ALTER FUNCTION fn.wp_plainto_tsquery(regconfig, text) OWNER TO wordpress;
 
 --
 -- PostgreSQL database dump complete
