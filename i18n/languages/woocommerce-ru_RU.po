@@ -241,6 +241,14 @@ msgstr[2] "рабочих дня"
 msgstr[3] "рабочих дней"
 
 
+msgid "up to %s business day"
+msgid_plural "up to %s business days"
+msgstr[0] "в тот же рабочий день"
+msgstr[1] "до %s рабочего дня"
+msgstr[2] "до %s рабочих дней"
+msgstr[3] "до %s рабочих дней"
+
+
 #: admin/woocommerce-admin-dashboard.php:224
 #: shortcodes/shortcode-pay.php:81
 #@ woocommerce
@@ -518,7 +526,7 @@ msgstr "Тип купонов"
 #: admin/post-types/writepanels/writepanel-coupon_data.php:35
 #@ woocommerce
 msgid "Coupon amount"
-msgstr "Кол-во купонов"
+msgstr "Номинал скидки по купону"
 
 #: admin/post-types/shop_coupon.php:23
 #@ woocommerce
@@ -2032,7 +2040,7 @@ msgstr ""
 #: admin/post-types/writepanels/writepanel-coupon_data.php:35
 #@ woocommerce
 msgid "Enter an amount e.g. 2.99"
-msgstr "Введите значение кол-ва, например, 2.99"
+msgstr "Введите номинал купона (скидки), например, 2.99"
 
 #: admin/post-types/writepanels/writepanel-coupon_data.php:38
 #@ woocommerce
@@ -2057,6 +2065,19 @@ msgstr "Недоступно"
 #@ woocommerce
 msgid "Coupon code"
 msgstr "Код купона"
+
+#: admin/post-types/writepanels/writepanels-init.php:75
+#: templates/checkout/form-coupon.php:15
+#@ woocommerce
+msgid "Coupon code applied successfully."
+msgstr "Скидка получена, купон применен."
+
+#: admin/post-types/writepanels/writepanels-init.php:75
+#: templates/checkout/form-coupon.php:15
+#@ woocommerce
+msgid "Coupon code already applied!"
+msgstr "Извините, скидка не получена. Этот купон просрочен или уже был использован."
+
 
 #: admin/woocommerce-admin-users.php:102
 #@ woocommerce
@@ -3005,6 +3026,12 @@ msgstr "Логин"
 #@ woocommerce
 msgid "Account password"
 msgstr "Пароль аккаунта"
+
+#: classes/class-wc-checkout.php:41
+#: classes/class-wc-checkout.php:47
+#@ woocommerce
+msgid "Confirm password"
+msgstr "Подтвердите пароль"
 
 #: templates/myaccount/form-login.php:22
 #: templates/myaccount/form-login.php:54

@@ -191,7 +191,9 @@ function woocommerce_edit_category_fields( $term, $taxonomy ) {
 				<button type="submit" class="remove_image_button button"><?php _e( 'Remove image', 'woocommerce' ); ?></button>
 			</div>
 			<script type="text/javascript">
-
+				// Correct "_wp_original_http_referer"
+				jQuery("input[name='_wp_original_http_referer']").val( window.location.href );
+				
 				// Uploading files
 				var file_frame;
 

@@ -42,6 +42,8 @@ function woocommerce_order_data_meta_box($post) {
 	} else {
 		$order_status = sanitize_title( apply_filters( 'woocommerce_default_order_status', 'pending' ) );
 	}
+	// Payment date
+	$paid_date = get_post_meta( $post->ID, '_paid_date', true );
 
 	if ( empty( $post->post_title ) )
 		$order_title = 'Order';
@@ -71,7 +73,12 @@ function woocommerce_order_data_meta_box($post) {
 			<div class="order_data_column_container">
 				<div class="order_data_column">
 
-					<h4><?php _e( 'General Details', 'woocommerce' ); ?></h4>
+					<h4>
+						<?php _e( 'General Details', 'woocommerce' ); ?>
+						<?php if( $paid_date ) : ?>
+							&nbsp;-&nbsp;<span class="payment info"> <? _e( 'Paid', 'woocommerce' ); ?>: <?php echo date_i18n( 'Y-m-d H:i:s', strtotime( $paid_date ) ); ?></span>
+						<?php endif; ?>
+					</h4>
 
 					<p class="form-field"><label for="order_status"><?php _e( 'Order status:', 'woocommerce' ) ?></label>
 					<select id="order_status" name="order_status" class="chosen_select">
@@ -429,6 +436,7 @@ function woocommerce_order_actions_meta_box( $post ) {
 	if ( ! is_object( $theorder ) )
 		$theorder = new WC_Order( $post->ID );
 
+	$paid_date = get_post_meta( $post->ID, '_paid_date', true );
 	$order = $theorder;
 	?>
 	<ul class="order_actions submitbox">
@@ -455,9 +463,18 @@ function woocommerce_order_actions_meta_box( $post ) {
 					}
 					?>
 				</optgroup>
-				<?php foreach( apply_filters( 'woocommerce_order_actions', array() ) as $action => $title ) { ?>
+				<?php foreach( apply_filters( 'woocommerce_order_actions', array() ) as $action => $title ) : ?>
 					<option value="<?php echo $action; ?>"><?php echo $title; ?></option>
-				<?php } ?>
+				<?php endforeach; ?>
+
+				<optgroup label="<?php _e( 'Payments', 'woocommerce' ); ?>">
+				<?php if( $paid_date ) : ?>
+					<option value="invoice_notpaid"><?php _e('Invoice not paid', 'woocommerce'); ?></option>
+				<?php else : ?>
+					<option value="invoice_paid"><?php _e('Invoice as paid', 'woocommerce'); ?></option>
+				<?php endif; ?>
+				</optgroup>
+				
 			</select>
 
 			<button class="button wc-reload" title="<?php _e( 'Apply', 'woocommerce' ); ?>"><span><?php _e( 'Apply', 'woocommerce' ); ?></span></button>
@@ -842,8 +859,8 @@ function woocommerce_process_shop_order_meta( $post_id, $post ) {
 	// Payment method handling
 	if ( get_post_meta( $post_id, '_payment_method', true ) !== stripslashes( $_POST['_payment_method'] ) ) {
 
-		$methods 				= $woocommerce->payment_gateways->payment_gateways();
-		$payment_method 		= woocommerce_clean( $_POST['_payment_method'] );
+		$methods 		= $woocommerce->payment_gateways->payment_gateways();
+		$payment_method 	= woocommerce_clean( $_POST['_payment_method'] );
 		$payment_method_title 	= $payment_method;
 
 		if ( isset( $methods) && isset( $methods[ $payment_method ] ) )
@@ -982,6 +999,7 @@ function woocommerce_process_shop_order_meta( $post_id, $post ) {
 	// Order status
 	$order->update_status( $_POST['order_status'] );
 
+
 	// Handle button actions
 	if ( ! empty( $_POST['wc_order_action'] ) ) {
 
@@ -1006,6 +1024,18 @@ function woocommerce_process_shop_order_meta( $post_id, $post ) {
 			}
 
 			do_action( 'woocommerce_after_resend_order_email', $order, $email_to_send );
+
+		// Payment date handling
+		} else if ( strstr( $action, 'invoice_' ) ) {
+			$mailer = $woocommerce->mailer();
+			if( $action == 'invoice_paid' ) {
+				update_post_meta( $order->id, '_paid_date', current_time('mysql',0), true );
+				do_action( 'woocommerce_payment_complete', $order->id );
+
+			} else if( $action == 'invoice_notpaid' ) {
+				delete_post_meta( $order->id, '_paid_date' );
+				do_action( 'woocommerce_payment_cancel', $order->id );
+			}
 
 		} else {
 

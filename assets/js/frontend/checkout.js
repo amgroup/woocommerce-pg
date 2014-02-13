@@ -1,7 +1,66 @@
 jQuery(document).ready(function($) {
 
+
+	var block_css = { message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6 }};
+	
+
+	// Update order_review        
+	function update_order_review(data) {
+		if( $( '#order_review' ).size() ) {
+			$( '#order_review').block(block_css);
+
+			$.extend(data, {
+				action:		'woocommerce_update_order_review',
+				security: 	woocommerce_params.update_order_review_nonce
+			});
+
+			$.ajax({
+				type:		'POST',
+				url:		woocommerce_params.ajax_url,
+				data:		data,
+				success:	function(response) {
+					$( '#order_review' ).unblock().html( $(response) );
+				}
+			});
+		}        
+	}
+
+	/* AJAX Coupon Form Submission */
+	$('form.checkout_coupon').submit( function() {
+		var $form = $(this);
+
+		if ( $form.is('.processing') ) return false;
+
+		$form.addClass('processing').block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
+
+		var data = {
+			action: 			'woocommerce_apply_coupon',
+			security: 			woocommerce_params.apply_coupon_nonce,
+			coupon_code:		$form.find('input[name=coupon_code]').val()
+		};
+
+		$.ajax({
+			type: 		'POST',
+			url: 		woocommerce_params.ajax_url,
+			data: 		data,
+			success: 	function( code ) {
+				$('.woocommerce-error, .woocommerce-message').remove();
+				$form.removeClass('processing').unblock();
+
+				if ( code ) {
+					$form.before( code );
+					$form.slideUp();
+
+					update_order_review(data);
+				}
+			},
+			dataType: 	"html"
+		});
+		return false;
+	});
+
 	$(document)
-		.on( 'updated:shipping_method', function() {
+		.on( 'updated:shipping_method,updated:checkout', function() {
 			var $form = $('*[name=shipping_method]:first').closest('form');
 			var data = closest_form_data( $form );
 			var block_css = {message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}};

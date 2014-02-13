@@ -802,7 +802,7 @@ class Woocommerce {
 	            'labels' => array(
 	                    'name' 				=> __( 'Product Categories', 'woocommerce'),
 	                    'singular_name' 	=> __( 'Product Category', 'woocommerce'),
-						'menu_name'			=> _x( 'Categories', 'Admin menu name', 'woocommerce' ),
+			    'menu_name'			=> _x( 'Categories', 'Admin menu name', 'woocommerce' ),
 	                    'search_items' 		=> __( 'Search Product Categories', 'woocommerce'),
 	                    'all_items' 		=> __( 'All Product Categories', 'woocommerce'),
 	                    'parent_item' 		=> __( 'Parent Product Category', 'woocommerce'),
@@ -815,7 +815,7 @@ class Woocommerce {
 	            'show_ui' 				=> true,
 	            'query_var' 			=> true,
 	            'capabilities'			=> array(
-	            	'manage_terms' 		=> 'manage_product_terms',
+	            'manage_terms' 		=> 'manage_product_terms',
 					'edit_terms' 		=> 'edit_product_terms',
 					'delete_terms' 		=> 'delete_product_terms',
 					'assign_terms' 		=> 'assign_product_terms',

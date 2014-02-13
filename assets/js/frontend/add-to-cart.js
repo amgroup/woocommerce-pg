@@ -91,6 +91,10 @@ jQuery(document).ready(function($) {
 
 					// Trigger event so themes can refresh other areas
 					$('body').trigger( 'added_to_cart', [ fragments, cart_hash ] );
+
+					$.ajax({type:'POST',url:woocommerce_params.ajax_url,data:{action:'woocommerce_get_mini_cart', security: woocommerce_params.mini_cart_nonce },success:function(r){
+					    $('.cart_list.product_list_widget').replaceWith(r);
+					}});
 				}
 			});
 

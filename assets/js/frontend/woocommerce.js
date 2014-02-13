@@ -1,3 +1,9 @@
+jQuery(document).on('got_nonce_params',function(){
+    jQuery.ajax({type:'POST',url:woocommerce_params.ajax_url,data:{action:'woocommerce_get_mini_cart', security: woocommerce_params.mini_cart_nonce },success:function(r){
+	jQuery('.widget_mini_cart_content').replaceWith(r);
+    }});
+});
+
 jQuery(document).ready(function($) {
 
 	// Orderby

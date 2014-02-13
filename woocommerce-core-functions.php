@@ -788,8 +788,7 @@ function woocommerce_price( $price, $args = array() ) {
 	global $woocommerce;
 
 	extract( shortcode_atts( array(
-		'ex_tax_label' 	=> '0',
-		'class'		=> array('amount')
+		'ex_tax_label' 	=> '0'
 	), $args ) );
 
 	$return          = '';
@@ -798,6 +797,7 @@ function woocommerce_price( $price, $args = array() ) {
 	$currency_symbol = get_woocommerce_currency_symbol();
 	$decimal_sep     = wp_specialchars_decode( stripslashes( get_option( 'woocommerce_price_decimal_sep' ) ), ENT_QUOTES );
 	$thousands_sep   = wp_specialchars_decode( stripslashes( get_option( 'woocommerce_price_thousand_sep' ) ), ENT_QUOTES );
+	if($price < 9999) $thousands_sep = '';
 
 	$price           = apply_filters( 'raw_woocommerce_price', (double) $price );
 	$price           = number_format( $price, $num_decimals, $decimal_sep, $thousands_sep );
@@ -805,7 +805,7 @@ function woocommerce_price( $price, $args = array() ) {
 	if ( get_option( 'woocommerce_price_trim_zeros' ) == 'yes' && $num_decimals > 0 )
 		$price = woocommerce_trim_zeros( $price );
 
-	$return = '<span class="' . implode(' ', $class) . '">' . sprintf( get_woocommerce_price_format(), $currency_symbol, $price ) . '</span>';
+	$return = sprintf( get_woocommerce_price_format(), $currency_symbol, $price );
 
 	if ( $ex_tax_label && get_option( 'woocommerce_calc_taxes' ) == 'yes' )
 		$return .= ' <small>' . $woocommerce->countries->ex_tax_or_vat() . '</small>';
@@ -1356,7 +1356,8 @@ function woocommerce_product_post_type_link( $permalink, $post ) {
     	'%second%',
     	'%post_id%',
     	'%category%',
-    	'%product_cat%'
+    	'%product_cat%',
+	'/%name%'
     );
 
     $replace = array(
@@ -1368,7 +1369,8 @@ function woocommerce_product_post_type_link( $permalink, $post ) {
     	date_i18n( 's', strtotime( $post->post_date ) ),
     	$post->ID,
     	$product_cat,
-    	$product_cat
+    	$product_cat,
+	''
     );
 
     $replace = array_map( 'sanitize_title', $replace );

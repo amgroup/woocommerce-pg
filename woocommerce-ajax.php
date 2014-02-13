@@ -1815,25 +1815,20 @@ if( !function_exists( 'get_data_product_variations' ) ) {
  * 
  * AJAX dinamic load nonce params
 */
-if( !function_exists( 'woocommerce_nonce_params' ) ) {
-    function woocommerce_nonce_params(){
+if( !function_exists( 'async_nonce_params' ) ) {
+    function async_nonce_params(){
+	$nonces = '';
 
         // Variables for JS scripts
         $woocommerce_params = array(
-            'update_order_review_nonce'        => wp_create_nonce( "update-order-review" ),
-            'apply_coupon_nonce'               => wp_create_nonce( "apply-coupon" ),
-            'get_shipping_methods_nonce'       => wp_create_nonce( "get-shipping-methods" ),
-            'shipping_methods_nonce'           => wp_create_nonce( "shipping-methods" ),
-            'add_to_cart_nonce'                => wp_create_nonce( "add-to-cart" ),
-            'checkout_billing_form_nonce'      => wp_create_nonce( "checkout-billing-form" ),
-            'checkout_shipping_form_nonce'    => wp_create_nonce( "checkout-shipping-form" ),
+            'mini_cart_nonce'                  => wp_create_nonce( "mini-cart" )
 
         );
-        apply_filters( 'woocommerce_params', $woocommerce_params );
 
         foreach( $woocommerce_params as $nonce => $value ) {
-            echo "woocommerce_params['" . $nonce . "']='" . $value . "';";
+            $nonces .= "woocommerce_params['" . $nonce . "']='" . $value . "';";
         }
+	return $nonces;
     }
 }
 
@@ -1843,6 +1838,9 @@ if( !function_exists( 'get_woocommerce_nonce_params' ) ) {
 
         header( 'Content-Type: application/javascript; charset=UTF-8' );
 	echo $woocommerce->nonce_params();
+	echo async_nonce_params();
+
+	echo "jQuery(document).trigger('got_nonce_params');";
         die();
     }
     add_action( 'wp_ajax_nopriv_get_woocommerce_nonce_params', 'get_woocommerce_nonce_params' );
@@ -1852,13 +1850,39 @@ if( !function_exists( 'get_woocommerce_nonce_params' ) ) {
 /*
  * Kidberries team
 */
-if( !function_exists( 'get_dynamic_shipping' ) ) {
-    // Will be removed!
-    function get_dynamic_shipping() {
-	woocommerce_shipping_methods();
+
+
+
+if( !function_exists( 'is_product_in_cart' ) ) {
+    function is_product_in_cart() {
+	global $woocommerce, $product;
+
+	$result = array();
+	header( 'Content-Type: application/json; charset=UTF-8' );
+
+	if ( ! defined('WOOCOMMERCE_CART') ) define( 'WOOCOMMERCE_CART', true );
+	if ( isset( $_POST['product_id'] ) ) {
+	    $result['cart'] = array(
+		'notempty' => false,
+		 $_POST['product_id'] => 0
+	    );
+	    $result['cart']['notempty'] = false;
+	    if( !empty($woocommerce->cart->cart_contents) ) {
+		$result['cart']['notempty'] = true;
+		foreach( $woocommerce->cart->cart_contents as $cart_item_id => $product ) {
+		    if( $product['product_id'] == $_POST['product_id'] ) {
+			$result['cart'][ $_POST['product_id'] ]++;
+			if( $product['variation_id'] )
+			    $result['cart'][ $product['variation_id'] ] ++;
+		    }
+		}
+	    }
+	}
+	echo json_encode( $result );
+	die();
     }
-    add_action( 'wp_ajax_nopriv_get_dynamic_shipping', 'get_dynamic_shipping' );
-    add_action( 'wp_ajax_get_dynamic_shipping', 'get_dynamic_shipping' );
+    add_action( 'wp_ajax_nopriv_is_product_in_cart', 'is_product_in_cart' );
+    add_action( 'wp_ajax_is_product_in_cart', 'is_product_in_cart' );
 }
 
 if( !function_exists( 'woocommerce_shipping_methods' ) ) {
@@ -1912,9 +1936,10 @@ if( !function_exists( 'woocommerce_shipping_methods' ) ) {
 		if ( isset( $_POST['shipping_address_2'] ) )
 			$woocommerce->customer->set_shipping_address_2( $_POST['shipping_address_2'] );
 
-
-
 		if ( isset( $_POST['product_id'] ) ) {
+		    if( is_array( $_POST['product_id'] ) )
+			$_POST['product_id'] = $_POST['product_id'][0] ? $_POST['product_id'][0] : $_POST['product_id'][1];
+
 			if ( isset( $_POST['variation_id'] ) && ! $_POST['variation_id'] ) {
 				$_POST['variation_id'] = $wpdb->get_var(
 					$wpdb->prepare("
@@ -1929,7 +1954,6 @@ if( !function_exists( 'woocommerce_shipping_methods' ) ) {
                 }
 
 		$woocommerce->cart->calculate_totals();
-
 		woocommerce_get_template( 'shipping/methods.php', array('ajax'=>'async'));
 
 		if( !empty( $woocommerce->cart->cart_contents[$cart_item_key] ) ) {
@@ -1940,7 +1964,6 @@ if( !function_exists( 'woocommerce_shipping_methods' ) ) {
 		}
 
 		$woocommerce->clear_product_transients();
-
 		die();
     }
 	add_action( 'wp_ajax_nopriv_woocommerce_shipping_methods', 'woocommerce_shipping_methods' );
@@ -2010,7 +2033,6 @@ if( !function_exists( 'checkout_billing_form' ) ) {
 }
 
 
-
 /**
  * AJAX get shipping methods
  *
@@ -2020,10 +2042,24 @@ if( !function_exists( 'checkout_billing_form' ) ) {
 if( !function_exists( 'woocommerce_ajax_shipping_methods_form' ) ) {
 	function woocommerce_ajax_shipping_methods_form() {
 		check_ajax_referer( 'shipping-methods', 'security' );
-		get_dynamic_shipping();
+		woocommerce_shipping_methods();
 	}
 
 	add_action('wp_ajax_woocommerce_shipping_methods_form', 'woocommerce_ajax_shipping_methods_form');
 	add_action('wp_ajax_nopriv_woocommerce_shipping_methods_form', 'woocommerce_ajax_shipping_methods_form');
 }
 
+
+if( !function_exists( 'woocommerce_get_mini_cart' ) ) {
+    function woocommerce_get_mini_cart() {
+	global $woocommerce;
+
+//	check_ajax_referer( 'mini-cart', 'security' );
+	// Get mini cart
+	woocommerce_mini_cart();
+	die();
+    }
+
+    add_action( 'wp_ajax_nopriv_woocommerce_get_mini_cart', 'woocommerce_get_mini_cart' );
+    add_action( 'wp_ajax_woocommerce_get_mini_cart', 'woocommerce_get_mini_cart' );
+}

@@ -1724,6 +1724,32 @@ function woocommerce_unique_post_slug($slug, $post_ID, $post_status, $post_type,
     return $slug;
 }
 
+/*
+ *
+ */
+
+function extd_price_format_html( $format ) {
+    $currency_pos = get_option( 'woocommerce_currency_pos' );
+
+    switch ( $currency_pos ) {
+        case 'left' :
+            $format = '<span class="price currency">%1$s</span><span class="price digit">%2$s</span>';
+        break;
+        case 'right' :
+            $format = '<span class="price digit">%2$s</span><span class="price currency">%1$s</span>';
+        break;
+        case 'left_space' :
+            $format = '<span class="price currency">%1$s&nbsp;</span><span class="price digit">%2$s</span>';
+        break;
+        case 'right_space' :
+            $format = '<span class="price digit">%2$s</span><span class="price currency">&nbsp;%1$s</span>';
+        break;
+    }
+
+    return $format;
+}
+add_filter( 'woocommerce_price_format', 'extd_price_format_html' );
+
 
 /*
  *  CartOn Team
