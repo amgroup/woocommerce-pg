@@ -13,6 +13,32 @@ SET search_path = public, pg_catalog;
 SET default_tablespace = '';
 
 SET default_with_oids = false;
+-- DROP INDEX public.wp_woocommerce_rewrites_object_id_idx;
+
+CREATE INDEX wp_woocommerce_rewrites_object_id_idx
+  ON public.wp_woocommerce_rewrites
+  USING btree
+  (object_id);
+
+-- Index: public.wp_woocommerce_rewrites_object_type_idx
+
+-- DROP INDEX public.wp_woocommerce_rewrites_object_type_idx;
+
+CREATE INDEX wp_woocommerce_rewrites_object_type_idx
+  ON public.wp_woocommerce_rewrites
+  USING btree
+  (object_type COLLATE pg_catalog."default");
+
+-- Index: public.wp_woocommerce_rewrites_uri_idx
+
+-- DROP INDEX public.wp_woocommerce_rewrites_uri_idx;
+
+CREATE INDEX wp_woocommerce_rewrites_uri_idx
+  ON public.wp_woocommerce_rewrites
+  USING btree
+  (uri COLLATE pg_catalog."default");
+
+
 
 --
 -- Name: term_taxonomy_term_id_taxonomy_key; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
