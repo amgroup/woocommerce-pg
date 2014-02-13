@@ -30,7 +30,7 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
         $this->icon         = apply_filters( 'woocommerce_paypal_icon', $woocommerce->plugin_url() . '/assets/images/icons/paypal_visa_mc.png' );
         $this->has_fields   = false;
         $this->liveurl      = 'https://www.paypal.com/cgi-bin/webscr';
-	$this->testurl      = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+		$this->testurl      = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
         $this->method_title = __( 'PayPal', 'woocommerce' );
         $this->notify_url   = str_replace( 'https:', 'http:', add_query_arg( 'wc-api', 'WC_Gateway_Paypal', home_url( '/' ) ) );
 
@@ -49,7 +49,7 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 		$this->debug			= $this->get_option( 'debug' );
 		$this->form_submission_method = $this->get_option( 'form_submission_method' ) == 'yes' ? true : false;
 		$this->page_style 		= $this->get_option( 'page_style' );
-		$this->invoice_prefix	= $this->get_option( 'invoice_prefix', 'WC-' );
+		$this->invoice_prefix	= $this->get_option( 'invoice_prefix' );
 
 		// Logs
 		if ( 'yes' == $this->debug )
@@ -157,6 +157,7 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 							'description' => __( 'Please enter a prefix for your invoice numbers. If you use your PayPal account for multiple stores ensure this prefix is unique as PayPal will not allow orders with the same invoice number.', 'woocommerce' ),
 							'default' => 'WC-',
 							'desc_tip'      => true,
+							'placeholder'	=> get_option('woocommerce_order_prefix'),
 						),
 			'form_submission_method' => array(
 							'title' => __( 'Submission method', 'woocommerce' ),
@@ -577,11 +578,11 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 
 		@ob_clean();
 
-    	if ( ! empty( $_POST ) && $this->check_ipn_request_is_valid() ) {
+		if ( ! empty( $_POST ) && $this->check_ipn_request_is_valid() ) {
 
-    		header( 'HTTP/1.1 200 OK' );
+    			header( 'HTTP/1.1 200 OK' );
 
-        	do_action( "valid-paypal-standard-ipn-request", $_POST );
+        		do_action( "valid-paypal-standard-ipn-request", $_POST );
 
 		} else {
 
@@ -601,7 +602,6 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 	 */
 	function successful_request( $posted ) {
 		global $woocommerce;
-
 		$posted = stripslashes_deep( $posted );
 
 		// Custom holds post ID
@@ -620,7 +620,7 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 	        	$this->log->add( 'paypal', 'Payment status: ' . $posted['payment_status'] );
 
 	        // We are here so lets check status and do actions
-	        switch ( $posted['payment_status'] ) {
+	        switch ( mb_strtolower( $posted['payment_status'] ) ) {
 	            case 'completed' :
 
 	            	// Check order not already completed
@@ -750,7 +750,7 @@ class WC_Gateway_Paypal extends WC_Payment_Gateway {
 	    	$order_id = (int) $custom;
 	    	$order_key = $posted['invoice'];
     	} elseif( is_string( $custom ) ) {
-	    	$order_id = (int) str_replace( $this->invoice_prefix, '', $custom );
+	    	$order_id = (int) str_replace( ( $this->invoice_prefix ? $this->invoice_prefix : get_option('woocommerce_order_prefix') ), '', $custom );
 	    	$order_key = $custom;
     	} else {
     		list( $order_id, $order_key ) = $custom;

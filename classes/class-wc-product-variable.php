@@ -208,19 +208,16 @@ class WC_Product_Variable extends WC_Product {
 	public function is_on_sale() {
 
 		if ( $this->has_child() ) {
-
 			foreach ( $this->get_children() as $child_id ) {
 				$sale_price = get_post_meta( $child_id, '_sale_price', true );
-				if ( $sale_price !== "" && $sale_price >= 0 )
+				$price = get_post_meta( $child_id, '_price', true );
+				if ( $sale_price && $sale_price == $price )
 					return true;
 			}
-
-		} else {
-
-			if ( $this->sale_price && $this->sale_price == $this->price )
-				return true;
-
 		}
+		if ( $this->sale_price && $this->sale_price == $this->price )
+			return true;
+
 		return false;
 	}
 

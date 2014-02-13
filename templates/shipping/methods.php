@@ -14,9 +14,6 @@ global $woocommerce;
 $available_methods = $woocommerce->shipping->get_available_shipping_methods();
 $salt = '_' . rand(100000,999999);
 ?>
-<pre>
-<?php //var_dump($woocommerce->session) ?>
-</pre>
 <!-- Shipping methods -->
 <?php
 if ( $available_methods ) {
@@ -119,3 +116,5 @@ if ( $available_methods ) {
 ?>
 <input type="hidden" name="shipping_method_variant" value="<?php echo $woocommerce->session->chosen_shipping_method_variant; ?>" />
 <input type="hidden" name="shipping_method_sub_variant" value="<?php echo $woocommerce->session->chosen_shipping_method_sub_variant; ?>" />
+<!-- /Shipping methods -->
+

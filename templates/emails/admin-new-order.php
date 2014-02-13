@@ -53,4 +53,3 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
 
 <?php woocommerce_get_template( 'emails/email-addresses.php', array( 'order' => $order ) ); ?>
 
-<?php do_action( 'woocommerce_email_footer' ); ?>

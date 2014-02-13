@@ -3,40 +3,34 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /**
- * New Order Email
+ * WC_Email_Invoice_Paid
  *
- * An email sent to the admin when a new order is received/paid for.
+ * Order emails are sent when an order marked as paid for.
  *
- * @class 		WC_Email_New_Order
+ * @class 		WC_Email_Invoice_Paid
  * @version		2.0.0
  * @package		WooCommerce/Classes/Emails
  * @author 		WooThemes
- * @extends 	WC_Email
+ * @extends 		WC_Email
  */
-class WC_Email_New_Order extends WC_Email {
+class WC_Email_Invoice_Paid extends WC_Email {
 
 	/**
 	 * Constructor
 	 */
 	function __construct() {
 
-		$this->id 			= 'new_order';
-		$this->title 			= __( 'New order', 'woocommerce' );
-		$this->description		= __( 'New order emails are sent when an order is received/paid by a customer.', 'woocommerce' );
+		$this->id 			= 'invoice_paid';
+		$this->title 			= __( 'Invoice Paid', 'woocommerce' );
+		$this->description		= __( 'Order emails are sent when an order marked as paid for.', 'woocommerce' );
 
-		$this->heading 			= __( 'New customer order', 'woocommerce' );
-		$this->subject      	= __( '[{blogname}] New customer order ({order_number}) - {order_date}', 'woocommerce' );
-
-		$this->template_html 	= 'emails/admin-new-order.php';
-		$this->template_plain 	= 'emails/plain/admin-new-order.php';
+		$this->heading 			= __( 'Payment Received', 'woocommerce' );
+		$this->subject      	= __( '[{blogname}] We got payment for ({order_number}) - {order_date}', 'woocommerce' );
+		$this->template_html 	= 'emails/admin-invoice-paid.php';
+		$this->template_plain 	= 'emails/plain/admin-invoice-paid.php';
 
 		// Triggers for this email
-		add_action( 'woocommerce_order_status_pending_to_processing_notification', array( $this, 'trigger' ) );
-		add_action( 'woocommerce_order_status_pending_to_completed_notification', array( $this, 'trigger' ) );
-		add_action( 'woocommerce_order_status_pending_to_on-hold_notification', array( $this, 'trigger' ) );
-		add_action( 'woocommerce_order_status_failed_to_processing_notification', array( $this, 'trigger' ) );
-		add_action( 'woocommerce_order_status_failed_to_completed_notification', array( $this, 'trigger' ) );
-		add_action( 'woocommerce_order_status_failed_to_on-hold_notification', array( $this, 'trigger' ) );
+		add_action( 'woocommerce_payment_complete', array( $this, 'trigger' ) );
 
 		// Call parent constructor
 		parent::__construct();
@@ -46,6 +40,7 @@ class WC_Email_New_Order extends WC_Email {
 
 		if ( ! $this->recipient )
 			$this->recipient = get_option( 'admin_email' );
+
 	}
 
 	/*
@@ -92,7 +87,7 @@ class WC_Email_New_Order extends WC_Email {
 	function get_content_html() {
 		ob_start();
 		woocommerce_get_template( $this->template_html, array(
-			'order' 		=> $this->object,
+			'order' 	=> $this->object,
 			'email_heading' => $this->get_heading()
 		) );
 		return ob_get_clean();
@@ -107,7 +102,7 @@ class WC_Email_New_Order extends WC_Email {
 	function get_content_plain() {
 		ob_start();
 		woocommerce_get_template( $this->template_plain, array(
-			'order' 		=> $this->object,
+			'order'		=> $this->object,
 			'email_heading' => $this->get_heading()
 		) );
 		return ob_get_clean();

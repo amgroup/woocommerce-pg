@@ -867,7 +867,7 @@ class WC_Product {
 	 * @return string
 	 */
 	function get_price_html_from_text() {
-		return '<span class="from">' . _x('From:', 'min_price', 'woocommerce') . ' </span>';
+		return '<span class="from" itemprop="lowPrice">' . _x('From:', 'min_price', 'woocommerce') . ' </span>';
 	}
 
 
@@ -878,7 +878,7 @@ class WC_Product {
 	 * @return string
 	 */
 	function get_price_html_from_to( $from, $to ) {
-		return '<del>' . ( ( is_numeric( $from ) ) ? woocommerce_price( $from ) : $from ) . '</del> <ins>' . ( ( is_numeric( $to ) ) ? woocommerce_price( $to ) : $to ) . '</ins>';
+		return '<del>' . ( ( is_numeric( $from ) ) ? woocommerce_price( $from ) : $from ) . '</del> <ins itemprop="price">' . ( ( is_numeric( $to ) ) ? woocommerce_price( $to ) : $to ) . '</ins>';
 	}
 
 	/**
@@ -1270,5 +1270,16 @@ class WC_Product {
 		}
 
 		return $image;
+    }
+
+    function in_cart() {
+		global $woocommerce;
+		$qty = 0;
+
+		if( isset($woocommerce->cart->cart_contents) )
+			if( ! empty($woocommerce->cart->cart_contents) )
+				foreach( $woocommerce->cart->cart_contents as $cart_item_id => $product )
+					if( $product['product_id'] == $this->id ) $qty++;
+		return $qty;
     }
 }

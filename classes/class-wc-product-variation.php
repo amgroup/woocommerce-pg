@@ -81,8 +81,8 @@ class WC_Product_Variation extends WC_Product {
 		$this->post   = ! empty( $this->parent->post ) ? $this->parent->post : array();
 
 		// Inheritance from the parent
-		$parent_custom_fields = get_post_meta( $args['parent_id'] );
-		$variation_custom_fields = get_post_meta( $this->variation_id );
+		$parent_custom_fields 	 = (array) get_post_meta( $args['parent_id'] );
+		$variation_custom_fields = (array) get_post_meta( $this->variation_id );
 
 		$this->product_custom_fields = $variation_custom_fields;
 		$complete_custom_fields = array_merge( array_keys($parent_custom_fields), array_keys($variation_custom_fields) );

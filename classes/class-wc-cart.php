@@ -851,7 +851,8 @@ class WC_Cart {
 		 */
 		public function add_to_cart( $product_id, $quantity = 1, $variation_id = '', $variation = '', $cart_item_data = array(), $ignore_stock = false ) {
 			global $woocommerce;
-		if ( $quantity <= 0 ) return false;
+
+			if ( $quantity <= 0 ) return false;
 
 			// Load cart item data - may be added by other plugins
 			$cart_item_data = (array) apply_filters( 'woocommerce_add_cart_item_data', $cart_item_data, $product_id, $variation_id );
@@ -1031,6 +1032,7 @@ class WC_Cart {
 			if ( ! $price ) return $price;
 
 			if ( ! empty( $this->applied_coupons ) ) {
+
 				foreach ( $this->applied_coupons as $code ) {
 					$coupon = new WC_Coupon( $code );
 
@@ -1546,10 +1548,12 @@ class WC_Cart {
 						// Base Price (i.e. no tax, regardless of region)
 						$base_price 				= $_product->get_price();
 
-						// Discounted Price (base price with any pre-tax discounts applied
-						$discounted_price 			= $this->get_discounted_price( $values, $base_price, true );
                         if( isset( $values['line_total_discounted'] ) )
                             $discounted_price       = $this->get_discounted_price( $values, $values['line_total_discounted'], true );
+						else {
+							// Discounted Price (base price with any pre-tax discounts applied
+							$discounted_price 		= $this->get_discounted_price( $values, $base_price, true );
+						}
 
 						// Tax Amount (For the line, based on discounted, ex.tax price)
 						if ( $_product->is_taxable() ) {
@@ -2241,7 +2245,7 @@ class WC_Cart {
         
         public function apply_cart_discouts_rules() {
             global $wpdb;
-		$cart_has_items = 0;
+			$cart_has_items = 0;
             
             if ( empty( $this->discount_totals ) )
 				$this->discount_totals = array();
@@ -2446,7 +2450,6 @@ class WC_Cart {
                                                     $discount_value = 0;
                                                 else
                                                     $discount_value = $price * $value / 100;
-													echo $discount_value . "\n";
                                                 break;
                                             case 'total_discout':
                                                 $discount_value = (float) ( $value / $times );

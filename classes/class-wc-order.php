@@ -1387,7 +1387,6 @@ class WC_Order {
 		}
 	}
 
-
 	/**
 	 * Record sales
 	 *
@@ -1510,6 +1509,41 @@ class WC_Order {
 						$new_quantity = $_product->reduce_stock( $qty );
 
 						$this->add_order_note( sprintf( __( 'Item #%s stock reduced from %s to %s.', 'woocommerce' ), $item['product_id'], $old_stock, $new_quantity) );
+
+						$this->send_stock_notifications( $_product, $new_quantity, $item['qty'] );
+
+					}
+
+				}
+
+			}
+
+			do_action( 'woocommerce_reduce_order_stock', $this );
+
+			$this->add_order_note( __( 'Order item stock reduced successfully.', 'woocommerce' ) );
+		}
+
+	}
+
+	public function increase_order_stock() {
+
+		if ( get_option('woocommerce_manage_stock') == 'yes' && sizeof( $this->get_items() ) > 0 ) {
+
+			// Reduce stock levels and do any other actions with products in the cart
+			foreach ( $this->get_items() as $item ) {
+
+				if ($item['product_id']>0) {
+					$_product = $this->get_product_from_item( $item );
+
+					if ( $_product && $_product->exists() && $_product->managing_stock() ) {
+
+						$old_stock = $_product->stock;
+
+						$qty = apply_filters( 'woocommerce_order_item_quantity', $item['qty'], $this, $item );
+
+						$new_quantity = $_product->increase_stock( $qty );
+
+						$this->add_order_note( sprintf( __( 'Item #%s stock increased from %s to %s.', 'woocommerce' ), $item['product_id'], $old_stock, $new_quantity) );
 
 						$this->send_stock_notifications( $_product, $new_quantity, $item['qty'] );
 

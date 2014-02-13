@@ -46,6 +46,7 @@ class WC_Emails {
 
 		// Include email classes
 		include_once( 'abstracts/abstract-wc-email.php' );
+
 		include_once( 'emails/class-wc-email-customer-completed-order.php' );
 		include_once( 'emails/class-wc-email-customer-invoice.php' );
 		include_once( 'emails/class-wc-email-customer-new-account.php' );
@@ -53,8 +54,10 @@ class WC_Emails {
 		include_once( 'emails/class-wc-email-customer-reset-password.php' );
 		include_once( 'emails/class-wc-email-customer-processing-order.php' );
 		include_once( 'emails/class-wc-email-new-order.php' );
+		include_once( 'emails/class-wc-email-invoice-paid.php' );
 
 		$this->emails['WC_Email_New_Order'] = new WC_Email_New_Order();
+		$this->emails['WC_Email_Invoice_Paid'] = new WC_Email_Invoice_Paid();
 		$this->emails['WC_Email_Customer_Processing_Order'] = new WC_Email_Customer_Processing_Order();
 		$this->emails['WC_Email_Customer_Completed_Order'] = new WC_Email_Customer_Completed_Order();
 		$this->emails['WC_Email_Customer_Invoice'] = new WC_Email_Customer_Invoice();
