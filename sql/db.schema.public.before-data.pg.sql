@@ -840,22 +840,20 @@ ALTER TABLE ONLY wp_woocommerce_termmeta ALTER COLUMN meta_id SET DEFAULT nextva
 -- Name: public; Type: ACL; Schema: -; Owner: -
 --
 
-CREATE TABLE public.wp_woocommerce_rewrites
+CREATE TABLE wp_woocommerce_rewrites
 (
   rewrite_id bigserial,
   object_id bigint,
+  slug text,
   uri text NOT NULL,
-  object_type text,
   created timestamp without time zone DEFAULT (now())::timestamp without time zone,
-  accessed timestamp without time zone DEFAULT now(),
+  accessed timestamp without time zone DEFAULT (now())::timestamp without time zone,
   CONSTRAINT wp_woocommerce_rewrites_pkey PRIMARY KEY (rewrite_id)
 )
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE public.wp_woocommerce_rewrites
-  OWNER TO wordpress;
-
+ALTER TABLE wp_woocommerce_rewrites OWNER TO wordpress;
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
