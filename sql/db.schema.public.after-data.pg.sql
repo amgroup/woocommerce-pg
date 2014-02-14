@@ -680,7 +680,7 @@ CREATE TRIGGER __wp_terms_slug_changed AFTER INSERT OR UPDATE OF slug ON wp_term
 -- Name: tsv; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tsv BEFORE INSERT OR UPDATE OF post_content, post_title, post_name ON wp_posts FOR EACH ROW EXECUTE PROCEDURE fn.tsv();
+CREATE TRIGGER tsv BEFORE INSERT OR UPDATE OF post_content, post_title ON wp_posts FOR EACH ROW EXECUTE PROCEDURE fn.tsv();
 
 
 --

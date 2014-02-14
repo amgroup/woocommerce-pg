@@ -682,6 +682,56 @@ CREATE FUNCTION post_tsv(post_id bigint) RETURNS tsvector
 
 
 --
+-- Name: query2tsvector(text); Type: FUNCTION; Schema: fn; Owner: -
+--
+
+CREATE FUNCTION query2tsvector(text) RETURNS text
+    LANGUAGE plperlu IMMUTABLE
+    AS $_X$  use Encode qw(encode decode);
+
+  $_[0] =~ s/[^\w0-9\| ]+//ig;
+  my @words = split('[| ]+', $_[0]);
+  my @result;
+  
+  if( @words ) {
+    my $plan = spi_prepare( 'SELECT fn.synonymize($1)', 'TEXT' );
+
+    foreach my $word (@words) {
+      if( $word =~ m/([^\w0-9])/ ) {
+        my @parts = split( /[^\w0-9]/, $word );
+        my @parts_;
+
+        foreach my $part (@parts) {
+          $part = synonymize( $plan, $part );
+          push( @parts_, $part ) if( $part );
+        }
+        $word = '(' . join('&',@parts_) . ')';
+      }
+      else {
+        $word = synonymize( $plan, $word );
+      }
+
+      push( @result, $word ) if( $word );
+    }
+    spi_freeplan($plan);
+  }
+
+  return join('|',@result);
+
+sub synonymize {
+  my $plan = shift;
+  my $word = shift;
+
+  my $rv = spi_exec_prepared( $plan, $word );
+  if( $rv->{rows} > 0 ) {
+    return $rv->{rows}[0]->{synonymize} if( $rv->{rows}[0]->{synonymize} );
+  }
+  return undef;
+}
+$_X$;
+
+
+--
 -- Name: real_post_id(bigint); Type: FUNCTION; Schema: fn; Owner: -
 --
 
@@ -695,6 +745,35 @@ SELECT DISTINCT
   END
 FROM wp_posts
 WHERE "ID" = $1
+LIMIT 1
+$_$;
+
+
+--
+-- Name: synonymize(text); Type: FUNCTION; Schema: fn; Owner: -
+--
+
+CREATE FUNCTION synonymize(phrase text) RETURNS text
+    LANGUAGE sql
+    AS $_$
+SELECT phrase FROM (
+  SELECT phrase, 0 AS rank FROM (
+    SELECT
+      CASE
+        WHEN (replacement IS NULL) THEN phrase
+        ELSE replacement
+      END AS phrase
+    FROM utils.synonym
+    WHERE
+      type='search' AND
+      phrase ~ lower($1)
+    ORDER BY trgm.similarity(phrase, lower($1)) DESC, phrase
+    LIMIT 1
+  ) p
+  UNION
+  SELECT $1 AS phrase, 1 AS rank
+) r
+ORDER BY rank
 LIMIT 1
 $_$;
 
@@ -916,7 +995,13 @@ function phpUnserialize (phpstr) {
     return parseNext();
 } //end phpUnserialize
 
-return JSON.stringify( phpUnserialize(php) );$$;
+var out = null;
+try {
+  out = JSON.stringify( phpUnserialize(php) ); 
+}
+catch(e) {
+}
+return out;$$;
 
 
 --
