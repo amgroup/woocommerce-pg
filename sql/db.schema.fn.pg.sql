@@ -790,6 +790,36 @@ $_$;
 
 
 --
+-- Name: time_between(text, text); Type: FUNCTION; Schema: fn; Owner: -
+--
+
+CREATE FUNCTION time_between("from" text, "to" text) RETURNS boolean
+    LANGUAGE sql
+    AS $_$
+SELECT fn.between(
+  CASE WHEN $1='' OR $1 IS NULL THEN NULL ELSE $1::time END,
+  CASE WHEN $2='' OR $2 IS NULL THEN NULL ELSE $2::time END,
+  now()::time
+);
+$_$;
+
+
+--
+-- Name: time_between(text, text, text); Type: FUNCTION; Schema: fn; Owner: -
+--
+
+CREATE FUNCTION time_between("from" text, "to" text, it text) RETURNS boolean
+    LANGUAGE sql
+    AS $_$
+SELECT fn.between(
+  CASE WHEN $1='' OR $1 IS NULL THEN NULL ELSE $1::time END,
+  CASE WHEN $2='' OR $2 IS NULL THEN NULL ELSE $2::time END,
+  CASE WHEN $3='' OR $3 IS NULL THEN NULL ELSE $3::time END
+);
+$_$;
+
+
+--
 -- Name: transient_wc_attribute_taxonomies(); Type: FUNCTION; Schema: fn; Owner: -
 --
 
