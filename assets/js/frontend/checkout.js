@@ -25,14 +25,21 @@ jQuery(document).ready(function($) {
 		}        
 	}
 
-	/* AJAX Coupon Form Submission */
-	$('form.checkout_coupon').submit( function() {
+	$('form.checkout').submit( function(e) {
 		var $form = $(this);
+		$form.attr('action','');
 
+		$("#place_order").removeClass('red').addClass('green');
+		if ( $form.is('.processing') ) return false;
+		$form.addClass('processing').parent().block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
+	});
+
+	/* AJAX Coupon Form Submission */
+	$('form.checkout_coupon').submit( function(e) {
+		var $form = $(this);
 		if ( $form.is('.processing') ) return false;
 
 		$form.addClass('processing').block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6}});
-
 		var data = {
 			action: 			'woocommerce_apply_coupon',
 			security: 			woocommerce_params.apply_coupon_nonce,
@@ -84,7 +91,7 @@ jQuery(document).ready(function($) {
 			});
 		});
 
-	$('p.password, form.login, .checkout_coupon, div.shipping_address').hide();
+	$('p.password, form.login, .checkout_coupon').hide();
 
 	$('input.show_password').change(function(){
 		$('p.password').slideToggle();
@@ -108,17 +115,17 @@ jQuery(document).ready(function($) {
 		}
 	}).change();
 
-	if ( woocommerce_params.option_guest_checkout == 'yes' ) {
-
+	if ( woocommerce_params.option_guest_checkout == 'no' ) {
+	    $('div.create-account').slideDown();
+	    $('input#createaccount').attr("checked", true).attr("disabled", true);
+	} else {
+	    $('input#createaccount').attr("checked", false).removeAttr("disabled");
+	    $('div.create-account').hide();
+	    $('input#createaccount').live("change", function(){
 		$('div.create-account').hide();
-
-		$('input#createaccount').change(function(){
-			$('div.create-account').hide();
-			if ($(this).is(':checked')) {
-				$('div.create-account').slideDown();
-			}
-		}).change();
-
+		if ($(this).is(':checked'))
+		    $('div.create-account').slideDown();
+	    });
 	}
 
 	/* Payment option selection */
