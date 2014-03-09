@@ -1,4 +1,4 @@
-jQuery(document).ready(function(){  
+jQuery(document).ready(function($){  
     jQuery('#the-list').on('click', '.editinline', function(){  
 		
 		inlineEditPost.revert();
@@ -108,4 +108,12 @@ jQuery(document).ready(function(){
     	jQuery(this).closest('li').siblings().find('input:checked').removeAttr('checked');
     	
     });
+
+    $('select[name=_stock_status]').on('change', function(){
+	if( $(this).val() == 'expected' ) $('input[name=_available_date]').show();
+	else $('input[name=_available_date]').hide();
+    });
+    
+    if( $('select[name=_stock_status]').val() == 'expected' ) $('input[name=_available_date]').show();
+    else $('input[name=_available_date]').hide();
 });  

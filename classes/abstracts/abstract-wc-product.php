@@ -233,6 +233,12 @@ class WC_Product {
 	function set_stock_status( $status ) {
 		$status = ( 'outofstock' === $status ) ? 'outofstock' : 'instock';
 
+		if ( $status == 'outofstock' )
+		    update_post_meta( $this->id, '_sold_date', date_i18n('Y-m-d H:i:s') );
+		else
+		    delete_post_meta( $this->id, '_sold_date' );
+
+
 		if ( $this->stock_status != $status ) {
 			update_post_meta( $this->id, '_stock_status', $status );
 
@@ -441,6 +447,28 @@ class WC_Product {
 	 */
 	function managing_stock() {
 		return ( ! isset( $this->manage_stock ) || $this->manage_stock == 'no' || get_option('woocommerce_manage_stock') != 'yes' ) ? false : true;
+	}
+
+
+	/**
+	 * Returns last date when the product was in stock.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	function sold_date() {
+	    return $this->__get( 'sold_date' );
+	}
+
+	/**
+	 * Returns when the product will be available.
+	 *
+	 * @access public
+	 * @return date or null
+	 */
+	function wbavailable() {
+	    $available_date = $this->__get( 'sold_date' );
+	    return $available_date ? $available_date : null;
 	}
 
 

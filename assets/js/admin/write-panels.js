@@ -1351,6 +1351,14 @@ jQuery( function($){
 		downloadable_file_frame.open();
 	});
 
+	$('#_stock_status').on('change', function(){
+		if( $(this).val() == 'expected' ) $('#_available_date').show();
+		else $('#_available_date').hide();
+	}
+
+	if( $('#_stock_status').val() == 'expected' ) $('#_available_date').show();
+	else $('#_available_date').hide();
+
 });
 
 /*!

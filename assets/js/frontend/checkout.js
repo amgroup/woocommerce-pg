@@ -2,7 +2,8 @@ jQuery(document).ready(function($) {
 
 
 	var block_css = { message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.ajax_loader_url + ') no-repeat center', backgroundSize: '16px 16px', opacity: 0.6 }};
-	
+
+    $(".product-actions a").click(function(e) { $(this).closest('tr').find(".product-name").block(block_css); });	
 
 	// Update order_review        
 	function update_order_review(data) {
@@ -115,17 +116,17 @@ jQuery(document).ready(function($) {
 		}
 	}).change();
 
-	if ( woocommerce_params.option_guest_checkout == 'no' ) {
-	    $('div.create-account').slideDown();
-	    $('input#createaccount').attr("checked", true).attr("disabled", true);
-	} else {
-	    $('input#createaccount').attr("checked", false).removeAttr("disabled");
-	    $('div.create-account').hide();
-	    $('input#createaccount').live("change", function(){
+	if ( woocommerce_params.option_guest_checkout == 'yes' ) {
+
 		$('div.create-account').hide();
-		if ($(this).is(':checked'))
-		    $('div.create-account').slideDown();
-	    });
+
+		$('input#createaccount').change(function(){
+			$('div.create-account').hide();
+			if ($(this).is(':checked')) {
+				$('div.create-account').slideDown();
+			}
+		}).change();
+
 	}
 
 	/* Payment option selection */

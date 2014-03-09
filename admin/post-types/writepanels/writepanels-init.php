@@ -160,6 +160,8 @@ function woocommerce_pre_post_update( $post_id ) {
 		update_post_meta( $post_id, '_visibility', stripslashes( $_POST['_visibility'] ) );
 	if ( isset( $_POST['_stock_status'] ) )
 		update_post_meta( $post_id, '_stock_status', stripslashes( $_POST['_stock_status'] ) );
+	if ( isset( $_POST['_available_date'] ) )
+		update_post_meta( $post_id, '_available_date', stripslashes( $_POST['_available_date'] ) );
 }
 add_action( 'pre_post_update', 'woocommerce_pre_post_update' );
 

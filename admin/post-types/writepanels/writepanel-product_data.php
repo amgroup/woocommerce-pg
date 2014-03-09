@@ -251,8 +251,14 @@ function woocommerce_product_data_box() {
 			// Stock status
 			woocommerce_wp_select( array( 'id' => '_stock_status', 'label' => __( 'Stock status', 'woocommerce' ), 'options' => array(
 				'instock' => __( 'In stock', 'woocommerce' ),
-				'outofstock' => __( 'Out of stock', 'woocommerce' )
+				'outofstock' => __( 'Out of stock', 'woocommerce' ),
+				'expected' => __( 'Expected', 'woocommerce' )
 			), 'desc_tip' => true, 'description' => __( 'Controls whether or not the product is listed as "in stock" or "out of stock" on the frontend.', 'woocommerce' ) ) );
+
+			$available_date = ( $date = get_post_meta( $thepostid, '_available_date', true ) ) ? date_i18n( 'Y-m-d', $date ) : '';
+			woocommerce_wp_text_input( array( 'id' => '_available_date', 'label' => __( 'Available From', 'woocommerce' ), 'class' => 'short', 'description' => '', 'type' => 'date', 'placeholder' =>  _x( 'From&hellip;', 'placeholder', 'woocommerce' ), 'custom_attributes' => array(
+					'pattern' => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
+			) ) );
 
 			if (get_option('woocommerce_manage_stock')=='yes') {
 
@@ -999,6 +1005,7 @@ function woocommerce_process_product_meta( $post_id, $post ) {
 		if ( $product_type == 'grouped' ) {
 
 			update_post_meta( $post_id, '_stock_status', stripslashes( $_POST['_stock_status'] ) );
+			update_post_meta( $post_id, '_available_date', stripslashes( $_POST['_available_date'] ) );
 			update_post_meta( $post_id, '_stock', '' );
 			update_post_meta( $post_id, '_manage_stock', 'no' );
 			update_post_meta( $post_id, '_backorders', 'no' );
@@ -1006,6 +1013,7 @@ function woocommerce_process_product_meta( $post_id, $post ) {
 		} elseif ( $product_type == 'external' ) {
 
 			update_post_meta( $post_id, '_stock_status', 'instock' );
+			update_post_meta( $post_id, '_stock_status', stripslashes( $_POST['_stock_status'] ) );
 			update_post_meta( $post_id, '_stock', '' );
 			update_post_meta( $post_id, '_manage_stock', 'no' );
 			update_post_meta( $post_id, '_backorders', 'no' );
@@ -1015,6 +1023,7 @@ function woocommerce_process_product_meta( $post_id, $post ) {
 			// Manage stock
 			update_post_meta( $post_id, '_stock', (int) $_POST['_stock'] );
 			update_post_meta( $post_id, '_stock_status', stripslashes( $_POST['_stock_status'] ) );
+			update_post_meta( $post_id, '_available_date', stripslashes( $_POST['_available_date'] ) );
 			update_post_meta( $post_id, '_backorders', stripslashes( $_POST['_backorders'] ) );
 			update_post_meta( $post_id, '_manage_stock', 'yes' );
 
@@ -1027,6 +1036,7 @@ function woocommerce_process_product_meta( $post_id, $post ) {
 			// Don't manage stock
 			update_post_meta( $post_id, '_stock', '' );
 			update_post_meta( $post_id, '_stock_status', stripslashes( $_POST['_stock_status'] ) );
+			update_post_meta( $post_id, '_available_date', stripslashes( $_POST['_available_date'] ) );
 			update_post_meta( $post_id, '_backorders', stripslashes( $_POST['_backorders'] ) );
 			update_post_meta( $post_id, '_manage_stock', 'no' );
 
@@ -1035,7 +1045,7 @@ function woocommerce_process_product_meta( $post_id, $post ) {
 	} else {
 
 		update_post_meta( $post_id, '_stock_status', stripslashes( $_POST['_stock_status'] ) );
-
+		update_post_meta( $post_id, '_available_date', stripslashes( $_POST['_available_date'] ) );
 	}
 
 	// Upsells
