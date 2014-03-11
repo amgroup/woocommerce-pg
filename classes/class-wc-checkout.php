@@ -178,7 +178,6 @@ class WC_Checkout {
 
 				// Clear the old line items - we'll add these again in case they changed
 				$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE order_item_id IN ( SELECT order_item_id FROM {$wpdb->prefix}woocommerce_order_items WHERE order_id = %d )", $order_id ) );
-
 				$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}woocommerce_order_items WHERE order_id = %d", $order_id ) );
 
 				// Trigger an action for the resumed order
@@ -246,6 +245,9 @@ class WC_Checkout {
 		if ( $this->customer_id )
 			do_action( 'woocommerce_checkout_update_user_meta', $this->customer_id, $this->posted );
 
+		// Max Expected Date
+		$expected = null;
+
 		// Store the line items to the new/resumed order
 		foreach ( $woocommerce->cart->get_cart() as $cart_item_key => $values ) {
 
@@ -277,10 +279,25 @@ class WC_Checkout {
 			 	if ( $_product->backorders_require_notification() && $_product->is_on_backorder( $values['quantity'] ) )
 			 		woocommerce_add_order_item_meta( $item_id, apply_filters( 'woocommerce_backordered_item_meta_name', __( 'Backordered', 'woocommerce' ), $cart_item_key, $order_id ), $values['quantity'] - max( 0, $_product->get_total_stock() ) );
 
+				// Calculate Max Expected Date
+				if( $_product->stock_status == 'expected' ) {
+					if( $expected ) {
+						if( strtotime($expected) < strtotime($_product->__get('stock_status_date')) )
+							$expected = $_product->__get('stock_status_date');
+					} else {
+						$expected = $_product->__get('stock_status_date');
+					}
+				}
+				
+
 			 	//allow plugins to add order item meta
 			 	do_action( 'woocommerce_add_order_item_meta', $item_id, $values );
 		 	}
 		}
+		// Store Max Expected Date
+		if( $expected )
+			update_post_meta( $order_id, '_expected_in_stock', $expected );
+
 
 		// Store fees
 		foreach ( $woocommerce->cart->get_fees() as $fee ) {

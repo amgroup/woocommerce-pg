@@ -187,7 +187,10 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 			</tr>
 			<tr>
 				<td class="upload_image">
-					<a href="#" class="upload_image_button <?php if ( $image_id > 0 ) echo 'remove'; ?>" rel="<?php echo esc_attr( $variation_id ); ?>"><img src="<?php if ( ! empty( $image ) ) echo esc_attr( $image ); else echo esc_attr( woocommerce_placeholder_img_src() ); ?>" /><input type="hidden" name="upload_image_id[<?php echo $loop; ?>]" class="upload_image_id" value="<?php echo esc_attr( $image_id ); ?>" /><span class="overlay"></span></a>
+					<p>Icon</p>
+					<a href="#" class="upload_image_button icon <?php if ( $image_id > 0 ) echo 'remove'; ?>" rel="<?php echo esc_attr( $variation_id ); ?>"><img src="<?php if ( ! empty( $icon ) ) echo esc_attr( $icon ); else echo esc_attr( woocommerce_placeholder_img_src() ); ?>" /><input type="hidden" name="upload_icon_id[<?php echo $loop; ?>]" class="upload_image_id icon" value="<?php echo esc_attr( $icon_id ); ?>" /><span class="overlay"></span></a>
+					<p>Image</p>
+					<a href="#" class="upload_image_button image <?php if ( $image_id > 0 ) echo 'remove'; ?>" rel="<?php echo esc_attr( $variation_id ); ?>"><img src="<?php if ( ! empty( $image ) ) echo esc_attr( $image ); else echo esc_attr( woocommerce_placeholder_img_src() ); ?>" /><input type="hidden" name="upload_image_id[<?php echo $loop; ?>]" class="upload_image_id image" value="<?php echo esc_attr( $image_id ); ?>" /><span class="overlay"></span></a>
 				</td>
 				<td class="options">
 					<label><input type="checkbox" class="checkbox" name="variable_enabled[<?php echo $loop; ?>]" <?php checked( $variation_post_status, 'publish' ); ?> /> <?php _e( 'Enabled', 'woocommerce' ); ?></label>

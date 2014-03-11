@@ -110,10 +110,10 @@ jQuery(document).ready(function($){
     });
 
     $('select[name=_stock_status]').on('change', function(){
-	if( $(this).val() == 'expected' ) $('input[name=_available_date]').show();
-	else $('input[name=_available_date]').hide();
+	if( $(this).val() == 'expected' ) $('input[name=_stock_status_date]').show();
+	else $('input[name=_stock_status_date]').hide();
     });
     
-    if( $('select[name=_stock_status]').val() == 'expected' ) $('input[name=_available_date]').show();
-    else $('input[name=_available_date]').hide();
+    if( $('select[name=_stock_status]').val() == 'expected' ) $('input[name=_stock_status_date]').show();
+    else $('input[name=_stock_status_date]').hide();
 });  

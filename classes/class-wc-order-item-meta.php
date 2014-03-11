@@ -50,11 +50,11 @@ class WC_Order_Item_Meta {
 				foreach( $meta_values as $meta_value ) {
 
 					// If this is a term slug, get the term's nice name
-		            if ( taxonomy_exists( esc_attr( str_replace( 'attribute_', '', $meta_key ) ) ) ) {
-		            	$term = get_term_by('slug', $meta_value, esc_attr( str_replace( 'attribute_', '', $meta_key ) ) );
-		            	if ( ! is_wp_error( $term ) && $term->name )
-		            		$meta_value = $term->name;
-		            }
+					if ( taxonomy_exists( esc_attr( str_replace( 'attribute_', '', $meta_key ) ) ) ) {
+				    	    $term = get_term_by('slug', $meta_value, esc_attr( str_replace( 'attribute_', '', $meta_key ) ) );
+				            if ( ! is_wp_error( $term ) && $term->name )
+				            	$meta_value = $term->name;
+				        }
 
 					if ( $flat )
 						$meta_list[] = esc_attr( $woocommerce->attribute_label( str_replace( 'attribute_', '', $meta_key ) ) . ': ' . $meta_value );

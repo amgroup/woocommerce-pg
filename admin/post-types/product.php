@@ -258,8 +258,11 @@ function woocommerce_custom_product_columns( $column ) {
 		break;
 		case "is_in_stock" :
 
-			if ($the_product->is_in_stock()) {
-				echo '<mark class="instock">' . __( 'In stock', 'woocommerce' ) . '</mark>';
+			if ( $the_product->is_in_stock() ) {
+				if( $the_product->stock_status == 'expected' )
+					echo '<mark class="expected">' . __( 'Expected', 'woocommerce' ) . ' - ' . $the_product->stock_status_date('<span class="date">%s</span>') . '</mark>';
+				else
+					echo '<mark class="instock">' . __( 'In stock', 'woocommerce' ) . '</mark>';
 			} else {
 				echo '<mark class="outofstock">' . __( 'Out of stock', 'woocommerce' ) . '</mark>';
 			}
@@ -647,7 +650,7 @@ function woocommerce_admin_product_quick_edit( $column_name, $post_type ) {
 						}
 					?>
 					</select>
-					<input type="date" name="_available_date" class="available_date" value="" />
+					<input type="date" name="_stock_status_date" class="available_date" value="" />
 				</span>
 			</label>
 
@@ -724,7 +727,7 @@ function woocommerce_admin_product_quick_edit_save( $post_id, $post ) {
 	if ( isset( $_POST['_width'] ) ) update_post_meta( $post_id, '_width', woocommerce_clean( $_POST['_width'] ) );
 	if ( isset( $_POST['_height'] ) ) update_post_meta( $post_id, '_height', woocommerce_clean( $_POST['_height'] ) );
 	if ( isset( $_POST['_stock_status'] ) ) update_post_meta( $post_id, '_stock_status', woocommerce_clean( $_POST['_stock_status'] ) );
-	if ( isset( $_POST['_available_date'] ) ) update_post_meta( $post_id, '_available_date', woocommerce_clean( $_POST['_available_date'] ) );
+	if ( isset( $_POST['_stock_status_date'] ) ) update_post_meta( $post_id, '_stock_status_date', woocommerce_clean( $_POST['_stock_status_date'] ) );
 	if ( isset( $_POST['_visibility'] ) ) update_post_meta( $post_id, '_visibility', woocommerce_clean( $_POST['_visibility'] ) );
 	if ( isset( $_POST['_featured'] ) ) update_post_meta( $post_id, '_featured', 'yes' ); else update_post_meta( $post_id, '_featured', 'no' );
 
@@ -937,7 +940,7 @@ function woocommerce_admin_product_bulk_edit( $column_name, $post_type ) {
 						}
 					?>
 					</select>
-					<input type="date" name="_available_date" class="available_date" value="" />
+					<input type="date" name="_stock_status_date" class="available_date" value="" />
 				</span>
 			</label>
 			<?php if (get_option('woocommerce_manage_stock')=='yes') : ?>
@@ -1033,8 +1036,8 @@ function woocommerce_admin_product_bulk_edit_save( $post_id, $post ) {
 	if ( ! empty( $_REQUEST['_stock_status'] ) )
 		update_post_meta( $post_id, '_stock_status', stripslashes( $_REQUEST['_stock_status'] ) );
 
-	if ( ! empty( $_REQUEST['_available_date'] ) )
-		update_post_meta( $post_id, '_available_date', stripslashes( $_REQUEST['_available_date'] ) );
+	if ( ! empty( $_REQUEST['_stock_status_date'] ) )
+		update_post_meta( $post_id, '_stock_status_date', stripslashes( $_REQUEST['_stock_status_date'] ) );
 
 	if ( ! empty( $_REQUEST['_visibility'] ) )
 		update_post_meta( $post_id, '_visibility', stripslashes( $_REQUEST['_visibility'] ) );

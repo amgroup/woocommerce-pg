@@ -185,6 +185,7 @@ function variable_product_type_options() {
 						'_downloadable',
 						'_virtual',
 						'_thumbnail_id',
+						'_thumbnail_icon_id',
 						'_sale_price_dates_from',
 						'_sale_price_dates_to'
 					);
@@ -195,6 +196,12 @@ function variable_product_type_options() {
 					// Price backwards compat
 					if ( $_regular_price == '' && $_price )
 						$_regular_price = $_price;
+
+					// Get icon
+					$icon = '';
+					$icon_id = absint( $_thumbnail_icon_id );
+					if ( $icon_id )
+						$icon = wp_get_attachment_url( $icon_id );
 
 					// Get image
 					$image = '';
@@ -507,27 +514,26 @@ console.log(input_tag + '[name^="' + field_to_edit + '["]');
 			});
 		};
 
-		// Uploader
+		// Image Uploader
 		var variable_image_frame;
 		var setting_variation_image_id;
 		var setting_variation_image;
 		var wp_media_post_id = wp.media.model.settings.post.id;
 
 		jQuery('#variable_product_options').on('click', '.upload_image_button', function( event ) {
-
-			var $button                = jQuery( this );
-			var post_id                = $button.attr('rel');
-			var $parent                = $button.closest('.upload_image');
-			setting_variation_image    = $parent;
-			setting_variation_image_id = post_id;
+			var $button                  = jQuery( this );
+			var post_id                  = $button.attr('rel');
+			var $parent                  = $button.closest('.upload_image');
+			setting_variation_image      = $parent;
+			setting_variation_image_id   = post_id;
+			setting_variation_image_type = $button.hasClass('icon') ? 'icon' : 'image';
 
 			event.preventDefault();
 
 			if ( $button.is('.remove') ) {
-
-				setting_variation_image.find( '.upload_image_id' ).val( '' );
-				setting_variation_image.find( 'img' ).attr( 'src', '<?php echo woocommerce_placeholder_img_src(); ?>' );
-				setting_variation_image.find( '.upload_image_button' ).removeClass( 'remove' );
+				setting_variation_image.find( '.upload_image_id.' + setting_variation_image_type ).val( '' );
+				setting_variation_image.find( '.upload_image_button.' + setting_variation_image_type + ' img' ).attr( 'src', '<?php echo woocommerce_placeholder_img_src(); ?>' );
+				setting_variation_image.find( '.upload_image_button.' + setting_variation_image_type ).removeClass( 'remove' );
 
 			} else {
 
@@ -553,10 +559,9 @@ console.log(input_tag + '[name^="' + field_to_edit + '["]');
 				variable_image_frame.on( 'select', function() {
 
 					attachment = variable_image_frame.state().get('selection').first().toJSON();
-
-					setting_variation_image.find( '.upload_image_id' ).val( attachment.id );
-					setting_variation_image.find( '.upload_image_button' ).addClass( 'remove' );
-					setting_variation_image.find( 'img' ).attr( 'src', attachment.url );
+					setting_variation_image.find( '.upload_image_id.' + setting_variation_image_type ).val( attachment.id );
+					setting_variation_image.find( '.upload_image_button.' + setting_variation_image_type ).addClass( 'remove' );
+					setting_variation_image.find( '.upload_image_button.' + setting_variation_image_type + ' img' ).attr( 'src', attachment.url );
 
 					wp.media.model.settings.post.id = wp_media_post_id;
 				});
@@ -618,7 +623,8 @@ function process_product_meta_variable( $post_id ) {
 		$variable_purchase_price 			= $_POST['variable_purchase_price'];
 		$variable_regular_price 			= $_POST['variable_regular_price'];
 		$variable_sale_price				= $_POST['variable_sale_price'];
-		$upload_image_id					= $_POST['upload_image_id'];
+		$upload_image_id				= $_POST['upload_image_id'];
+		$upload_icon_id				= $_POST['upload_icon_id'];
 		$variable_file_paths 				= $_POST['variable_file_paths'];
 		$variable_download_limit 			= $_POST['variable_download_limit'];
 		$variable_download_expiry   		= $_POST['variable_download_expiry'];
@@ -693,6 +699,7 @@ function process_product_meta_variable( $post_id ) {
 
 			update_post_meta( $variation_id, '_stock', woocommerce_clean( $variable_stock[ $i ] ) );
 			update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[ $i ] ) );
+			update_post_meta( $variation_id, '_thumbnail_icon_id', absint( $upload_icon_id[ $i ] ) );
 
 			update_post_meta( $variation_id, '_virtual', woocommerce_clean( $is_virtual ) );
 			update_post_meta( $variation_id, '_downloadable', woocommerce_clean( $is_downloadable ) );

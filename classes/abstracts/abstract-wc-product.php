@@ -214,9 +214,10 @@ class WC_Product {
 			update_post_meta( $this->id, '_stock', $this->stock );
 
 			// Out of stock attribute
-			if ( $this->backorders_allowed() || $this->get_total_stock() > 0 )
-				$this->set_stock_status( 'instock' );
-
+			if ( $this->backorders_allowed() || $this->get_total_stock() > 0 ) {
+				$status = ( 'expected' === $this->__get( 'stock_prev_status' ) ) ? 'expected' : 'instock';
+				$this->set_stock_status( $status );
+			}
 			$woocommerce->clear_product_transients( $this->id ); // Clear transient
 
 			return $this->get_stock_quantity();
@@ -231,17 +232,32 @@ class WC_Product {
 	 * @return void
 	 */
 	function set_stock_status( $status ) {
-		$status = ( 'outofstock' === $status ) ? 'outofstock' : 'instock';
+		$prev_status      = $this->__get( 'stock_status' );
+		$prev_status_date = $this->__get( 'stock_status_date' );
+		$status_date      = date_i18n( 'Y-m-d H:i:s' );
 
-		if ( $status == 'outofstock' )
-		    update_post_meta( $this->id, '_sold_date', date_i18n('Y-m-d H:i:s') );
-		else
-		    delete_post_meta( $this->id, '_sold_date' );
-
+		if( $status >= 1 || $status == 'instock' ) {
+		    $status = 'instock';
+		} elseif( $status == 'expected' ) {
+		    $expected_status_date = $this->__get( 'stock_prev_status_date' );
+		    if( strtotime( $expected_status_date ) <= strtotime( $status_date ) )
+			$status = 'instock';
+		    else
+			$status_date = $expected_status_date;
+		} else {
+		    $status = 'outofstock';
+		}
 
 		if ( $this->stock_status != $status ) {
+			update_post_meta( $this->id, '_stock_prev_status', $prev_status );
 			update_post_meta( $this->id, '_stock_status', $status );
 
+			if( $status_date ) {
+			    update_post_meta( $this->id, '_stock_prev_status_date', $prev_status_date );
+			    update_post_meta( $this->id, '_stock_status_date', $status_date );
+			}
+
+			$this->stock_status = $status;
 			do_action( 'woocommerce_product_set_stock_status', $this->id, $status );
 		}
 	}
@@ -451,24 +467,42 @@ class WC_Product {
 
 
 	/**
-	 * Returns last date when the product was in stock.
+	 * Returns when the product status date changed.
 	 *
 	 * @access public
 	 * @return string
 	 */
-	function sold_date() {
-	    return $this->__get( 'sold_date' );
+	function stock_status_date( $wrap = '%s' ) {
+	    $stock_status_date = $this->__get( 'stock_status_date' );
+	    if( $stock_status_date ) {
+		return sprintf( $wrap, date_i18n( woocommerce_date_format(), strtotime( $stock_status_date ) ) );
+	    } else {
+		return null;
+	    }
 	}
 
+
 	/**
-	 * Returns when the product will be available.
+	 * Returns date when the product expected in stock or null.
 	 *
 	 * @access public
-	 * @return date or null
+	 * @return string
 	 */
-	function wbavailable() {
-	    $available_date = $this->__get( 'sold_date' );
-	    return $available_date ? $available_date : null;
+	function expected( $wrap = '%s' ) {
+	    if( $this->is_expected() )
+		return $this->stock_status_date( $wrap );
+	    return null;
+	}
+
+
+	/**
+	 * Returns whether or not the product expected in stock.
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	function is_expected() {
+	    return ( $this->is_in_stock() && $this->stock_status == 'expected' );
 	}
 
 
@@ -479,24 +513,33 @@ class WC_Product {
 	 * @return bool
 	 */
 	function is_in_stock() {
-		if ( $this->managing_stock() ) {
 
+		if ( $this->managing_stock() ) {
 			if ( $this->backorders_allowed() ) {
 				return true;
 			} else {
+				$expected = $this->__get('stock_status_date');
+
 				if ( $this->get_total_stock() <  1 ) {
+					if( strtotime($expected) <= strtotime(date_i18n( 'Y-m-d H:i:s' ) ) )
+						$this->set_stock_status('outofstock');
+
 					return false;
 				} else {
-					if ( $this->stock_status == 'instock' )
+					if( strtotime($expected) <= strtotime(date_i18n( 'Y-m-d H:i:s' ) ) )
+						$this->set_stock_status('instock');
+
+					if ( $this->stock_status == 'instock' || $this->stock_status == 'expected' ) {
 						return true;
-					else
+					} else {
 						return false;
+					}
 				}
 			}
 
 		} else {
 
-			if ( $this->stock_status == 'instock' )
+			if ( $this->stock_status == 'instock' || $this->stock_status == 'expected' )
 				return true;
 			else
 				return false;
@@ -1112,7 +1155,7 @@ class WC_Product {
 		// Meta query
 		$meta_query = array();
 		$meta_query[] = $woocommerce->query->visibility_meta_query();
-	    $meta_query[] = $woocommerce->query->stock_status_meta_query();
+		$meta_query[] = $woocommerce->query->stock_status_meta_query();
 
 		// Get the posts
 		$related_posts = get_posts( apply_filters('woocommerce_product_related_posts', array(

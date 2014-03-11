@@ -6036,7 +6036,7 @@ msgstr "&quot;%s&quot; добавлен в корзину."
 #: woocommerce-functions.php:251
 #@ woocommerce
 msgid "Please choose product options&hellip;"
-msgstr "Пожалуйста, укажите опции товара&hellip;"
+msgstr "Пожалуйста, выберите вариант товара&hellip;"
 
 #: woocommerce-functions.php:282
 #@ woocommerce

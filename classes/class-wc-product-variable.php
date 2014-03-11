@@ -228,6 +228,18 @@ class WC_Product_Variable extends WC_Product {
 	 * @param string $price (default: '')
 	 * @return string
 	 */
+	public function get_price() {
+		$this->variable_product_sync();
+		return parent::get_price();
+	}
+
+	/**
+	 * Returns the price in html format.
+	 *
+	 * @access public
+	 * @param string $price (default: '')
+	 * @return string
+	 */
 	public function get_price_html( $price = '' ) {
 		// Ensure variation prices are synced with variations
 		if ( $this->min_variation_price === '' || $this->min_variation_regular_price === '' || $this->price === '' ) {
@@ -398,7 +410,7 @@ class WC_Product_Variable extends WC_Product {
 					$attachment_id = get_post_thumbnail_id( $variation->get_variation_id() );
 
 					$attachment = wp_get_attachment_image_src( $attachment_id, apply_filters( 'single_product_large_thumbnail_size', 'shop_single' )  );
-                    $zoomed     = wp_get_attachment_image_src( $attachment_id, apply_filters( 'single_product_zommed_thumbnail_size', 'shop_zoomed' )  );
+					$zoomed     = wp_get_attachment_image_src( $attachment_id, apply_filters( 'single_product_zommed_thumbnail_size', 'shop_zoomed' )  );
 
 					$image = $attachment ? current( $attachment ) : '';
 
@@ -450,18 +462,26 @@ class WC_Product_Variable extends WC_Product {
 			'post_parent' 	=> $this->id,
 			'posts_per_page'=> -1,
 			'post_type' 	=> 'product_variation',
-			'fields' 		=> 'ids',
+			'fields' 	=> 'ids',
 			'post_status'	=> 'publish'
 		));
+		$price         = get_post_meta( $this->id, '_price', true );
+		$regular_price = get_post_meta( $this->id, '_regular_price', true );
+		$sale_price    = get_post_meta( $this->id, '_sale_price', true );
+
+		$price = $price == '' ? $regular_price : $price;
 
 		$this->min_variation_price = $this->min_variation_regular_price = $this->min_variation_sale_price = $this->max_variation_price = $this->max_variation_regular_price = $this->max_variation_sale_price = '';
 
 		if ( $children ) {
 			foreach ( $children as $child ) {
-
 				$child_price 			= get_post_meta( $child, '_price', true );
-				$child_regular_price 	= get_post_meta( $child, '_regular_price', true );
+				$child_regular_price		= get_post_meta( $child, '_regular_price', true );
 				$child_sale_price 		= get_post_meta( $child, '_sale_price', true );
+
+				$child_price         = $child_price == '' ?         $price : $child_price;
+				$child_regular_price = $child_regular_price == '' ? $regular_price : $child_regular_price;
+				$child_sale_price    = $child_sale_price == '' ?    $sale_price : $child_sale_price;
 
 				// Regular prices
 				if ( $child_regular_price !== '' ) {
@@ -491,6 +511,7 @@ class WC_Product_Variable extends WC_Product {
 					if ( $this->min_variation_price === '' || $child_price < $this->min_variation_price )
 						$this->min_variation_price = $child_price;
 				}
+
 			}
 
 			update_post_meta( $this->id, '_price', $this->min_variation_price );

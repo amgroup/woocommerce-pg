@@ -21,6 +21,9 @@ class WC_Order {
 	/** @public string Order date (placed). */
 	public $order_date;
 
+	/** @public string Order in stock date. */
+	public $expected_in_stock;
+
 	/** @public string Order date (paid). */
 	public $modified_date;
 
@@ -218,8 +221,8 @@ class WC_Order {
 		// Define the data we're going to load: Key => Default value
 		$load_data = apply_filters( 'woocommerce_load_order_data', array(
 			'order_key'				=> '',
-			'billing_first_name'	=> '',
-			'billing_last_name' 	=> '',
+			'billing_first_name'		=> '',
+			'billing_last_name' 		=> '',
 			'billing_company'		=> '',
 			'billing_address_1'		=> '',
 			'billing_address_2'		=> '',
@@ -229,11 +232,11 @@ class WC_Order {
 			'billing_state' 		=> '',
 			'billing_email'			=> '',
 			'billing_phone'			=> '',
-			'shipping_first_name'	=> '',
-			'shipping_last_name'	=> '',
+			'shipping_first_name'		=> '',
+			'shipping_last_name'		=> '',
 			'shipping_company'		=> '',
-			'shipping_address_1'	=> '',
-			'shipping_address_2'	=> '',
+			'shipping_address_1'		=> '',
+			'shipping_address_2'		=> '',
 			'shipping_city'			=> '',
 			'shipping_postcode'		=> '',
 			'shipping_country'		=> '',
@@ -241,18 +244,19 @@ class WC_Order {
 			'shipping_email'		=> '',
 			'shipping_phone'		=> '',
 			'shipping_method'		=> '',
-			'shipping_method_title'	=> '',
-			'shipping_method_instruction' => '',
+			'shipping_method_title'		=> '',
+			'shipping_method_instruction'	=> '',
 			'payment_method'		=> '',
-			'payment_method_title' 	=> '',
+			'payment_method_title'		=> '',
 			'order_discount'		=> '',
 			'cart_discount'			=> '',
-            'cart_actions_discount'	=> '',
-            'cart_actions_discounts'=> '',
-			'order_tax'				=> '',
+	                'cart_actions_discount'		=> '',
+        		'cart_actions_discounts'	=> '',
+			'expected_in_stock'		=> '',
+			'order_tax'			=> '',
 			'order_shipping'		=> '',
-			'order_shipping_real'	=> '',
-			'order_shipping_tax'	=> '',
+			'order_shipping_real'		=> '',
+			'order_shipping_tax'		=> '',
 			'order_total'			=> '',
 			'customer_user'			=> '',
 			'completed_date'		=> $this->modified_date
@@ -273,6 +277,20 @@ class WC_Order {
 		// Get status
 		$terms = wp_get_object_terms( $this->id, 'shop_order_status', array('fields' => 'slugs') );
 		$this->status = (isset($terms[0])) ? $terms[0] : 'pending';
+	}
+
+	/**
+         * Returns when the order expected in stock if expected
+         *
+         * @access public
+         * @param string $wrap default '%s'
+	 * @return string or null
+	 */
+	public function expected_in_stock( $wrap = '%s' ) {
+	    if( $this->expected_in_stock )
+		    return sprintf( $wrap, date_i18n( woocommerce_date_format(), strtotime( $this->expected_in_stock ) ) );
+
+	    return null;
 	}
 
 
