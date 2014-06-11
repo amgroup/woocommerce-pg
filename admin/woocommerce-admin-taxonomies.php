@@ -41,6 +41,7 @@ function woocommerce_add_category_fields() {
 			<option value="products"><?php _e( 'Products', 'woocommerce' ); ?></option>
 			<option value="subcategories"><?php _e( 'Subcategories', 'woocommerce' ); ?></option>
 			<option value="both"><?php _e( 'Both', 'woocommerce' ); ?></option>
+			<option value="textcontent"><?php _e( 'Text content only', 'woocommerce' ); ?></option>
 		</select>
 	</div>
 
@@ -178,6 +179,7 @@ function woocommerce_edit_category_fields( $term, $taxonomy ) {
 				<option value="products" <?php selected( 'products', $display_type ); ?>><?php _e( 'Products', 'woocommerce' ); ?></option>
 				<option value="subcategories" <?php selected( 'subcategories', $display_type ); ?>><?php _e( 'Subcategories', 'woocommerce' ); ?></option>
 				<option value="both" <?php selected( 'both', $display_type ); ?>><?php _e( 'Both', 'woocommerce' ); ?></option>
+				<option value="textcontent" <?php selected( 'textcontent', $display_type ); ?>><?php _e( 'Text content only', 'woocommerce' ); ?></option>
 			</select>
 		</td>
 	</tr>

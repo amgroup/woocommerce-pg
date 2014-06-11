@@ -1046,7 +1046,7 @@ if ( ! function_exists( 'woocommerce_products_will_display' ) ) {
 		if ( is_search() || is_filtered() || is_paged() )
 			return true;
 
-		if ( is_shop() && get_option( 'woocommerce_shop_page_display' ) != 'subcategories' )
+		if ( is_shop() && in_array( get_option( 'woocommerce_shop_page_display' ), array('both','') ) )
 			return true;
 
 		$term = get_queried_object();
@@ -1058,7 +1058,7 @@ if ( ! function_exists( 'woocommerce_products_will_display' ) ) {
 					return true;
 				break;
 				case '' :
-					if ( get_option( 'woocommerce_category_archive_display' ) != 'subcategories' )
+					if ( in_array( get_option( 'woocommerce_category_archive_display' ), array('both','') ) )
 						return true;
 				break;
 			}
@@ -1132,8 +1132,19 @@ if ( ! function_exists( 'woocommerce_product_subcategories' ) ) {
 				case '' :
 					if ( get_option( 'woocommerce_category_archive_display' ) == '' )
 						return;
+					if ( get_option( 'woocommerce_category_archive_display' ) == 'textcontent' ) {
+						$wp_query->post_count = 0;
+						$wp_query->max_num_pages = 0;
+						return;
+					}
 				break;
 			}
+		}
+
+		if ( is_shop() && get_option( 'woocommerce_shop_page_display' ) == 'textcontent' ) {
+			$wp_query->post_count = 0;
+			$wp_query->max_num_pages = 0;
+			return;
 		}
 
 		// NOTE: using child_of instead of parent - this is not ideal but due to a WP bug ( http://core.trac.wordpress.org/ticket/15626 ) pad_counts won't work
@@ -1161,7 +1172,6 @@ if ( ! function_exists( 'woocommerce_product_subcategories' ) ) {
 					$product_category_found = true;
 					echo $before;
 				}
-
 				woocommerce_get_template( 'content-product_cat.php', array(
 					'category' => $category
 				) );
@@ -1179,11 +1189,17 @@ if ( ! function_exists( 'woocommerce_product_subcategories' ) ) {
 					case 'subcategories' :
 						$wp_query->post_count = 0;
 						$wp_query->max_num_pages = 0;
+					case 'textcontent' :
+						$wp_query->post_count = 0;
+						$wp_query->max_num_pages = 0;
+						return false;
 					break;
 					case '' :
-						if ( get_option( 'woocommerce_category_archive_display' ) == 'subcategories' ) {
+						if ( in_array( get_option( 'woocommerce_category_archive_display' ), array('subcategories','textcontent') ) ) {
 							$wp_query->post_count = 0;
 							$wp_query->max_num_pages = 0;
+							if( get_option( 'woocommerce_category_archive_display' ) == 'textcontent' )
+								return false;
 						}
 					break;
 				}

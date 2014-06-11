@@ -421,15 +421,35 @@ abstract class WC_Email extends WC_Settings_API {
 	 * @return void
 	 */
 	function send( $to, $subject, $message, $headers, $attachments ) {
+		global $wpdb;
+		// Set content type
+		$this->_content_type = $content_type;
+		$mail_table = '"' . $wpdb->prefix . 'woocommerce_mails"';
+
+		// Filters for the email
 		add_filter( 'wp_mail_from', array( $this, 'get_from_address' ) );
 		add_filter( 'wp_mail_from_name', array( $this, 'get_from_name' ) );
 		add_filter( 'wp_mail_content_type', array( $this, 'get_content_type' ) );
 
-		wp_mail( $to, $subject, $message, $headers, $attachments );
+		// Just insert into emails queue NOT SEND NOW!
+		$md5 = md5( $to . $subject . $message . $headers . $attachments );
 
+		$exists = $wpdb->get_var( $wpdb->prepare( 'SELECT "id" FROM ' . $mail_table . ' WHERE "md5" = %s', $md5 ));
+		if( $exists ) {
+			$wpdb->query( 'UPDATE ' . $mail_table . ' SET "sended" = NULL WHERE "id" = ' . $exists );
+		} else {
+			$wpdb->query(
+			    $wpdb->prepare(
+					'INSERT INTO ' . $mail_table . ' ("md5", "to", "subject", "message", "headers", "attachments") VALUES (%s,%s,%s,%s,%s,%s)',
+					$md5, $to, $subject, $message, $headers, $attachments
+			    )
+			);
+		}
+
+		// Unhook filters
 		remove_filter( 'wp_mail_from', array( $this, 'get_from_address' ) );
 		remove_filter( 'wp_mail_from_name', array( $this, 'get_from_name' ) );
-		remove_filter( 'wp_mail_content_type', array( $this, 'get_content_type' ) );
+		remove_filter( 'wp_mail_content_type', array( $this, 'get_content_type' ) );		
 	}
 
     /**

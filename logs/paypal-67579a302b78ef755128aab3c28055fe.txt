@@ -1,0 +1,1447 @@
+02-24-2014 @ 20:13:03 - Generating payment form for order OL-4774. Notify URL: http://www.kidberries.com/?wc-api=WC_Gateway_Paypal
+03-05-2014 @ 12:10:23 - Generating payment form for order OL-4809. Notify URL: http://www.kidberries.com/?wc-api=WC_Gateway_Paypal
+03-05-2014 @ 12:36:04 - Checking IPN response is valid...
+03-05-2014 @ 12:36:04 - IPN Request: Array
+(
+    [body] => Array
+        (
+            [cmd] => _notify-validate
+            [mc_gross] => 6421.00
+            [invoice] => OL-4809
+            [protection_eligibility] => Ineligible
+            [address_status] => unconfirmed
+            [item_number1] => WLP2188
+            [tax] => 0.00
+            [item_number2] => 
+            [payer_id] => FQX6SD3DGPEAN
+            [address_street] => ул. Дм. Донского, д.26, кв.6
+            [payment_date] => 00:36:01 Mar 05, 2014 PST
+            [payment_status] => Completed
+            [charset] => KOI8_R
+            [address_zip] => 236001
+            [mc_shipping] => 0.00
+            [mc_handling] => 0.00
+            [first_name] => Анастасия
+            [mc_fee] => 260.42
+            [address_country_code] => RU
+            [address_name] => Михаевич Анастасия
+            [notify_version] => 3.7
+            [custom] => a:2:{i:0;i:4809;i:1;s:19:"order_5316dbe831519";}
+            [payer_status] => unverified
+            [business] => wheelpak.com@gmail.com
+            [address_country] => Russia
+            [num_cart_items] => 2
+            [mc_handling1] => 0.00
+            [mc_handling2] => 0.00
+            [address_city] => Калининград
+            [verify_sign] => ARyNDMbKwa-zLx7AtfPa-etrhyTVArtxTBa0cnlzg0qbXuzYmdnZISEF
+            [payer_email] => asyad@list.ru
+            [mc_shipping1] => 0.00
+            [mc_shipping2] => 0.00
+            [tax1] => 0.00
+            [tax2] => 0.00
+            [txn_id] => 042650700U7085352
+            [payment_type] => instant
+            [last_name] => Михаевич
+            [address_state] => Калининградская область
+            [item_name1] => Школьный рюкзак на колесах  ранец Wheelpak Cruze Pink  арт. WLP2188 (для 3-5 класс
+            [receiver_email] => amgroup.web@gmail.com
+            [item_name2] => Доставка Почтой России - Калининград, Калининградская обл.
+            [payment_fee] => 
+            [quantity1] => 1
+            [quantity2] => 1
+            [receiver_id] => UFL55DCK57848
+            [txn_type] => cart
+            [mc_gross_1] => 5950.00
+            [mc_currency] => RUB
+            [mc_gross_2] => 471.00
+            [residence_country] => RU
+            [transaction_subject] => a:2:{i:0;i:4809;i:1;s:19:"order_5316dbe831519";}
+            [payment_gross] => 
+            [ipn_track_id] => db05b4f0942b2
+        )
+
+    [sslverify] => 
+    [timeout] => 60
+    [user-agent] => WooCommerce/2.0.5
+)
+
+03-05-2014 @ 12:36:05 - IPN Response: Array
+(
+    [headers] => Array
+        (
+            [server] => Apache
+            [x-frame-options] => SAMEORIGIN
+            [strict-transport-security] => Array
+                (
+                    [0] => max-age=14400
+                    [1] => max-age=14400
+                )
+
+            [content-type] => text/html; charset=UTF-8
+            [dc] => slc-b-origin-www-1.paypal.com
+            [vary] => Accept-Encoding
+            [date] => Wed, 05 Mar 2014 08:36:05 GMT
+            [content-length] => 8
+            [connection] => close
+            [set-cookie] => Array
+                (
+                    [0] => cwrClyrK4LoCV1fydGbAxiNL6iG=aiI82jFSDsV9tFXUTnIGkS-XdKNMTE1NqrHBgrsNHImc9sBaRWldLOT9hnwbxG-KfK8QRo_L09aWijoZ3W8D4B29QoMzfRBTDUlLy5O0zepRuBBkY8XQuy206STHjKSZC6VfD0kbcNJ5cq_JC0PyRY--djwnlGWW4AcpeMGlRIg6dHfgyHafGUsT7tPkadq6RR3zpd52fT_fZg1padhSNKnB7CyqLy3TerI6cv_zv5_3qEIpBMVOgJhXk2DS8uaX_gKF57YNIcdgQ9V3Ax4oFQXLhIg2far3TM-BVHKBO-rN0k466JWGeedDokWiZGHAGNl1TaFeqFPmJmevw1SqZsZD0gXLvguAN24jJZ4yfG4PhCVajDjYPOR4Howf6WloR3wGK3XfOu9rS9Si5gUU2evvTjCE09kE-9gjRkwg0V9hjTtqJvJqPZTaJh0; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [1] => cookie_check=yes; expires=Sat, 02-Mar-2024 08:36:04 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [2] => navcmd=_notify-validate; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [3] => navlns=0.0; expires=Fri, 04-Mar-2016 08:36:04 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [4] => Apache=10.74.8.134.1394008564631881; path=/; expires=Fri, 26-Feb-44 08:36:04 GMT
+                    [5] => X-PP-SILOVER=name%3DLIVE6.WEB.1%26silo_version%3D880%26app%3Dslingshot%26TIME%3D4108392019; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [6] => X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT
+                    [7] => Apache=10.74.8.40.1394008564624478; path=/; expires=Fri, 26-Feb-44 08:36:04 GMT
+                    [8] => AKDC=slc-b-origin-www-1.paypal.com; expires=Wed, 05-Mar-2014 09:06:05 GMT; path=/; secure
+                )
+
+        )
+
+    [body] => VERIFIED
+    [response] => Array
+        (
+            [code] => 200
+            [message] => OK
+        )
+
+    [cookies] => Array
+        (
+            [0] => WP_Http_Cookie Object
+                (
+                    [name] => cwrClyrK4LoCV1fydGbAxiNL6iG
+                    [value] => aiI82jFSDsV9tFXUTnIGkS-XdKNMTE1NqrHBgrsNHImc9sBaRWldLOT9hnwbxG-KfK8QRo_L09aWijoZ3W8D4B29QoMzfRBTDUlLy5O0zepRuBBkY8XQuy206STHjKSZC6VfD0kbcNJ5cq_JC0PyRY--djwnlGWW4AcpeMGlRIg6dHfgyHafGUsT7tPkadq6RR3zpd52fT_fZg1padhSNKnB7CyqLy3TerI6cv_zv5_3qEIpBMVOgJhXk2DS8uaX_gKF57YNIcdgQ9V3Ax4oFQXLhIg2far3TM-BVHKBO-rN0k466JWGeedDokWiZGHAGNl1TaFeqFPmJmevw1SqZsZD0gXLvguAN24jJZ4yfG4PhCVajDjYPOR4Howf6WloR3wGK3XfOu9rS9Si5gUU2evvTjCE09kE-9gjRkwg0V9hjTtqJvJqPZTaJh0
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [1] => WP_Http_Cookie Object
+                (
+                    [name] => cookie_check
+                    [value] => yes
+                    [expires] => 1709368564
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [2] => WP_Http_Cookie Object
+                (
+                    [name] => navcmd
+                    [value] => _notify-validate
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [3] => WP_Http_Cookie Object
+                (
+                    [name] => navlns
+                    [value] => 0.0
+                    [expires] => 1457080564
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [4] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.74.8.134.1394008564631881
+                    [expires] => 2340088564
+                    [path] => /
+                    [domain] => 
+                )
+
+            [5] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => name=LIVE6.WEB.1&silo_version=880&app=slingshot&TIME=4108392019
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [6] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => 
+                    [expires] => 1
+                    [path] => 
+                    [domain] => 
+                )
+
+            [7] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.74.8.40.1394008564624478
+                    [expires] => 2340088564
+                    [path] => /
+                    [domain] => 
+                )
+
+            [8] => WP_Http_Cookie Object
+                (
+                    [name] => AKDC
+                    [value] => slc-b-origin-www-1.paypal.com
+                    [expires] => 1394010365
+                    [path] => /
+                    [domain] => 
+                    [secure] => 
+                )
+
+        )
+
+    [filename] => 
+)
+
+03-05-2014 @ 12:36:05 - Received valid response from PayPal
+03-05-2014 @ 12:36:05 - Found order #4809
+03-05-2014 @ 12:36:05 - Payment status: completed
+03-05-2014 @ 12:36:05 - IPN Response is for another one: amgroup.web@gmail.com our email is wheelpak.com@gmail.com
+03-17-2014 @ 15:46:20 - Generating payment form for order OL-4893. Notify URL: http://www.kidberries.com/?wc-api=WC_Gateway_Paypal
+03-17-2014 @ 15:49:28 - Checking IPN response is valid...
+03-17-2014 @ 15:49:28 - IPN Request: Array
+(
+    [body] => Array
+        (
+            [cmd] => _notify-validate
+            [mc_gross] => 6550.00
+            [invoice] => OL-4893
+            [protection_eligibility] => Ineligible
+            [address_status] => unconfirmed
+            [item_number1] => WLP2187
+            [payer_id] => WC3DW5SMMQ264
+            [tax] => 0.00
+            [address_street] => 3-я фрунзенская 9-157
+            [payment_date] => 04:49:20 Mar 17, 2014 PDT
+            [payment_status] => Completed
+            [charset] => KOI8_R
+            [address_zip] => 119270
+            [mc_shipping] => 0.00
+            [mc_handling] => 0.00
+            [first_name] => Юрий
+            [mc_fee] => 265.45
+            [address_country_code] => RU
+            [address_name] => Соловьев Юрий
+            [notify_version] => 3.7
+            [custom] => a:2:{i:0;i:4893;i:1;s:19:"order_5326e081d9101";}
+            [payer_status] => unverified
+            [business] => amgroup.web@gmail.com
+            [address_country] => Russia
+            [num_cart_items] => 1
+            [mc_handling1] => 0.00
+            [address_city] => Москва
+            [verify_sign] => AI36sk2Aln3iC.t.mla1wMizPRcQAKCcR1zx77ELsGWW2OKhm1SLkWtW
+            [payer_email] => yury.solovyev@verint.com
+            [mc_shipping1] => 0.00
+            [tax1] => 0.00
+            [txn_id] => 25M82215R05262941
+            [payment_type] => instant
+            [last_name] => Соловьев
+            [address_state] => 
+            [item_name1] => Школьный рюкзак на колесах  ранец Wheelpak Cruze Navy  арт. WLP2187 (для 3-5 класс
+            [receiver_email] => amgroup.web@gmail.com
+            [payment_fee] => 
+            [quantity1] => 1
+            [receiver_id] => UFL55DCK57848
+            [txn_type] => cart
+            [mc_gross_1] => 6550.00
+            [mc_currency] => RUB
+            [residence_country] => RU
+            [transaction_subject] => a:2:{i:0;i:4893;i:1;s:19:"order_5326e081d9101";}
+            [payment_gross] => 
+            [ipn_track_id] => 5a68a55026567
+        )
+
+    [sslverify] => 
+    [timeout] => 60
+    [user-agent] => WooCommerce/2.0.5
+)
+
+03-17-2014 @ 15:49:29 - IPN Response: Array
+(
+    [headers] => Array
+        (
+            [server] => Apache
+            [x-frame-options] => SAMEORIGIN
+            [strict-transport-security] => Array
+                (
+                    [0] => max-age=14400
+                    [1] => max-age=14400
+                )
+
+            [content-type] => text/html; charset=UTF-8
+            [dc] => slc-b-origin-www-1.paypal.com
+            [vary] => Accept-Encoding
+            [date] => Mon, 17 Mar 2014 11:49:29 GMT
+            [content-length] => 8
+            [connection] => close
+            [set-cookie] => Array
+                (
+                    [0] => cwrClyrK4LoCV1fydGbAxiNL6iG=C_eoui3NENWa6q4vXbV-lJvwyWt4S8qOcJ0OPrO7_EyU1kyJQ4p2z0En0SeCtvVHLckJnkBqm_ZI17EYEPc6v-UNeB7kn35KiAbarnlP1BnbZ0r7GtR30lmTad8GoSa6LqG1ALMnq0ZW0mWQq16v8cZkB3GoFoL7hTagbWVxRI1vV2inagLyGoHDrMMczXOOI_zvJSIMKjwkgA_bM1poMYSwQinyRtP-h4e0CO9q8tZM-nmhO7ujIK5fO3eXzznfO1-xBQjLuCwIVnRL_36UVtUNSolQMHXvXKHzv4ReXtJA8emgKq2YSiePwEj2e7cjkizeK5eV6_ROp-ewIv8OektfAmcsuQjVyf66ZwDKxjdghbHs2YWHgI_5tgxW954leXpLPnkQKyVsT4XZIOU1ZcCVtA8mwxyGCQoU10; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [1] => cookie_check=yes; expires=Thu, 14-Mar-2024 11:49:29 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [2] => navcmd=_notify-validate; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [3] => navlns=0.0; expires=Wed, 16-Mar-2016 11:49:29 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [4] => Apache=10.74.8.134.1395056969055256; path=/; expires=Wed, 09-Mar-44 11:49:29 GMT
+                    [5] => X-PP-SILOVER=name%3DLIVE6.WEB.1%26silo_version%3D880%26app%3Dslingshot%26TIME%3D1239492179; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [6] => X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT
+                    [7] => Apache=10.74.8.42.1395056969046327; path=/; expires=Wed, 09-Mar-44 11:49:29 GMT
+                    [8] => AKDC=slc-b-origin-www-1.paypal.com; expires=Mon, 17-Mar-2014 12:19:29 GMT; path=/; secure
+                )
+
+        )
+
+    [body] => VERIFIED
+    [response] => Array
+        (
+            [code] => 200
+            [message] => OK
+        )
+
+    [cookies] => Array
+        (
+            [0] => WP_Http_Cookie Object
+                (
+                    [name] => cwrClyrK4LoCV1fydGbAxiNL6iG
+                    [value] => C_eoui3NENWa6q4vXbV-lJvwyWt4S8qOcJ0OPrO7_EyU1kyJQ4p2z0En0SeCtvVHLckJnkBqm_ZI17EYEPc6v-UNeB7kn35KiAbarnlP1BnbZ0r7GtR30lmTad8GoSa6LqG1ALMnq0ZW0mWQq16v8cZkB3GoFoL7hTagbWVxRI1vV2inagLyGoHDrMMczXOOI_zvJSIMKjwkgA_bM1poMYSwQinyRtP-h4e0CO9q8tZM-nmhO7ujIK5fO3eXzznfO1-xBQjLuCwIVnRL_36UVtUNSolQMHXvXKHzv4ReXtJA8emgKq2YSiePwEj2e7cjkizeK5eV6_ROp-ewIv8OektfAmcsuQjVyf66ZwDKxjdghbHs2YWHgI_5tgxW954leXpLPnkQKyVsT4XZIOU1ZcCVtA8mwxyGCQoU10
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [1] => WP_Http_Cookie Object
+                (
+                    [name] => cookie_check
+                    [value] => yes
+                    [expires] => 1710416969
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [2] => WP_Http_Cookie Object
+                (
+                    [name] => navcmd
+                    [value] => _notify-validate
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [3] => WP_Http_Cookie Object
+                (
+                    [name] => navlns
+                    [value] => 0.0
+                    [expires] => 1458128969
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [4] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.74.8.134.1395056969055256
+                    [expires] => 2341136969
+                    [path] => /
+                    [domain] => 
+                )
+
+            [5] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => name=LIVE6.WEB.1&silo_version=880&app=slingshot&TIME=1239492179
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [6] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => 
+                    [expires] => 1
+                    [path] => 
+                    [domain] => 
+                )
+
+            [7] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.74.8.42.1395056969046327
+                    [expires] => 2341136969
+                    [path] => /
+                    [domain] => 
+                )
+
+            [8] => WP_Http_Cookie Object
+                (
+                    [name] => AKDC
+                    [value] => slc-b-origin-www-1.paypal.com
+                    [expires] => 1395058769
+                    [path] => /
+                    [domain] => 
+                    [secure] => 
+                )
+
+        )
+
+    [filename] => 
+)
+
+03-17-2014 @ 15:49:29 - Received valid response from PayPal
+03-17-2014 @ 15:49:29 - Found order #4893
+03-17-2014 @ 15:49:29 - Payment status: completed
+03-17-2014 @ 15:49:40 - Payment complete.
+04-07-2014 @ 12:22:05 - Generating payment form for order OL-5001. Notify URL: http://www.kidberries.com/?wc-api=WC_Gateway_Paypal
+04-07-2014 @ 12:32:37 - Generating payment form for order OL-5001. Notify URL: http://www.kidberries.com/?wc-api=WC_Gateway_Paypal
+04-07-2014 @ 12:46:19 - Checking IPN response is valid...
+04-07-2014 @ 12:46:19 - IPN Request: Array
+(
+    [body] => Array
+        (
+            [cmd] => _notify-validate
+            [mc_gross] => 3105.00
+            [invoice] => OL-5001
+            [protection_eligibility] => Ineligible
+            [address_status] => unconfirmed
+            [item_number1] => T20
+            [tax] => 0.00
+            [item_number2] => 
+            [payer_id] => EPDL39YUWE9CL
+            [address_street] => медиков д.13 кв.2
+            [payment_date] => 01:46:15 Apr 07, 2014 PDT
+            [payment_status] => Completed
+            [charset] => KOI8_R
+            [address_zip] => 628256
+            [mc_shipping] => 0.00
+            [mc_handling] => 0.00
+            [first_name] => иван
+            [mc_fee] => 131.10
+            [address_country_code] => RU
+            [address_name] => михалев иван
+            [notify_version] => 3.7
+            [custom] => a:2:{i:0;i:5001;i:1;s:19:"order_534262a475113";}
+            [payer_status] => unverified
+            [business] => amgroup.web@gmail.com
+            [address_country] => Russia
+            [num_cart_items] => 2
+            [mc_handling1] => 0.00
+            [mc_handling2] => 0.00
+            [address_city] => коммунистический
+            [verify_sign] => ApNuobzUxFcLIaMZ-0hu3Kwm671AAmkYcDLbHK5Cdz4X5BxJUhkG9fB-
+            [payer_email] => mix.samza@gmail.com
+            [mc_shipping1] => 0.00
+            [mc_shipping2] => 0.00
+            [tax1] => 0.00
+            [tax2] => 0.00
+            [txn_id] => 18Y46274794708424
+            [payment_type] => instant
+            [last_name] => михалев
+            [address_state] => хмао
+            [item_name1] => Школьный рюкзак  ранец HummingBird Teens Miss B  арт. T20
+            [receiver_email] => amgroup.web@gmail.com
+            [item_name2] => Доставка Почтой России - Коммунистический, Тюменская обл.
+            [payment_fee] => 
+            [quantity1] => 1
+            [quantity2] => 1
+            [receiver_id] => UFL55DCK57848
+            [txn_type] => cart
+            [mc_gross_1] => 2800.00
+            [mc_currency] => RUB
+            [mc_gross_2] => 305.00
+            [residence_country] => RU
+            [transaction_subject] => a:2:{i:0;i:5001;i:1;s:19:"order_534262a475113";}
+            [payment_gross] => 
+            [ipn_track_id] => 7e35f2c3274f2
+        )
+
+    [sslverify] => 
+    [timeout] => 60
+    [user-agent] => WooCommerce/2.0.5
+)
+
+04-07-2014 @ 12:46:20 - IPN Response: Array
+(
+    [headers] => Array
+        (
+            [server] => Apache
+            [x-frame-options] => SAMEORIGIN
+            [strict-transport-security] => Array
+                (
+                    [0] => max-age=14400
+                    [1] => max-age=14400
+                )
+
+            [content-type] => text/html; charset=UTF-8
+            [dc] => slc-b-origin-www-1.paypal.com
+            [vary] => Accept-Encoding
+            [date] => Mon, 07 Apr 2014 08:46:20 GMT
+            [content-length] => 8
+            [connection] => close
+            [set-cookie] => Array
+                (
+                    [0] => cwrClyrK4LoCV1fydGbAxiNL6iG=um2z5BuWb1eG0S2UsI1olA5kyct1aAlbASwILPHVy38mS0JRHlqH7vv1iisb-2yx-C9O7H2d2CIjZFTgBOaduILhZPIRskbrsKupUDPMRWkltj-LKs3JJ3xIlHhhnmvwv7ztAqDzS0J-VIxhAJBse_nxJekZTn8wnEVKyx_ZTIv9Du1VQwz3yek1rRuKiKYk2-FRj_VAQApjD2uZIY95N0NBZ8VGqeUZs8YRniy9lka4CJ0P8bL-1YC-inKKqEZmPLdCpmOQ9kn3PiR2P7MmkztJy-s8jN0hzQnc5tSAoPAGf30O34zznR7qjaZly5rpBMLzZCgdccMHh_lYyzmX65RBwpHaMEXf8Qy6MTgxVuw_FEobMzw2sDI-6v7O-EzNqKI5p1qO5xFjCu1k1ug5fEqt9SlHU6bbnZLqn-Egkvyvdwd1UhKLs3_Bvnq; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [1] => cookie_check=yes; expires=Thu, 04-Apr-2024 08:46:20 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [2] => navcmd=_notify-validate; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [3] => navlns=0.0; expires=Wed, 06-Apr-2016 08:46:20 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [4] => Apache=10.74.8.134.1396860380148757; path=/; expires=Wed, 30-Mar-44 08:46:20 GMT
+                    [5] => X-PP-SILOVER=name%3DLIVE6.WEB.1%26silo_version%3D880%26app%3Dslingshot%26TIME%3D3697623635; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [6] => X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT
+                    [7] => Apache=10.74.8.47.1396860380140987; path=/; expires=Wed, 30-Mar-44 08:46:20 GMT
+                    [8] => AKDC=slc-b-origin-www-1.paypal.com; expires=Mon, 07-Apr-2014 09:16:20 GMT; path=/; secure
+                )
+
+        )
+
+    [body] => VERIFIED
+    [response] => Array
+        (
+            [code] => 200
+            [message] => OK
+        )
+
+    [cookies] => Array
+        (
+            [0] => WP_Http_Cookie Object
+                (
+                    [name] => cwrClyrK4LoCV1fydGbAxiNL6iG
+                    [value] => um2z5BuWb1eG0S2UsI1olA5kyct1aAlbASwILPHVy38mS0JRHlqH7vv1iisb-2yx-C9O7H2d2CIjZFTgBOaduILhZPIRskbrsKupUDPMRWkltj-LKs3JJ3xIlHhhnmvwv7ztAqDzS0J-VIxhAJBse_nxJekZTn8wnEVKyx_ZTIv9Du1VQwz3yek1rRuKiKYk2-FRj_VAQApjD2uZIY95N0NBZ8VGqeUZs8YRniy9lka4CJ0P8bL-1YC-inKKqEZmPLdCpmOQ9kn3PiR2P7MmkztJy-s8jN0hzQnc5tSAoPAGf30O34zznR7qjaZly5rpBMLzZCgdccMHh_lYyzmX65RBwpHaMEXf8Qy6MTgxVuw_FEobMzw2sDI-6v7O-EzNqKI5p1qO5xFjCu1k1ug5fEqt9SlHU6bbnZLqn-Egkvyvdwd1UhKLs3_Bvnq
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [1] => WP_Http_Cookie Object
+                (
+                    [name] => cookie_check
+                    [value] => yes
+                    [expires] => 1712220380
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [2] => WP_Http_Cookie Object
+                (
+                    [name] => navcmd
+                    [value] => _notify-validate
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [3] => WP_Http_Cookie Object
+                (
+                    [name] => navlns
+                    [value] => 0.0
+                    [expires] => 1459932380
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [4] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.74.8.134.1396860380148757
+                    [expires] => 2342940380
+                    [path] => /
+                    [domain] => 
+                )
+
+            [5] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => name=LIVE6.WEB.1&silo_version=880&app=slingshot&TIME=3697623635
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [6] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => 
+                    [expires] => 1
+                    [path] => 
+                    [domain] => 
+                )
+
+            [7] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.74.8.47.1396860380140987
+                    [expires] => 2342940380
+                    [path] => /
+                    [domain] => 
+                )
+
+            [8] => WP_Http_Cookie Object
+                (
+                    [name] => AKDC
+                    [value] => slc-b-origin-www-1.paypal.com
+                    [expires] => 1396862180
+                    [path] => /
+                    [domain] => 
+                    [secure] => 
+                )
+
+        )
+
+    [filename] => 
+)
+
+04-07-2014 @ 12:46:20 - Received valid response from PayPal
+04-07-2014 @ 12:46:20 - Found order #5001
+04-07-2014 @ 12:46:20 - Payment status: completed
+04-07-2014 @ 12:46:22 - Payment complete.
+04-08-2014 @ 15:45:12 - Generating payment form for order OL-5004. Notify URL: http://www.kidberries.com/?wc-api=WC_Gateway_Paypal
+04-08-2014 @ 15:45:51 - Checking IPN response is valid...
+04-08-2014 @ 15:45:51 - IPN Request: Array
+(
+    [body] => Array
+        (
+            [cmd] => _notify-validate
+            [mc_gross] => 5950.00
+            [invoice] => OL-5004
+            [protection_eligibility] => Ineligible
+            [address_status] => unconfirmed
+            [item_number1] => WLP2144
+            [payer_id] => AEGQFXEZZLNPJ
+            [tax] => 0.00
+            [address_street] => Дубнинская 29-1-229
+            [payment_date] => 04:45:47 Apr 08, 2014 PDT
+            [payment_status] => Completed
+            [charset] => KOI8_R
+            [address_zip] => 127474
+            [mc_shipping] => 0.00
+            [mc_handling] => 0.00
+            [first_name] => Михаил
+            [mc_fee] => 242.05
+            [address_country_code] => RU
+            [address_name] => Голубков Михаил
+            [notify_version] => 3.7
+            [custom] => a:2:{i:0;i:5004;i:1;s:19:"order_5343e14774ef6";}
+            [payer_status] => unverified
+            [business] => amgroup.web@gmail.com
+            [address_country] => Russia
+            [num_cart_items] => 1
+            [mc_handling1] => 0.00
+            [address_city] => Москва
+            [verify_sign] => A1ttzVRTlKSeocZwufh3mXQWx0oPA8NEuiasu8SVAjM6s4ppo1SaCLJZ
+            [payer_email] => golmiha@gmail.com
+            [mc_shipping1] => 0.00
+            [tax1] => 0.00
+            [txn_id] => 7WK74497SY9566535
+            [payment_type] => instant
+            [last_name] => Голубков
+            [address_state] => 
+            [item_name1] => Школьный рюкзак на колесах  ранец Wheelpak Candy Pink  арт. WLP2144 (для 0-3 класс
+            [receiver_email] => amgroup.web@gmail.com
+            [payment_fee] => 
+            [quantity1] => 1
+            [receiver_id] => UFL55DCK57848
+            [txn_type] => cart
+            [mc_gross_1] => 5950.00
+            [mc_currency] => RUB
+            [residence_country] => RU
+            [transaction_subject] => a:2:{i:0;i:5004;i:1;s:19:"order_5343e14774ef6";}
+            [payment_gross] => 
+            [ipn_track_id] => 52d4f32a356cb
+        )
+
+    [sslverify] => 
+    [timeout] => 60
+    [user-agent] => WooCommerce/2.0.5
+)
+
+04-08-2014 @ 15:45:52 - IPN Response: Array
+(
+    [headers] => Array
+        (
+            [server] => Apache
+            [x-frame-options] => SAMEORIGIN
+            [strict-transport-security] => Array
+                (
+                    [0] => max-age=14400
+                    [1] => max-age=14400
+                )
+
+            [content-type] => text/html; charset=UTF-8
+            [dc] => slc-a-origin-www-1.paypal.com
+            [vary] => Accept-Encoding
+            [date] => Tue, 08 Apr 2014 11:45:52 GMT
+            [content-length] => 8
+            [connection] => close
+            [set-cookie] => Array
+                (
+                    [0] => cwrClyrK4LoCV1fydGbAxiNL6iG=Cj3HBmHZjuoMclqxZ-07OHrqA7C_bwShatnXxLre5PjuChI-xiyIkXnPfdIJz0fPe1XjdEukOEn5yeT2pQg1QpIDWbyXzBRiNitHHfRx4EnXrbuPYF7AL9T7jz_IKNrgQgP0LmvT2ye5kknaiGHBtv-SWfQPUIXh6RPIT7n5rIyBdvmywwrYhb33-TxHsRtfbA47_YCN-s91upLxCinDXF-y5RgdW4Mgo7j65CD4jKEtWYPiJR31KnSGHyKzZ8Xtij3M9O5OydzVbtaehYOstZ_deYqqUFf1IiKUvG1ZaLYRD2m0Zmf9KVDQlTiC0kZc9C5mCv0Ghe-G3oKojHSHSVOtDPd-VI6Sy4mn1v69jM8yUShNf_gxCqGMe-9jWHeFLoeluQNKanJjR3YieIXrJT_mC93c96e-eXNHktD1iFzLdyzEcOlWbUdVwYu; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [1] => cookie_check=yes; expires=Fri, 05-Apr-2024 11:45:52 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [2] => navcmd=_notify-validate; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [3] => navlns=0.0; expires=Thu, 07-Apr-2016 11:45:52 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [4] => Apache=10.73.8.137.1396957551883019; path=/; expires=Thu, 31-Mar-44 11:45:51 GMT
+                    [5] => X-PP-SILOVER=name%3DLIVE5.WEB.1%26silo_version%3D880%26app%3Dslingshot%26TIME%3D1877033811; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [6] => X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT
+                    [7] => Apache=10.73.8.40.1396957551875693; path=/; expires=Thu, 31-Mar-44 11:45:51 GMT
+                    [8] => AKDC=slc-a-origin-www-1.paypal.com; expires=Tue, 08-Apr-2014 12:15:52 GMT; path=/; secure
+                )
+
+        )
+
+    [body] => VERIFIED
+    [response] => Array
+        (
+            [code] => 200
+            [message] => OK
+        )
+
+    [cookies] => Array
+        (
+            [0] => WP_Http_Cookie Object
+                (
+                    [name] => cwrClyrK4LoCV1fydGbAxiNL6iG
+                    [value] => Cj3HBmHZjuoMclqxZ-07OHrqA7C_bwShatnXxLre5PjuChI-xiyIkXnPfdIJz0fPe1XjdEukOEn5yeT2pQg1QpIDWbyXzBRiNitHHfRx4EnXrbuPYF7AL9T7jz_IKNrgQgP0LmvT2ye5kknaiGHBtv-SWfQPUIXh6RPIT7n5rIyBdvmywwrYhb33-TxHsRtfbA47_YCN-s91upLxCinDXF-y5RgdW4Mgo7j65CD4jKEtWYPiJR31KnSGHyKzZ8Xtij3M9O5OydzVbtaehYOstZ_deYqqUFf1IiKUvG1ZaLYRD2m0Zmf9KVDQlTiC0kZc9C5mCv0Ghe-G3oKojHSHSVOtDPd-VI6Sy4mn1v69jM8yUShNf_gxCqGMe-9jWHeFLoeluQNKanJjR3YieIXrJT_mC93c96e-eXNHktD1iFzLdyzEcOlWbUdVwYu
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [1] => WP_Http_Cookie Object
+                (
+                    [name] => cookie_check
+                    [value] => yes
+                    [expires] => 1712317552
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [2] => WP_Http_Cookie Object
+                (
+                    [name] => navcmd
+                    [value] => _notify-validate
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [3] => WP_Http_Cookie Object
+                (
+                    [name] => navlns
+                    [value] => 0.0
+                    [expires] => 1460029552
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [4] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.73.8.137.1396957551883019
+                    [expires] => 2343037551
+                    [path] => /
+                    [domain] => 
+                )
+
+            [5] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => name=LIVE5.WEB.1&silo_version=880&app=slingshot&TIME=1877033811
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [6] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => 
+                    [expires] => 1
+                    [path] => 
+                    [domain] => 
+                )
+
+            [7] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.73.8.40.1396957551875693
+                    [expires] => 2343037551
+                    [path] => /
+                    [domain] => 
+                )
+
+            [8] => WP_Http_Cookie Object
+                (
+                    [name] => AKDC
+                    [value] => slc-a-origin-www-1.paypal.com
+                    [expires] => 1396959352
+                    [path] => /
+                    [domain] => 
+                    [secure] => 
+                )
+
+        )
+
+    [filename] => 
+)
+
+04-08-2014 @ 15:45:52 - Received valid response from PayPal
+04-08-2014 @ 15:45:52 - Found order #5004
+04-08-2014 @ 15:45:52 - Payment status: completed
+04-08-2014 @ 15:45:52 - Payment complete.
+04-23-2014 @ 23:59:08 - Generating payment form for order OL-5066. Notify URL: http://www.kidberries.com/?wc-api=WC_Gateway_Paypal
+04-24-2014 @ 00:01:27 - Generating payment form for order OL-5066. Notify URL: http://www.kidberries.com/?wc-api=WC_Gateway_Paypal
+04-24-2014 @ 00:07:36 - Checking IPN response is valid...
+04-24-2014 @ 00:07:36 - IPN Request: Array
+(
+    [body] => Array
+        (
+            [cmd] => _notify-validate
+            [mc_gross] => 3395.00
+            [invoice] => OL-5066
+            [protection_eligibility] => Ineligible
+            [address_status] => unconfirmed
+            [item_number1] => T23
+            [tax] => 0.00
+            [item_number2] => ext_delivery_by_1
+            [payer_id] => 2D6PR5QQ7DWHW
+            [address_street] => Nekrasova 28/110
+            [payment_date] => 13:07:30 Apr 23, 2014 PDT
+            [payment_status] => Completed
+            [charset] => KOI8_R
+            [address_zip] => 220040
+            [mc_shipping] => 0.00
+            [mc_handling] => 0.00
+            [first_name] => Natalia
+            [mc_fee] => 176.36
+            [address_country_code] => LT
+            [address_name] => Natalia Melnikova
+            [notify_version] => 3.8
+            [custom] => a:2:{i:0;i:5066;i:1;s:19:"order_53581c162e8f3";}
+            [payer_status] => verified
+            [business] => amgroup.web@gmail.com
+            [address_country] => Lithuania
+            [num_cart_items] => 2
+            [mc_handling1] => 0.00
+            [mc_handling2] => 0.00
+            [address_city] => Minsk
+            [verify_sign] => AY-upBTHAv1eiT7-kAcM3DhTKfXLALTEMb28VKUYFdRjxbETsuYT7q4c
+            [payer_email] => 7229527@mail.ru
+            [mc_shipping1] => 0.00
+            [mc_shipping2] => 0.00
+            [txn_id] => 1G8689178V347494R
+            [payment_type] => instant
+            [last_name] => Melnikova
+            [address_state] => 
+            [item_name1] => Школьный рюкзак  ранец HummingBird Teens Butterfly Flash  арт. T23
+            [receiver_email] => amgroup.web@gmail.com
+            [item_name2] => Доставка 1кг Почтой РФ в Беларусь, г.Минск
+            [payment_fee] => 
+            [quantity1] => 1
+            [quantity2] => 1
+            [receiver_id] => UFL55DCK57848
+            [txn_type] => cart
+            [mc_gross_1] => 3000.00
+            [mc_currency] => RUB
+            [mc_gross_2] => 395.00
+            [residence_country] => LT
+            [transaction_subject] => a:2:{i:0;i:5066;i:1;s:19:"order_53581c162e8f3";}
+            [payment_gross] => 
+            [ipn_track_id] => 1ad519fa3db1f
+        )
+
+    [sslverify] => 
+    [timeout] => 60
+    [user-agent] => WooCommerce/2.0.5
+)
+
+04-24-2014 @ 00:07:37 - IPN Response: Array
+(
+    [headers] => Array
+        (
+            [server] => Apache
+            [x-frame-options] => SAMEORIGIN
+            [strict-transport-security] => Array
+                (
+                    [0] => max-age=14400
+                    [1] => max-age=14400
+                )
+
+            [content-type] => text/html; charset=UTF-8
+            [dc] => slc-a-origin-www-2.paypal.com
+            [vary] => Accept-Encoding
+            [date] => Wed, 23 Apr 2014 20:07:37 GMT
+            [content-length] => 8
+            [connection] => close
+            [set-cookie] => Array
+                (
+                    [0] => cwrClyrK4LoCV1fydGbAxiNL6iG=3vLXIlwDOVEUTZTXI8tfOBgrfv5TUgTsajsP6wjr6RanVb1ukHyKfNpaA0UG23frZ-NiZ7JlB0hVkRDuZ9EASG_5snmmw1I1r-HMisuOM07C3j4YkC6KUwj9E5cZQjlAyvUW-__t7OrLWPIXrxYvfOGxEuSEyNfwXQfSryO2ELKb4VbL4Rt5EX7ezpBp3UXEgzfSQ7BTU_vE25ItOVzGQLX15XF11DgDaq5e5BVLxEk17L0vp9mXGNDrGpuVc-PHST1XF2lHHkAKu-_esDpUb4dR1gipzagvOPVEaO5qlpKny_VA1FFoNsn2DgViEubK-617Qo52wuB9CQ-XoY822H9_hKWQTjt8tVv5vS47PNhFOiHsQWHJlAaor-5sOp6YBwA995QMqKxktDt9MPr3UiOMIEIO_MEjz0fw8wIAfxvVLTYJ7O8pEjm3OcC; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [1] => cookie_check=yes; expires=Sat, 20-Apr-2024 20:07:37 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [2] => navcmd=_notify-validate; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [3] => navlns=0.0; expires=Fri, 22-Apr-2016 20:07:37 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [4] => Apache=10.73.8.137.1398283656777301; path=/; expires=Fri, 15-Apr-44 20:07:36 GMT
+                    [5] => X-PP-SILOVER=name%3DLIVE5.WEB.1%26silo_version%3D880%26app%3Dslingshot%26TIME%3D2283624531; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [6] => X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT
+                    [7] => Apache=10.73.8.53.1398283656768651; path=/; expires=Fri, 15-Apr-44 20:07:36 GMT
+                    [8] => AKDC=slc-a-origin-www-2.paypal.com; expires=Wed, 23-Apr-2014 20:37:37 GMT; path=/; secure
+                )
+
+        )
+
+    [body] => VERIFIED
+    [response] => Array
+        (
+            [code] => 200
+            [message] => OK
+        )
+
+    [cookies] => Array
+        (
+            [0] => WP_Http_Cookie Object
+                (
+                    [name] => cwrClyrK4LoCV1fydGbAxiNL6iG
+                    [value] => 3vLXIlwDOVEUTZTXI8tfOBgrfv5TUgTsajsP6wjr6RanVb1ukHyKfNpaA0UG23frZ-NiZ7JlB0hVkRDuZ9EASG_5snmmw1I1r-HMisuOM07C3j4YkC6KUwj9E5cZQjlAyvUW-__t7OrLWPIXrxYvfOGxEuSEyNfwXQfSryO2ELKb4VbL4Rt5EX7ezpBp3UXEgzfSQ7BTU_vE25ItOVzGQLX15XF11DgDaq5e5BVLxEk17L0vp9mXGNDrGpuVc-PHST1XF2lHHkAKu-_esDpUb4dR1gipzagvOPVEaO5qlpKny_VA1FFoNsn2DgViEubK-617Qo52wuB9CQ-XoY822H9_hKWQTjt8tVv5vS47PNhFOiHsQWHJlAaor-5sOp6YBwA995QMqKxktDt9MPr3UiOMIEIO_MEjz0fw8wIAfxvVLTYJ7O8pEjm3OcC
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [1] => WP_Http_Cookie Object
+                (
+                    [name] => cookie_check
+                    [value] => yes
+                    [expires] => 1713643657
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [2] => WP_Http_Cookie Object
+                (
+                    [name] => navcmd
+                    [value] => _notify-validate
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [3] => WP_Http_Cookie Object
+                (
+                    [name] => navlns
+                    [value] => 0.0
+                    [expires] => 1461355657
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [4] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.73.8.137.1398283656777301
+                    [expires] => 2344363656
+                    [path] => /
+                    [domain] => 
+                )
+
+            [5] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => name=LIVE5.WEB.1&silo_version=880&app=slingshot&TIME=2283624531
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [6] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => 
+                    [expires] => 1
+                    [path] => 
+                    [domain] => 
+                )
+
+            [7] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.73.8.53.1398283656768651
+                    [expires] => 2344363656
+                    [path] => /
+                    [domain] => 
+                )
+
+            [8] => WP_Http_Cookie Object
+                (
+                    [name] => AKDC
+                    [value] => slc-a-origin-www-2.paypal.com
+                    [expires] => 1398285457
+                    [path] => /
+                    [domain] => 
+                    [secure] => 
+                )
+
+        )
+
+    [filename] => 
+)
+
+04-24-2014 @ 00:07:37 - Received valid response from PayPal
+04-24-2014 @ 00:07:37 - Found order #5066
+04-24-2014 @ 00:07:37 - Payment status: completed
+04-24-2014 @ 00:07:37 - Payment complete.
+04-25-2014 @ 19:04:57 - Generating payment form for order OL-5070. Notify URL: http://www.kidberries.com/?wc-api=WC_Gateway_Paypal
+04-25-2014 @ 19:06:56 - Checking IPN response is valid...
+04-25-2014 @ 19:06:56 - IPN Request: Array
+(
+    [body] => Array
+        (
+            [cmd] => _notify-validate
+            [mc_gross] => 3200.00
+            [invoice] => OL-5070
+            [protection_eligibility] => Ineligible
+            [address_status] => unconfirmed
+            [item_number1] => T9
+            [payer_id] => 5Q6Y7GDF3QFE2
+            [tax] => 0.00
+            [address_street] => ул.6-я Парковая, д.27, кв.127
+            [payment_date] => 08:06:51 Apr 25, 2014 PDT
+            [payment_status] => Completed
+            [charset] => KOI8_R
+            [address_zip] => 105043
+            [mc_shipping] => 0.00
+            [mc_handling] => 0.00
+            [first_name] => Светлана
+            [mc_fee] => 134.80
+            [address_country_code] => RU
+            [address_name] => Мережкина Светлана
+            [notify_version] => 3.8
+            [custom] => a:2:{i:0;i:5070;i:1;s:19:"order_535a799845326";}
+            [payer_status] => unverified
+            [business] => amgroup.web@gmail.com
+            [address_country] => Russia
+            [num_cart_items] => 1
+            [mc_handling1] => 0.00
+            [address_city] => Москва
+            [verify_sign] => AgfbqGVTTo2LhBKq6ZmHM6jJ5qWkA.4szYp.itpkp.cz5A3N7p7FzJJB
+            [payer_email] => merezhkin1@yandex.ru
+            [mc_shipping1] => 0.00
+            [tax1] => 0.00
+            [txn_id] => 323412756H922953D
+            [payment_type] => instant
+            [last_name] => Мережкина
+            [address_state] => 
+            [item_name1] => Школьный рюкзак  ранец HummingBird Teens Cat  арт. T9
+            [receiver_email] => amgroup.web@gmail.com
+            [payment_fee] => 
+            [quantity1] => 1
+            [receiver_id] => UFL55DCK57848
+            [txn_type] => cart
+            [mc_gross_1] => 3200.00
+            [mc_currency] => RUB
+            [residence_country] => RU
+            [receipt_id] => 2774-7838-5345-6763
+            [transaction_subject] => a:2:{i:0;i:5070;i:1;s:19:"order_535a799845326";}
+            [payment_gross] => 
+            [ipn_track_id] => 81ddb5543b23
+        )
+
+    [sslverify] => 
+    [timeout] => 60
+    [user-agent] => WooCommerce/2.0.5
+)
+
+04-25-2014 @ 19:06:56 - IPN Response: Array
+(
+    [headers] => Array
+        (
+            [server] => Apache
+            [x-frame-options] => SAMEORIGIN
+            [strict-transport-security] => Array
+                (
+                    [0] => max-age=14400
+                    [1] => max-age=14400
+                )
+
+            [content-type] => text/html; charset=UTF-8
+            [dc] => slc-b-origin-www-2.paypal.com
+            [vary] => Accept-Encoding
+            [date] => Fri, 25 Apr 2014 15:06:56 GMT
+            [content-length] => 8
+            [connection] => close
+            [set-cookie] => Array
+                (
+                    [0] => cwrClyrK4LoCV1fydGbAxiNL6iG=j5AoEAzibDrbw75ivhTPhVsYWRWpi9VF8HK_LMr9WI6ox7F1_eeiDQyuQBV_9sF2oEaB30xgftcs1XnyzaLzG2cL18SAufIILD9Xg9UjQt-DpYpvc8ccuPo8fvpWNCAWqsSHe_0Tt6DwoNhV0GYjiSLWQEkcsH0dFjBgOQ2SYoTiFZNvICelE4Is-J5bWGJ59XZdPvdE3YGToU9opEG-ARcBG8RgAZnuXMEt0rd8EixpPH37uYoauIGn9YabsPmKlV5cutY6V90aVsD-oIo8dSZ2aTdwbRVPHOQneaDigo7VnFdI1Q5_S9N2HD9m-ohOGZxmCBEabHRkbt1bL7gbyh1GH2OexCnR3I7_B9AlZfdguFY8SV7_eP_yw8bBx_-1LEgVJMo5EXoelZSs5NAjSWNSfOdSb6xbZfloKVSK8vm7ReUhPfjPmPmJFiO; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [1] => cookie_check=yes; expires=Mon, 22-Apr-2024 15:06:56 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [2] => navcmd=_notify-validate; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [3] => navlns=0.0; expires=Sun, 24-Apr-2016 15:06:56 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [4] => Apache=10.74.8.134.1398438416560036; path=/; expires=Sun, 17-Apr-44 15:06:56 GMT
+                    [5] => X-PP-SILOVER=name%3DLIVE6.WEB.1%26silo_version%3D880%26app%3Dslingshot%26TIME%3D276453971; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [6] => X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT
+                    [7] => Apache=10.74.8.52.1398438416542055; path=/; expires=Sun, 17-Apr-44 15:06:56 GMT
+                    [8] => AKDC=slc-b-origin-www-2.paypal.com; expires=Fri, 25-Apr-2014 15:36:56 GMT; path=/; secure
+                )
+
+        )
+
+    [body] => VERIFIED
+    [response] => Array
+        (
+            [code] => 200
+            [message] => OK
+        )
+
+    [cookies] => Array
+        (
+            [0] => WP_Http_Cookie Object
+                (
+                    [name] => cwrClyrK4LoCV1fydGbAxiNL6iG
+                    [value] => j5AoEAzibDrbw75ivhTPhVsYWRWpi9VF8HK_LMr9WI6ox7F1_eeiDQyuQBV_9sF2oEaB30xgftcs1XnyzaLzG2cL18SAufIILD9Xg9UjQt-DpYpvc8ccuPo8fvpWNCAWqsSHe_0Tt6DwoNhV0GYjiSLWQEkcsH0dFjBgOQ2SYoTiFZNvICelE4Is-J5bWGJ59XZdPvdE3YGToU9opEG-ARcBG8RgAZnuXMEt0rd8EixpPH37uYoauIGn9YabsPmKlV5cutY6V90aVsD-oIo8dSZ2aTdwbRVPHOQneaDigo7VnFdI1Q5_S9N2HD9m-ohOGZxmCBEabHRkbt1bL7gbyh1GH2OexCnR3I7_B9AlZfdguFY8SV7_eP_yw8bBx_-1LEgVJMo5EXoelZSs5NAjSWNSfOdSb6xbZfloKVSK8vm7ReUhPfjPmPmJFiO
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [1] => WP_Http_Cookie Object
+                (
+                    [name] => cookie_check
+                    [value] => yes
+                    [expires] => 1713798416
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [2] => WP_Http_Cookie Object
+                (
+                    [name] => navcmd
+                    [value] => _notify-validate
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [3] => WP_Http_Cookie Object
+                (
+                    [name] => navlns
+                    [value] => 0.0
+                    [expires] => 1461510416
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [4] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.74.8.134.1398438416560036
+                    [expires] => 2344518416
+                    [path] => /
+                    [domain] => 
+                )
+
+            [5] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => name=LIVE6.WEB.1&silo_version=880&app=slingshot&TIME=276453971
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [6] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => 
+                    [expires] => 1
+                    [path] => 
+                    [domain] => 
+                )
+
+            [7] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.74.8.52.1398438416542055
+                    [expires] => 2344518416
+                    [path] => /
+                    [domain] => 
+                )
+
+            [8] => WP_Http_Cookie Object
+                (
+                    [name] => AKDC
+                    [value] => slc-b-origin-www-2.paypal.com
+                    [expires] => 1398440216
+                    [path] => /
+                    [domain] => 
+                    [secure] => 
+                )
+
+        )
+
+    [filename] => 
+)
+
+04-25-2014 @ 19:06:56 - Received valid response from PayPal
+04-25-2014 @ 19:06:56 - Found order #5070
+04-25-2014 @ 19:06:56 - Payment status: completed
+04-25-2014 @ 19:06:57 - Payment complete.
+04-30-2014 @ 16:34:00 - Checking IPN response is valid...
+04-30-2014 @ 16:34:00 - IPN Request: Array
+(
+    [body] => Array
+        (
+            [cmd] => _notify-validate
+            [mc_gross] => -195.00
+            [invoice] => OL-5066
+            [protection_eligibility] => Ineligible
+            [item_number1] => T23
+            [item_number2] => ext_delivery_by_1
+            [payer_id] => 2D6PR5QQ7DWHW
+            [address_street] => Nekrasova 28/110
+            [payment_date] => 05:33:56 Apr 30, 2014 PDT
+            [payment_status] => Refunded
+            [charset] => KOI8_R
+            [address_zip] => 220040
+            [mc_shipping] => 0.00
+            [mc_handling] => 0.00
+            [first_name] => Natalia
+            [mc_fee] => -9.56
+            [address_country_code] => LT
+            [address_name] => Natalia Melnikova
+            [notify_version] => 3.8
+            [reason_code] => refund
+            [custom] => a:2:{i:0;i:5066;i:1;s:19:"order_53581c162e8f3";}
+            [business] => amgroup.web@gmail.com
+            [address_country] => Lithuania
+            [mc_handling1] => 0.00
+            [mc_handling2] => 0.00
+            [address_city] => Minsk
+            [verify_sign] => Adab29VfWTNUD.w2uMl4W1.o8Gx4AwlkD-IUE4G3ZpaknI9xiiSzmZnV
+            [payer_email] => 7229527@mail.ru
+            [mc_shipping1] => 0.00
+            [mc_shipping2] => 0.00
+            [tax1] => 0.00
+            [tax2] => 0.00
+            [parent_txn_id] => 1G8689178V347494R
+            [txn_id] => 5L152283D20658502
+            [payment_type] => instant
+            [last_name] => Melnikova
+            [address_state] => 
+            [item_name1] => Школьный рюкзак  ранец HummingBird Teens Butterfly Flash  арт. T23
+            [receiver_email] => amgroup.web@gmail.com
+            [item_name2] => Доставка 1кг Почтой РФ в Беларусь, г.Минск
+            [payment_fee] => 
+            [quantity1] => 1
+            [quantity2] => 1
+            [receiver_id] => UFL55DCK57848
+            [mc_gross_1] => 3000.00
+            [mc_currency] => RUB
+            [mc_gross_2] => 395.00
+            [residence_country] => LT
+            [transaction_subject] => a:2:{i:0;i:5066;i:1;s:19:"order_53581c162e8f3";}
+            [payment_gross] => 
+            [ipn_track_id] => 4510fcaf1459c
+        )
+
+    [sslverify] => 
+    [timeout] => 60
+    [user-agent] => WooCommerce/2.0.5
+)
+
+04-30-2014 @ 16:34:00 - IPN Response: Array
+(
+    [headers] => Array
+        (
+            [server] => Apache
+            [x-frame-options] => SAMEORIGIN
+            [strict-transport-security] => Array
+                (
+                    [0] => max-age=14400
+                    [1] => max-age=14400
+                )
+
+            [content-type] => text/html; charset=UTF-8
+            [dc] => slc-b-origin-www-2.paypal.com
+            [vary] => Accept-Encoding
+            [date] => Wed, 30 Apr 2014 12:34:00 GMT
+            [content-length] => 8
+            [connection] => close
+            [set-cookie] => Array
+                (
+                    [0] => cwrClyrK4LoCV1fydGbAxiNL6iG=SSvG3G1721HSECMNOrDoH3kL-KSYrbPpQ15m3_Pk5X36XAV2_ctXTgkINPxu3v_ArcRCNMcWvHwNID9eKI3sILP2hZJW2xBuVzD_hFGnc8aMYK4dZGfChW2p9r2b7bd6izMtBTjI5sA6Lk5hQphXtfzGoddFSgaoCsP-pm-lmM8iCKDOZPcOGd5c253drtWMq2zJ0cfeUKvQmasolob39miyoDNBUolyJ1zj10IhMfyFbXm_LBGnis8MFKjC3Eh0Z36TjvvOgWNmWJ1I1xOdnBKBfBPMiaIOFmnv0p8tJsFXHkNWU74kIEdxbsK4X32iDCkYg6HuuKpsBMF3zEx9SRVOZFGHi1Q0m3zT9AkV2NY-fXwMGSu3xRdu2mrBQHcmvrKQn3ea9d26TQ8qYzq9AdZFr_SnU7jk06lbRbBcL8S16g9iYiR-Dr9wyMe; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [1] => cookie_check=yes; expires=Sat, 27-Apr-2024 12:34:00 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [2] => navcmd=_notify-validate; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [3] => navlns=0.0; expires=Fri, 29-Apr-2016 12:34:00 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [4] => Apache=10.74.8.137.1398861240327214; path=/; expires=Fri, 22-Apr-44 12:34:00 GMT
+                    [5] => X-PP-SILOVER=name%3DLIVE6.WEB.1%26silo_version%3D880%26app%3Dslingshot%26TIME%3D3102564435; domain=.paypal.com; path=/; Secure; HttpOnly
+                    [6] => X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT
+                    [7] => Apache=10.74.8.68.1398861240318384; path=/; expires=Fri, 22-Apr-44 12:34:00 GMT
+                    [8] => AKDC=slc-b-origin-www-2.paypal.com; expires=Wed, 30-Apr-2014 13:04:00 GMT; path=/; secure
+                )
+
+        )
+
+    [body] => VERIFIED
+    [response] => Array
+        (
+            [code] => 200
+            [message] => OK
+        )
+
+    [cookies] => Array
+        (
+            [0] => WP_Http_Cookie Object
+                (
+                    [name] => cwrClyrK4LoCV1fydGbAxiNL6iG
+                    [value] => SSvG3G1721HSECMNOrDoH3kL-KSYrbPpQ15m3_Pk5X36XAV2_ctXTgkINPxu3v_ArcRCNMcWvHwNID9eKI3sILP2hZJW2xBuVzD_hFGnc8aMYK4dZGfChW2p9r2b7bd6izMtBTjI5sA6Lk5hQphXtfzGoddFSgaoCsP-pm-lmM8iCKDOZPcOGd5c253drtWMq2zJ0cfeUKvQmasolob39miyoDNBUolyJ1zj10IhMfyFbXm_LBGnis8MFKjC3Eh0Z36TjvvOgWNmWJ1I1xOdnBKBfBPMiaIOFmnv0p8tJsFXHkNWU74kIEdxbsK4X32iDCkYg6HuuKpsBMF3zEx9SRVOZFGHi1Q0m3zT9AkV2NY-fXwMGSu3xRdu2mrBQHcmvrKQn3ea9d26TQ8qYzq9AdZFr_SnU7jk06lbRbBcL8S16g9iYiR-Dr9wyMe
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [1] => WP_Http_Cookie Object
+                (
+                    [name] => cookie_check
+                    [value] => yes
+                    [expires] => 1714221240
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [2] => WP_Http_Cookie Object
+                (
+                    [name] => navcmd
+                    [value] => _notify-validate
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [3] => WP_Http_Cookie Object
+                (
+                    [name] => navlns
+                    [value] => 0.0
+                    [expires] => 1461933240
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [4] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.74.8.137.1398861240327214
+                    [expires] => 2344941240
+                    [path] => /
+                    [domain] => 
+                )
+
+            [5] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => name=LIVE6.WEB.1&silo_version=880&app=slingshot&TIME=3102564435
+                    [expires] => 
+                    [path] => /
+                    [domain] => .paypal.com
+                    [secure] => 
+                    [httponly] => 
+                )
+
+            [6] => WP_Http_Cookie Object
+                (
+                    [name] => X-PP-SILOVER
+                    [value] => 
+                    [expires] => 1
+                    [path] => 
+                    [domain] => 
+                )
+
+            [7] => WP_Http_Cookie Object
+                (
+                    [name] => Apache
+                    [value] => 10.74.8.68.1398861240318384
+                    [expires] => 2344941240
+                    [path] => /
+                    [domain] => 
+                )
+
+            [8] => WP_Http_Cookie Object
+                (
+                    [name] => AKDC
+                    [value] => slc-b-origin-www-2.paypal.com
+                    [expires] => 1398863040
+                    [path] => /
+                    [domain] => 
+                    [secure] => 
+                )
+
+        )
+
+    [filename] => 
+)
+
+04-30-2014 @ 16:34:00 - Received valid response from PayPal
+04-30-2014 @ 16:34:00 - Found order #5066
+04-30-2014 @ 16:34:00 - Payment status: refunded
+05-16-2014 @ 10:25:35 - Generating payment form for order OL-5105. Notify URL: http://www.kidberries.com/?wc-api=WC_Gateway_Paypal

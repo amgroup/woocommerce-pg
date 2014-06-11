@@ -152,6 +152,9 @@ class Woocommerce {
 
 		// Loaded action
 		do_action( 'woocommerce_loaded' );
+
+		//Extend product statuses
+		add_action( 'init', array( $this, 'register_product_statuses' ));
 	}
 
 	/**
@@ -172,6 +175,18 @@ class Woocommerce {
 		}
 
 		return false;
+	}
+
+
+	public function register_product_statuses() {
+	    global $wp_post_statuses;
+
+	    register_post_status( 'not_available', array(
+			'label'       => _x( 'Removed from sale', 'post' ),
+			'public'      => true,
+			'_builtin'    => true, /* internal use only. */
+			'label_count' => _n_noop( 'Removed from sale <span class="count">(%s)</span>', 'Removed from sale <span class="count">(%s)</span>' ),
+	    ));
 	}
 
 	/**
@@ -448,6 +463,7 @@ class Woocommerce {
 	 * @return void
 	 */
 	public function init() {
+
 		//Before init action
 		do_action( 'before_woocommerce_init' );
 
@@ -519,6 +535,7 @@ class Woocommerce {
 
 		// Init action
 		do_action( 'woocommerce_init' );
+
 	}
 
 

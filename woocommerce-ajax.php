@@ -2063,3 +2063,50 @@ if( !function_exists( 'woocommerce_get_mini_cart' ) ) {
     add_action( 'wp_ajax_nopriv_woocommerce_get_mini_cart', 'woocommerce_get_mini_cart' );
     add_action( 'wp_ajax_woocommerce_get_mini_cart', 'woocommerce_get_mini_cart' );
 }
+
+
+function woocommerce_send_emails_async() {
+	global $wpdb;
+	$lock   = plugin_dir_path(__FILE__) . 'logs/.email_sender.lock';
+	$lock_h = null;
+	$time   = time();
+	$unlock = $time + 90;
+
+	if( file_exists( $lock ) ) {
+		$unlocktime = (int) file($lock)[0];
+		if( $time <= $unlocktime ) {
+			echo "processed\n";
+			die();
+		}
+	}
+
+	$lock_h = fopen( $lock, "w" );
+	fwrite($lock_h, $unlock);
+	fclose($lock_h);
+
+	$mail_table = '"' . $wpdb->prefix . 'woocommerce_mails"';
+	$processed = 0;
+
+	$emails = $wpdb->get_results( $wpdb->prepare('
+		SELECT
+			"id", "to", "subject", "message", "headers", "attachments"
+		FROM ' . $mail_table . '
+		WHERE
+			("sended" IS NULL) OR
+			("processed"::timestamp < (now() - \'10 min\'::interval)::timestamp)
+		ORDER BY "created"'
+		));
+	foreach( $emails as $email ) {
+		$wpdb->query( $wpdb->prepare( 'UPDATE ' . $mail_table . ' SET "processed" = now(), "sended" = NULL WHERE "id" = %u', $email->id  ) );
+
+		wp_mail( $email->to, $email->subject, $email->message, $email->headers, $email->attachments );
+		$wpdb->query( $wpdb->prepare( 'UPDATE ' . $mail_table . ' SET "sended" = now(), "processed" = NULL WHERE "id" = %u', $email->id  ) );
+
+		$processed++;
+	}
+	echo "sent\n";
+	unlink($lock);
+	die();
+}
+add_action( 'wp_ajax_nopriv_send_emails', 'woocommerce_send_emails_async' );
+add_action( 'wp_ajax_send_emails', 'woocommerce_send_emails_async' );

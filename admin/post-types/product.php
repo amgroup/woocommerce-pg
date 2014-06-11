@@ -257,20 +257,21 @@ function woocommerce_custom_product_columns( $column ) {
 			echo '</a>';
 		break;
 		case "is_in_stock" :
-
-			if ( $the_product->is_in_stock() ) {
-				if( $the_product->stock_status == 'expected' )
-					echo '<mark class="expected">' . __( 'Expected', 'woocommerce' ) . ' - ' . $the_product->stock_status_date('<span class="date">%s</span>') . '</mark>';
-				else
-					echo '<mark class="instock">' . __( 'In stock', 'woocommerce' ) . '</mark>';
+			if( 'not_available' == $post->post_status ) {
+				echo '<mark class="not_available">' . __( 'Removed from sale', 'woocommerce' ) . '</mark>';
 			} else {
-				echo '<mark class="outofstock">' . __( 'Out of stock', 'woocommerce' ) . '</mark>';
+				if ( $the_product->is_in_stock() ) {
+					if( $the_product->stock_status == 'expected' )
+						echo '<mark class="expected">' . __( 'Expected', 'woocommerce' ) . ' - ' . $the_product->stock_status_date('<span class="date">%s</span>') . '</mark>';
+					else
+						echo '<mark class="instock">' . __( 'In stock', 'woocommerce' ) . '</mark>';
+				} else {
+					echo '<mark class="outofstock">' . __( 'Out of stock', 'woocommerce' ) . '</mark>';
+				}
 			}
-
-			if ( $the_product->managing_stock() ) :
+			if ( $the_product->managing_stock() ) {
 				echo ' &times; ' . $the_product->get_total_stock();
-			endif;
-
+			}
 		break;
 	}
 }

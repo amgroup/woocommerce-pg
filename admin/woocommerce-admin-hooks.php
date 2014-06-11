@@ -69,6 +69,11 @@ add_action( 'admin_footer', 'woocommerce_bulk_admin_footer', 10 );
 add_action( 'load-edit.php', 'woocommerce_order_bulk_action' );
 add_action( 'admin_notices', 'woocommerce_order_bulk_admin_notices' );
 
+add_action( 'load-edit.php', 'woocommerce_product_bulk_action' );
+add_action( 'admin_notices', 'woocommerce_product_bulk_admin_notices' );
+
+add_action( 'admin_footer-post.php', 'woocommerce_product_admin_footer' );
+
 /**
  * Mijireh Gateway
  */

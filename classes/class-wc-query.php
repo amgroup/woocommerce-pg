@@ -373,8 +373,6 @@ class WC_Query {
 	 */
 	public function get_catalog_ordering_args( $orderby = '', $order = '' ) {
 		global $woocommerce;
-        
-        add_filter( 'posts_clauses', array( $this, 'product_stock_ordering' ) );
 
 		// Get ordering from query string unless defined
 		if ( ! $orderby ) {
@@ -398,9 +396,7 @@ class WC_Query {
 				$args['meta_key'] = '';
 			break;
 			case 'price' :
-				$args['orderby']  = 'meta_value_num';
-				$args['order']    = $order == 'DESC' ? 'DESC' : 'ASC';
-				$args['meta_key'] = '_price';
+				add_filter( 'posts_clauses', array( $this, 'product_price_ordering' ) );
 			break;
 			case 'popularity' :
 				$args['orderby']  = 'meta_value_num';
@@ -412,7 +408,7 @@ class WC_Query {
 				$args['order']    = $order == 'DESC' ? 'DESC' : 'ASC';
 				$args['meta_key'] = '';
 
-				//add_filter( 'posts_clauses', array( $this, 'order_by_rating_post_clauses' ) );
+//				add_filter( 'posts_clauses', array( $this, 'order_by_rating_post_clauses' ) );
 			break;
 			case 'title' :
 				$args['orderby']  = 'title';
@@ -426,29 +422,100 @@ class WC_Query {
 				$args['meta_key'] = '';
 			break;
 		}
-
+                add_filter( 'posts_clauses', array( $this, 'product_stock_ordering' ) );
 		return apply_filters( 'woocommerce_get_catalog_ordering_args', $args );
 	}
 
-	public function product_stock_ordering( $args ) {
+
+	/**
+	 *
+	 *
+	 * @access public
+	 * @
+	 * @
+	 */
+	public function product_price_ordering( $args ) {
 		global $wpdb;
 
-        $args['groupby'] = '';
-        $args['join'] = "INNER JOIN {$wpdb->postmeta} s ON (s.post_id = {$wpdb->posts}.\"ID\" AND s.meta_key = '_stock')" . $args['join'];
-        $args['orderby'] = "is_positive(s.meta_value::numeric) DESC" . ($args['orderby']?', ':'') . $args['orderby'];
-	$args['orderby'] .= ",s.meta_value::numeric DESC";
-        
-        $args['distinct'] = 'DISTINCT';        
-        $args['fields'] .= ", " . preg_replace( '/ (DESC|ASC)/','', $args['orderby'] );
+		$orderby_value = isset( $_GET['orderby'] ) ? woocommerce_clean( $_GET['orderby'] ) : apply_filters( 'woocommerce_default_catalog_orderby', get_option( 'woocommerce_default_catalog_orderby' ) );
 
-		return apply_filters( 'woocommerce_get_catalog_ordering_args', $args );
+		// Get order + orderby args from string
+		$orderby_value = explode( '-', $orderby_value );
+		$orderby       = esc_attr( $orderby_value[0] );
+		$order         = ! empty( $orderby_value[1] ) ? $orderby_value[1] : $order;
+
+		$orderby = strtolower( $orderby );
+		$order   = strtoupper( $order );
+
+		$args['join'] = "
+INNER JOIN (
+  SELECT
+    \"ID\",
+    min(meta_value) AS price
+  FROM (
+    SELECT
+      CASE WHEN p1.post_type = 'product' THEN \"ID\" ELSE post_parent END AS \"ID\",
+      meta_value::numeric
+    FROM
+      {$wpdb->postmeta} pm1,
+      {$wpdb->posts} p1
+    WHERE
+      pm1.meta_key='_price' AND pm1.meta_value::numeric > 0 AND pm1.post_id = p1.\"ID\" AND
+      p1.post_type IN ('product', 'product_variation' ) AND
+      p1.post_status = 'publish'
+   ) q
+  GROUP BY \"ID\" ) prc ON ( prc.\"ID\" = {$wpdb->posts}.\"ID\" )
+" . $args['join'];
+
+		$args['orderby'] = 'prc.price ' . ($order == 'DESC' ? 'DESC,' : 'ASC,') . $args['orderby'];
+		$args['fields']  .= ', prc.price';
+		return $args;
+	}
+
+	/**
+	 *
+	 *
+	 * @access public
+	 * @
+	 * @
+	 */
+	public function product_stock_ordering( $args ) {
+            global $wpdb;
+
+            $args['join'] = "
+INNER JOIN (
+  SELECT
+    \"ID\",
+    sum(meta_value) AS stock
+  FROM (
+    SELECT
+      CASE WHEN p1.post_type = 'product' THEN \"ID\" ELSE post_parent END AS \"ID\",
+      meta_value::numeric
+    FROM
+      {$wpdb->postmeta} pm1,
+      {$wpdb->posts} p1
+    WHERE
+      pm1.meta_key='_stock' AND pm1.post_id = p1.\"ID\" AND
+      p1.post_type IN ('product', 'product_variation' ) AND
+      p1.post_status = 'publish'
+   ) q
+  GROUP BY \"ID\" ) stk ON ( stk.\"ID\" = {$wpdb->posts}.\"ID\" )
+" . $args['join'];
+
+            $args['groupby'] = '';
+            $args['orderby'] = "(stk.stock>0)::integer DESC " . ($args['orderby']?', ':'') . $args['orderby'];
+
+            $args['distinct'] = 'DISTINCT';
+            $args['fields'] .= ", " . preg_replace( '/ (DESC|ASC)/','', $args['orderby'] );
+
+            return $args;
 	}
 
 	/**
 	 * order_by_rating_post_clauses function.
 	 *
 	 * @access public
-	 * @param array $args
+	 * @param array $argsINNER JOIN SELECT * FROM
 	 * @return array
 	 */
 	public function order_by_rating_post_clauses( $args ) {
@@ -511,14 +578,16 @@ class WC_Query {
 	}
 }
 
+/*
 function BAGOrder($orderBy, $query) {
-	global $wpdb;
-	
-//    $orderBy .= '';
-//echo "<pre>";
-//	var_dump( $wpdb->query );
-//echo "</pre>";
+    global $wpdb, $wp_query;
 
-	return $orderBy;
+    $orderBy .= '';
+echo "<pre>";
+var_dump( $wp_query );
+echo "</pre>";
+
+    return $orderBy;
 }
 add_filter('posts_orderby', 'BAGOrder', 20, 2);
+*/

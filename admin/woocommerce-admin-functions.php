@@ -491,6 +491,20 @@ function woocommerce_bulk_admin_footer() {
 		});
 		</script>
 		<?php
+	} else if ( 'product' == $post_type ) {
+		?>
+		<script type="text/javascript">
+		jQuery(document).ready(function() {
+			jQuery('<option>').val('publish').text('<?php _e( 'Publish', 'woocommerce' )?>').appendTo("select[name='action']");
+			jQuery('<option>').val('publish').text('<?php _e( 'Publish', 'woocommerce' )?>').appendTo("select[name='action2']");
+			jQuery('<option>').val('publish').text('<?php _e( 'Publish', 'woocommerce' )?>').appendTo("select[name='_status']");
+
+			jQuery('<option>').val('not_available').text('<?php _e( 'Remove from sale', 'woocommerce' )?>').appendTo("select[name='action']");
+			jQuery('<option>').val('not_available').text('<?php _e( 'Remove from sale', 'woocommerce' )?>').appendTo("select[name='action2']");
+			jQuery('<option>').val('not_available').text('<?php _e( 'Remove from sale', 'woocommerce' )?>').appendTo("select[name='_status']");
+		});
+		</script>
+		<?php
 	}
 }
 
@@ -551,4 +565,86 @@ function woocommerce_order_bulk_admin_notices() {
 			echo '<div class="updated"><p>' . $message . '</p></div>';
 		}
 	}
+}
+
+
+/**
+ * Process the new bulk actions for changing product status
+ *
+ * @access public
+ * @return void
+ */
+function woocommerce_product_bulk_action() {
+	$wp_list_table = _get_list_table( 'WP_Posts_List_Table' );
+	$action = $wp_list_table->current_action();
+
+	switch ( $action ) {
+		case 'publish':
+			$new_status = 'publish';
+			$report_action = 'marked_publish';
+			break;
+		case 'not_available':
+			$new_status = 'not_available';
+			$report_action = 'marked_not_available';
+			break;
+		default:
+			return;
+	}
+
+	$changed = 0;
+
+	$post_ids = array_map( 'absint', (array) $_REQUEST['post'] );
+
+	foreach( $post_ids as $post_id ) {
+		wp_update_post(array( 'ID' => $post_id, 'post_status' => $action ));
+		$changed++;
+	}
+
+	$sendback = add_query_arg( array( 'post_type' => 'product', $report_action => $changed, 'ids' => join( ',', $post_ids ) ), '' );
+	wp_redirect( $sendback );
+	exit();
+}
+
+
+/**
+ * Show confirmation message that product status changed for number of products
+ *
+ * @access public
+ * @return void
+ */
+function woocommerce_product_bulk_admin_notices() {
+	global $post_type, $pagenow;
+
+	if ( isset( $_REQUEST['marked_not_available'] ) || isset( $_REQUEST['marked_publish'] ) ) {
+		$number = isset( $_REQUEST['marked_publish'] ) ? absint( $_REQUEST['marked_publish'] ) : absint( $_REQUEST['marked_not_available'] );
+
+		if ( 'edit.php' == $pagenow && 'product' == $post_type ) {
+			$message = sprintf( _n( 'Product status changed.', '%s product statuses changed.', $number ), number_format_i18n( $number ) );
+			echo '<div class="updated"><p>' . $message . '</p></div>';
+		}
+	}
+}
+
+
+
+function woocommerce_product_admin_footer() {
+    global $post;
+
+    $complete = '';
+    $label    = '';
+
+    if($post->post_type == 'product'){
+	if($post->post_status == 'not_available'){
+	    $complete = ' selected=\"selected\"';
+	    $label 	  = '<span id=\"post-status-display\"> ' . __( 'Removed from sale', 'woocommerce' ) . '</span>';
+	}
+	echo '
+      <script type="text/javascript">
+      jQuery(document).ready(function($) {
+           $("select#post_status").append("<option value=\"not_available\" ' . $complete . '>' . __( 'Removed from sale', 'woocommerce' ) . '</option>");
+           $(".misc-pub-section label").append("' . $label . '");
+      });
+      </script>
+      ';
+    }
 }
