@@ -427,7 +427,7 @@ class WC_Product_Variable extends WC_Product {
 					'attributes' 			=> $variation_attributes,
 					'image_src' 			=> esc_url( $image ),
 					'image_link' 			=> esc_url( $image_link ),
-					'image_zoomed' 			=> esc_url( current( $zoomed ) ),
+					'image_zoomed' 			=> esc_url( @current( $zoomed ) ),
 					'image_title'			=> $image_title,
 					'price_html' 			=> '<span class="price">' . $variation->get_price_html() . '</span>',
 					'availability_html' 	=> $availability_html,
