@@ -177,7 +177,7 @@ class WC_Query {
 		global $woocommerce, $wpdb;
 
 		if( is_search() ) {
-			$max_rank = 0;
+			$max_rank = 0.000001;
 				$not_ranked_posts = array();
 
 			foreach( $posts as $post ) {
