@@ -407,11 +407,13 @@ function woocommerce_product_data_box() {
 
 					// Product attributes - taxonomies and custom, ordered, with visibility and variation attributes set
 					$attributes = maybe_unserialize( get_post_meta( $thepostid, '_product_attributes', true ) );
+
 					$i = -1;
 
 					// Taxonomies
 					if ( $attribute_taxonomies ) {
 				    	foreach ( $attribute_taxonomies as $tax ) { $i++;
+						$tax = (object) $tax;
 
 				    		// Get name of taxonomy we're now outputting (pa_xxx)
 				    		$attribute_taxonomy_name = $woocommerce->attribute_taxonomy_name( $tax->attribute_name );
@@ -565,7 +567,7 @@ function woocommerce_product_data_box() {
 											<div class="enable_variation show_if_variable">
 											<label><input type="checkbox" class="checkbox" <?php checked( $attribute['is_variation'], 1 ); ?> name="attribute_variation[<?php echo $i; ?>]" value="1" /> <?php _e( 'Used for variations', 'woocommerce' ); ?></label>
 											<label><input type="checkbox" class="checkbox" <?php checked( $attribute['is_changeable'], 1 ); ?> name="attribute_variation_ch_[<?php echo $i; ?>]" value="1" /> <?php _e( 'Used for changeable', 'woocommerce' ); ?></label>
-											</div>
+							14~				</div>
 										</td>
 									</tr>
 								</tbody>
@@ -583,6 +585,7 @@ function woocommerce_product_data_box() {
 					<?php
 						if ( $attribute_taxonomies ) {
 					    	foreach ( $attribute_taxonomies as $tax ) {
+							$tax = (object) $tax;
 					    		$attribute_taxonomy_name = $woocommerce->attribute_taxonomy_name( $tax->attribute_name );
 					    		$label = $tax->attribute_label ? $tax->attribute_label : $tax->attribute_name;
 					    		echo '<option value="' . esc_attr( $attribute_taxonomy_name ) . '">' . esc_html( $label ) . '</option>';

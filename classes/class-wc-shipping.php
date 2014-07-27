@@ -317,9 +317,11 @@ class WC_Shipping {
 			set_transient( $package_hash, $package['rates'], 60 * 60 ); // Cached for an hour
 
 		} else {
-
 			$package['rates'] = $stored_rates;
-
+			foreach( $package['rates'] as $rate_id => $rate ) {
+				if( is_array( $rate ) )
+					$package['rates'][$rate_id] = new WC_Shipping_Rate( $rate );
+			}
 		}
 
 		return $package;
@@ -347,7 +349,6 @@ class WC_Shipping {
 			if ( ! $package['rates'] ) continue;
 
 			foreach ( $package['rates'] as $id => $rate ) {
-
 				if ( isset( $available_methods[$id] ) ) {
 					// Merge cost and taxes - label and ID will be the same
 					$available_methods[$id]->cost += $rate->cost;
@@ -358,11 +359,8 @@ class WC_Shipping {
 				} else {
 					$available_methods[$id] = $rate;
 				}
-
 			}
-
 		}
-
 		return apply_filters( 'woocommerce_available_shipping_methods', $available_methods );
 	}
 

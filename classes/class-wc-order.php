@@ -962,27 +962,32 @@ class WC_Order {
 
 		$total_rows = array();
 
-        if( $this->cart_actions_discount ) {
-            $cart_actions_discounts = unserialize($this->cart_actions_discounts);
-            foreach( $cart_actions_discounts as $key => $value ) {
-                $total_rows[ 'cart_actions_discount_' . sanitize_title( $key ) ] = array(
-                    'label' => __( 'Total in Discount Action:', 'woocommerce' ) . ' "' . $key . '"',
-                    'value'	=> woocommerce_price( -1 * $value )
-                );
-            }
-        }
+
 
 		if ( $subtotal = $this->get_subtotal_to_display() )
 			$total_rows['cart_subtotal'] = array(
 				'label' => __( 'Cart Subtotal:', 'woocommerce' ),
-				'value'	=> $subtotal
+				'value'	=> $subtotal,
+				'class'	=> 'subtotal_before_discounts'
 			);
 
 		if ( $this->get_cart_discount() > 0 )
 			$total_rows['cart_discount'] = array(
 				'label' => __( 'Cart Discount:', 'woocommerce' ),
-				'value'	=> '-' . $this->get_cart_discount_to_display()
+				'value'	=> '-' . $this->get_cart_discount_to_display(),
+				'class'	=> 'cart discount'
 			);
+
+		if( $this->cart_actions_discount ) {
+			$cart_actions_discounts = maybe_unserialize($this->cart_actions_discounts);
+			foreach( $cart_actions_discounts as $key => $value ) {
+				$total_rows[ 'cart_actions_discount_' . sanitize_title( $key ) ] = array(
+					'label' => __( 'Total in Discount Action:', 'woocommerce' ) . ' "' . $key . '"',
+					'value'	=> woocommerce_price( -1 * $value ),
+					'class'	=> 'action discount'
+				);
+			}
+		}
 
 		if ( $this->get_shipping_method() ) {
 			if( $this->shipping_method == 'local_pickup' ) {
@@ -996,6 +1001,7 @@ class WC_Order {
 					'value'	=> $this->get_shipping_to_display()
 				);
 			}
+			$total_rows['shipping']['class'] = 'shipping';
 		}
 		if ( $fees = $this->get_fees() )
 			foreach( $fees as $id => $fee ) {
@@ -1065,12 +1071,14 @@ class WC_Order {
 		if ( $this->get_order_discount() > 0 )
 			$total_rows['order_discount'] = array(
 				'label' => __( 'Order Discount:', 'woocommerce' ),
-				'value'	=> '-' . $this->get_order_discount_to_display()
+				'value'	=> '-' . $this->get_order_discount_to_display(),
+				'class' => 'order discount'
 			);
 
 		$total_rows['order_total'] = array(
 			'label' => __( 'Order Total:', 'woocommerce' ),
-			'value'	=> $this->get_formatted_order_total()
+			'value'	=> $this->get_formatted_order_total(),
+			'class'	=> 'total'
 		);
 
 		// Tax for inclusive prices

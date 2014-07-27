@@ -72,13 +72,13 @@ abstract class WC_Shipping_Method extends WC_Settings_API {
 		$defaults = array(
 			'id' 		=> '',			// ID for the rate
 			'label' 	=> '',			// Label for the rate
-			'label_extra'=> '',			// Extra for the label
+			'label_extra'   => '',			// Extra for the label
 			'cost' 		=> '0',			// Amount or array of costs (per item shipping)
-            'multicost' => '0',			// 
+        		'multicost'     => '0',			// 
 			'cost_real'	=> null,		// Amount or array of real costs (per item shipping)
 			'taxes' 	=> '',			// Pass taxes, nothing to have it calculated for you, or 'false' to calc no tax
-			'calc_tax'	=> 'per_order',	// Calc tax per_order or per_item. Per item needs an array of costs
-			'info' 	=> '',
+			'calc_tax'	=> 'per_order',		// Calc tax per_order or per_item. Per item needs an array of costs
+			'info' 	        => '',
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -150,7 +150,19 @@ abstract class WC_Shipping_Method extends WC_Settings_API {
 		}
 		$total_cost_real = $cost_real ? $cost_real : $total_cost;
 
-		$this->rates[] = new WC_Shipping_Rate( $id, $label, $multicost, $total_cost, $total_cost_real, $taxes, $this->id, $label_extra, $info );
+#		$this->rates[] = new WC_Shipping_Rate( $id, $label, $multicost, $total_cost, $total_cost_real, $taxes, $this->id, $label_extra, $info );
+                $this->rates[] = new WC_Shipping_Rate( array(
+                    'id'         => $id,
+                    'label'      => $label,
+                    'multicost'  => $multicost,
+                    'cost'       => $total_cost,
+                    'cost_real'  => $total_cost_real,
+                    'taxes'      => $taxes,
+                    'method_id'  => $this->id,
+                    'label_extra'=> $label_extra,
+                    'info'       => $info
+                ));
+
 	}
 
 	/**

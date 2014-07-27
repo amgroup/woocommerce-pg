@@ -18,12 +18,13 @@ class WC_Shipping_Rate {
 	var $id 		= '';
 	var $label 		= '';
 	var $label_extra= '';
-    var $multicost  = 0;
+        var $multicost  = 0;
 	var $cost 		= 0;
 	var $cost_real  = 0;
 	var $info       = array();
 	var $taxes 		= array();
 	var $method_id	= '';
+	var $options    = '';
 
 	/**
 	 * __construct function.
@@ -35,17 +36,30 @@ class WC_Shipping_Rate {
 	 * @param mixed $taxes
 	 * @return void
 	 */
-	public function __construct( $id, $label, $multicost, $cost, $cost_real, $taxes, $method_id, $label_extra, $info ) {
-		$this->id 		    = $id;
+	public function __construct( $id, $label=null, $multicost=null, $cost=null, $cost_real=null, $taxes=null, $method_id=null, $label_extra=null, $info=null ) {
+	    if( is_array($id) ) {
+		$this->id 		= $id['id'];
+		$this->label 		= $id['label'];
+		$this->label_extra	= $id['label_extra'];
+    		$this->multicost 	= $id['multicost'];
+		$this->cost 		= $id['cost'];
+		$this->cost_real	= $id['cost_real'];
+		$this->taxes 		= $id['taxes'] ? $id['taxes'] : array();
+		$this->info 		= $id['info'] ? $id['info'] : array();
+		$this->method_id 	= $id['method_id'];
+		$this->options		= null;
+	    } else {
+		$this->id 		= $id;
 		$this->label 		= $label;
 		$this->label_extra	= $label_extra;
-        $this->multicost 	= $multicost;
+    		$this->multicost 	= $multicost;
 		$this->cost 		= $cost;
 		$this->cost_real	= $cost_real;
 		$this->taxes 		= $taxes ? $taxes : array();
 		$this->info 		= $info ? $info : array();
 		$this->method_id 	= $method_id;
 		$this->options		= null;
+	    }
 	}
 
 	/**
