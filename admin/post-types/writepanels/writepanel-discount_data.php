@@ -88,8 +88,7 @@ function woocommerce_discount_data_meta_box( $post ) {
 			// Amount
                         
 			woocommerce_wp_text_input( array( 'id' => 'discount_amount', 'label' => __( 'Discount amount', 'woocommerce' ), 'placeholder' => '0.00', 'description' => __( 'Value of the discount.', 'woocommerce' ), 'type' => 'number', 'custom_attributes' => array(
-					'step' 	=> 'any',
-					'min'	=> '0'
+					'step' 	=> 'any'
 				)  ) );
                                     
 			

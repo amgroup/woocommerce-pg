@@ -2342,9 +2342,10 @@ class WC_Cart {
 					}
 
 					// Check for "product_categories"
-                    if( sizeof( $discount['product_categories'] ) > 0 ) {
+                    if( implode(',', $discount['product_categories']) ) {
                         $i = 0;
                         foreach ( $_candidats as  $_candidat ) {
+
                             if( ! $wpdb->get_var(
 								"SELECT DISTINCT 1
 								FROM {$wpdb->term_relationships} r, {$wpdb->term_taxonomy} t
@@ -2365,9 +2366,8 @@ class WC_Cart {
                     }
 
                     // Check for "product_categories_accompaining" is in cart
-                    if( sizeof( $discount['product_categories_accompaining'] ) > 0 ) {
-
-						if( sizeof( $_products_in_cart_ids ) ) {
+                    if( implode(",", $discount['product_categories_accompaining'] ) ) {
+						if( ! empty( $_products_in_cart_ids ) ) {
 							if( ! $wpdb->get_var(
 									"SELECT DISTINCT 1
 									FROM {$wpdb->term_relationships} r, {$wpdb->term_taxonomy} t
@@ -2383,7 +2383,6 @@ class WC_Cart {
 			}
                         //echo  "Yeah! " . $discount["shop_discount"]->ID . " is product_categories_accompaining rule. Needed" . $_candidats[$i]['product_id'] . " in the cart!<br/>" ;
                     }
-					
 					// Check for "product_attributes" IT DOESNT IMPLEMENTED YET !!!
 					/*
 					if( sizeof( $discount['product_attributes'] ) > 0 ) {
@@ -2401,6 +2400,7 @@ class WC_Cart {
                     }
 					*/
                     
+
                     // OK. We got the colection and processing now
                     $counter = 0;
 
